@@ -5,7 +5,7 @@ class AuthenticationService{
   //Firebase auth instance declaration.
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //TODO: login function
+
   Future signIn(String email, String password) async{
 
     try{
