@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jotihunt/services/authservice.dart';
 
 
 class SettingsScreen extends StatelessWidget {
+  final AuthenticationService _auth = new AuthenticationService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +32,22 @@ class SettingsScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               child: Divider(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FlatButton.icon(
+                    onPressed: (){
+                      try{
+                        _auth.signOut();
+                      }catch(e){
+                        print(e);
+                      }
+
+                    },
+                    icon: Icon(Icons.power_settings_new),
+                    label: Text('Uitloggen'))
+              ],
             )
           ],
         ),
