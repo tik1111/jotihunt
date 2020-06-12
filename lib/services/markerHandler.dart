@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/locationservice.dart';
@@ -31,6 +32,11 @@ class MarkerHandler{
   }
 
 
+  
+     
+  
+
+
   Future<Set<Marker>> getMarkers() async{
     Set<Marker> markerSet = new Set();
 
@@ -49,6 +55,7 @@ class MarkerHandler{
             markerId: MarkerId(result.data['User']),
             position: LatLng(result.data['Lat'],result.data['Long']),
             icon: carImage,
+            
             draggable: false 
           )
         );
