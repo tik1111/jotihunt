@@ -5,20 +5,33 @@ class AuthenticationService{
   //Firebase auth instance declaration.
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //TODO: login function
 
+  Future signIn(String email, String password) async{
+
+    try{
+      print('loggin in');
+      return await _auth.signInWithEmailAndPassword(email: email, password: password);
+    }catch (error){
+      print(error.toString());
+    }
+
+  }
+
+   getCurrentUserUid() async{
+      var user = await _auth.currentUser();
+      
+      return (user);
+
+  }
 
   //Logout firebase user by sign out function from firebase.
   Future signOut() async{
 
-   try{
+    try{
       return await _auth.signOut();
-   }catch (error){
+    }catch (error){
       print(error.toString());
+    }
   }
-
-}
-
-
 
 }
