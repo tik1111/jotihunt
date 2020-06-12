@@ -17,7 +17,12 @@ class AuthenticationService{
 
   }
 
+   getCurrentUserUid() async{
+      var user = await _auth.currentUser();
+      
+      return (user);
 
+  }
 
   //Logout firebase user by sign out function from firebase.
   Future signOut() async{

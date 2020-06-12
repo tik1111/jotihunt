@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:jotihunt/home/google_map.dart';
-import 'package:jotihunt/settings/settings_screen.dart';
+import 'package:jotihunt/googleMaps/jotiMap.dart';
+import 'package:jotihunt/screens/settings_screen.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
 
@@ -15,9 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
   //static const TextStyle optionStyle =
   //TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
+    JotiMap(),
     SettingsScreen(),
-    MyGoogleMap(),
-    MyGoogleMap(),
+    SettingsScreen(),
     SettingsScreen(),
   ];
 
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Jotihunt'),
       ),
       body: Center(
+        
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
