@@ -57,5 +57,3 @@ class MarkerHandler{
     return markerSet;
   }
 }
-
-//hi
