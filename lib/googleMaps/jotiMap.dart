@@ -16,6 +16,8 @@ class JotiMap extends StatefulWidget {
 class _JotiMapState extends State<JotiMap> {
   
   MarkerHandler handler = new MarkerHandler();
+
+  MapType _defaultMapType = MapType.normal;
   
   GoogleMapController _googleMapController;
   
@@ -43,6 +45,15 @@ class _JotiMapState extends State<JotiMap> {
   }
 
 
+  
+
+  void _changeMapType() {
+    setState(() {
+      _defaultMapType = _defaultMapType == MapType.normal ? MapType.hybrid : MapType.normal;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -51,7 +62,7 @@ class _JotiMapState extends State<JotiMap> {
         if(snapshot.data != null){
           snapshot.data.documents.forEach((element) {
               _future = handler.getMarkers();
-              //?TODO remove print after document read optimisation.
+              //! //!TODO remove print after document read optimisation.
             print(element.data['User']);
           });
         }
@@ -69,7 +80,7 @@ class _JotiMapState extends State<JotiMap> {
                 }
                 Set<Marker>  markerList = snapshot.data;
                 return  GoogleMap(
-                  mapType: MapType.normal,
+                  mapType: _defaultMapType,
                     onMapCreated: _onMapCreated,
                   myLocationEnabled: true,
                   compassEnabled: true,
@@ -81,6 +92,23 @@ class _JotiMapState extends State<JotiMap> {
               },
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(onPressed: null,
+              mini: true,
+              child: Icon(Icons.my_location),
+            ),
+            FloatingActionButton(
+              mini: true,
+              child: Icon(Icons.map),
+              onPressed: () {
+                _changeMapType();
+              }
+            ),
+          ],
+          ),
+          
         ]),
       );
       }
