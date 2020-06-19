@@ -44,9 +44,6 @@ class _JotiMapState extends State<JotiMap> {
     
   }
 
-
-  
-
   void _changeMapType() {
     setState(() {
       _defaultMapType = _defaultMapType == MapType.normal ? MapType.hybrid : MapType.normal;
@@ -58,7 +55,7 @@ class _JotiMapState extends State<JotiMap> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _locationUpdateStream,
-      builder:( context, snapshot){
+      builder:(context, snapshot){
         if(snapshot.data != null){
           snapshot.data.documents.forEach((element) {
               _future = handler.getMarkers();

@@ -32,11 +32,6 @@ class MarkerHandler{
   }
 
 
-  
-     
-  
-
-
   Future<Set<Marker>> getMarkers() async{
     Set<Marker> markerSet = new Set();
 
