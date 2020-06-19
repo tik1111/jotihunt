@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>99417396407-eu5vfr6comb1hi8ken841atlu841gs0i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.99417396407-eu5vfr6comb1hi8ken841atlu841gs0i</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDsNMYAJcEJMtAmn-RBRFc_sVqLd51agVI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>99417396407</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.timvandermaas.jotihunt</string>
+	<key>PROJECT_ID</key>
+	<string>jotihunt-8f978</string>
+	<key>STORAGE_BUCKET</key>
+	<string>jotihunt-8f978.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:99417396407:ios:e964d8b2749a002f5be932</string>
+	<key>DATABASE_URL</key>
+	<string>https://jotihunt-8f978.firebaseio.com</string>
+</dict>
+</plist>
