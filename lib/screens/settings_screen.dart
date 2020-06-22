@@ -7,6 +7,7 @@ import 'package:jotihunt/services/locationservice.dart';
 class SettingsScreen extends StatelessWidget {
   final AuthenticationService _auth = new AuthenticationService();
   final MarkerHandler _write = new MarkerHandler();
+  final LocationService _locationService =  new LocationService();
   
   
 
@@ -57,8 +58,8 @@ class SettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 FlatButton.icon(
-                  onPressed: ()async{
-                    print(await _write.getMarkers());
+                  onPressed: (){
+                     print(_locationService.getGeoLocation());
                   }, 
                   icon: Icon(Icons.my_location), 
                   label: Text('Get LatLng')

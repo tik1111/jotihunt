@@ -1,9 +1,12 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jotihunt/screens/loading_screen.dart';
 import 'package:jotihunt/services/markerHandler.dart';
+
 
 
 
@@ -26,6 +29,21 @@ class _JotiMapState extends State<JotiMap> {
   Future _future;
 
   Stream<QuerySnapshot> _locationUpdateStream = Firestore.instance.collection("Locations").snapshots();
+
+
+
+
+  @override
+  void initState() { 
+    super.initState();
+    var geolocator = Geolocator();
+    var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+
+    StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
+        (Position position) {
+            print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+        });
+  }
 
 
   static final CameraPosition initialLocation = CameraPosition(
@@ -58,7 +76,7 @@ class _JotiMapState extends State<JotiMap> {
       builder:(context, snapshot){
         if(snapshot.data != null){
           snapshot.data.documents.forEach((element) {
-              _future = handler.getMarkers();
+              _future = handler.updateAllMarkers();
               //! //!TODO remove print after document read optimisation.
             print(element.data['User']);
           });

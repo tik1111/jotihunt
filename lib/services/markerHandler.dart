@@ -19,7 +19,7 @@ class MarkerHandler{
 
       FirebaseUser user = await _auth.getCurrentUserUid();
       
-      var userLocation = await _locationService.getsUserLocation();      
+      var userLocation = await _locationService.getGeoLocation();      
       
       await databaseReference.collection('Locations').document(user.uid).setData(
         {
@@ -32,7 +32,31 @@ class MarkerHandler{
   }
 
 
-  Future<Set<Marker>> getMarkers() async{
+
+  Future<Marker> singleMarkers(String markerID) async{
+    Marker markerSet;
+
+    var carImage = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(
+          size: Size(1, 1)),
+        "assets/car_icon_blue.png");
+
+    var document = await databaseReference.collection('Locations').document(markerID).get();
+
+    markerSet= Marker
+    (
+      markerId: MarkerId(document['User']),
+      position: LatLng(document.data['Lat'],document.data['Long']),
+      icon: carImage,
+      draggable: false
+    );
+
+    return markerSet;
+  }
+
+
+    
+  Future<Set<Marker>> updateAllMarkers() async{
     Set<Marker> markerSet = new Set();
 
 
@@ -45,6 +69,7 @@ class MarkerHandler{
     await databaseReference.collection('Locations').getDocuments().then((querySnapshot){
 
       querySnapshot.documents.forEach((result) {
+        print(result.documentID);
         markerSet.add(
           Marker(
             markerId: MarkerId(result.data['User']),
