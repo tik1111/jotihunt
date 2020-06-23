@@ -1,20 +1,22 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jotihunt/screens/loading_screen.dart';
 import 'package:jotihunt/services/markerHandler.dart';
 
 
 
 
 
-class JotiMap extends StatefulWidget {
+class JotiMap_test extends StatefulWidget {
   @override
   _JotiMapState createState() => _JotiMapState();
 }
 
-class _JotiMapState extends State<JotiMap> {
+class _JotiMapState extends State<JotiMap_test> {
   
   MarkerHandler _markerHandler = new MarkerHandler();
 
@@ -97,6 +99,4 @@ class _JotiMapState extends State<JotiMap> {
   }
 
 }
-
-
 

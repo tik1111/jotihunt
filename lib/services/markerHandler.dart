@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/locationservice.dart';
@@ -28,59 +26,26 @@ class MarkerHandler{
           'Lat' : userLocation.latitude
         }
       );
-
   }
 
 
 
-  Future<Marker> singleMarkers(String markerID) async{
-    Marker markerSet;
 
-    var carImage = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(
-          size: Size(1, 1)),
-        "assets/car_icon_blue.png");
 
-    var document = await databaseReference.collection('Locations').document(markerID).get();
+  Marker setSingleMarker(String markerID, LatLng position, String markerType){
 
-    markerSet= Marker
-    (
-      markerId: MarkerId(document['User']),
-      position: LatLng(document.data['Lat'],document.data['Long']),
-      icon: carImage,
-      draggable: false
+    //! add image code
+       // var carImage = await BitmapDescriptor.fromAssetImage(
+   //     ImageConfiguration(
+   //       size: Size(1, 1)),
+   //     "assets/car_icon_blue.png");
+
+    return Marker(
+      markerId: MarkerId(markerID),
+      position: position,
+      draggable: false    
     );
 
-    return markerSet;
   }
 
-
-    
-  Future<Set<Marker>> updateAllMarkers() async{
-    Set<Marker> markerSet = new Set();
-
-
-    var carImage = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(
-          size: Size(1, 1)),
-        "assets/car_icon_blue.png");
-
-
-    await databaseReference.collection('Locations').getDocuments().then((querySnapshot){
-
-      querySnapshot.documents.forEach((result) {
-        print(result.documentID);
-        markerSet.add(
-          Marker(
-            markerId: MarkerId(result.data['User']),
-            position: LatLng(result.data['Lat'],result.data['Long']),
-            icon: carImage,
-            
-            draggable: false 
-          )
-        );
-      });
-    });
-    return markerSet;
-  }
 }
