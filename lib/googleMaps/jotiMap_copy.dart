@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:jotihunt/screens/loading_screen.dart';
 import 'package:jotihunt/services/markerHandler.dart';
 
 
@@ -25,6 +23,8 @@ class _JotiMapState extends State<JotiMap_test> {
   GoogleMapController _googleMapController;
   
   Set<Marker> allMarkers = {};
+  
+  Timer timer;
 
   Stream<QuerySnapshot> _locationUpdateStream = Firestore.instance.collection("Locations").snapshots();
 
@@ -36,12 +36,13 @@ class _JotiMapState extends State<JotiMap_test> {
     super.initState();
     var geolocator = Geolocator();
     var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    //_markerHandler.updateAllMarkers();
     geolocator.getPositionStream(locationOptions).listen(
         (Position position) {
             print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+            
+            _markerHandler.createLocationRecord();
         });
-    
+           
   }
 
 

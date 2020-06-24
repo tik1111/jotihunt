@@ -9,7 +9,7 @@ class AuthenticationService{
   Future signIn(String email, String password) async{
 
     try{
-      print('loggin in');
+      //print('loggin in');
       return await _auth.signInWithEmailAndPassword(email: email, password: password);
     }catch (error){
       print(error.toString());
