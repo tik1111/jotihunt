@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jotihunt/authenticate/login_screen.dart';
+import 'package:jotihunt/screens/login_screen.dart';
 import 'package:jotihunt/screens/home_screen.dart';
 
 class loginWrapper extends StatelessWidget {

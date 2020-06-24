@@ -1,25 +1,17 @@
-
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationService{
 
-
-Location location = new Location();
-LocationData _location;
+Geolocator geolocator = new Geolocator();
 
 
 
-Future<LocationData> getsUserLocation() async{
+Future <Position> getGeoLocation() async{
 
-  _location = await location.getLocation();
-  return(_location);
-  
+  Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+  return(position);
+
 }
-
-
-
-
-
 
 
 }

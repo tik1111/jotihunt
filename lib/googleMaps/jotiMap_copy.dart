@@ -9,12 +9,12 @@ import 'package:jotihunt/services/markerHandler.dart';
 
 
 
-class JotiMap extends StatefulWidget {
+class JotiMap_test extends StatefulWidget {
   @override
   _JotiMapState createState() => _JotiMapState();
 }
 
-class _JotiMapState extends State<JotiMap> {
+class _JotiMapState extends State<JotiMap_test> {
   
   MarkerHandler _markerHandler = new MarkerHandler();
 
@@ -23,6 +23,8 @@ class _JotiMapState extends State<JotiMap> {
   GoogleMapController _googleMapController;
   
   Set<Marker> allMarkers = {};
+  
+  Timer timer;
 
   Stream<QuerySnapshot> _locationUpdateStream = Firestore.instance.collection("Locations").snapshots();
 
@@ -34,12 +36,13 @@ class _JotiMapState extends State<JotiMap> {
     super.initState();
     var geolocator = Geolocator();
     var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    //_markerHandler.updateAllMarkers();
     geolocator.getPositionStream(locationOptions).listen(
         (Position position) {
             print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+            
+            _markerHandler.createLocationRecord();
         });
-    
+           
   }
 
 
@@ -97,6 +100,4 @@ class _JotiMapState extends State<JotiMap> {
   }
 
 }
-
-
 
