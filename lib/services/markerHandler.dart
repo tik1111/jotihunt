@@ -16,20 +16,30 @@ class MarkerHandler{
   
 
  
-  void createLocationRecord() async{
-
-      FirebaseUser user = await _auth.getCurrentUserUid();
-      
-      var userLocation = await _locationService.getGeoLocation();      
-      
-      await databaseReference.collection('Locations').document(user.uid).setData(
-        {
-          'User': '${user.uid}',
-          'Long': userLocation.longitude,
-          'Lat' : userLocation.latitude
-        }
-      );
-  }
+  //void createLocationRecord() async{
+//
+  //    FirebaseUser user = await _auth.getCurrentUserUid();
+  //    
+  //    var userLocation = await _locationService.getGeoLocation();      
+  //    
+  //    if(databaseReference.collection('Locations').document(user.uid) != null){
+//
+  //      databaseReference.collection('Locations').document(user.uid).updateData({
+  //          'Long': userLocation.longitude,
+  //          'Lat' : userLocation.latitude
+  //          });
+  //          
+  //    }else{
+  //   
+  //      await databaseReference.collection('Locations').document(user.uid).setData(
+  //        {
+  //          'User': '${user.uid}',
+  //          'Long': userLocation.longitude,
+  //          'Lat' : userLocation.latitude
+  //        }
+  //      );
+  //    }
+  //}
 
 
   Future<BitmapDescriptor> getMarkerIcon()async{

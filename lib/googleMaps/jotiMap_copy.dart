@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jotihunt/services/databaseHandler.dart';
 import 'package:jotihunt/services/markerHandler.dart';
 
 
@@ -17,6 +18,8 @@ class JotiMap_test extends StatefulWidget {
 class _JotiMapState extends State<JotiMap_test> {
   
   MarkerHandler _markerHandler = new MarkerHandler();
+  
+  DatabaseHandler _databaseHandler = new DatabaseHandler();
 
   MapType _defaultMapType = MapType.normal;
   
@@ -40,9 +43,32 @@ class _JotiMapState extends State<JotiMap_test> {
         (Position position) {
             print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
             
-            _markerHandler.createLocationRecord();
+            _databaseHandler.writeUserLocation();
         });
-           
+    print('initstate is triggerd');
+    setInitialMapMarkers();    
+  }
+
+
+  void setInitialMapMarkers(){
+    Firestore.instance
+    .collection('Locations')
+    .snapshots()
+    .listen(
+      (data) =>
+        data.documents.forEach(
+          (doc) => allMarkers.add(
+            _markerHandler.setSingleMarker(
+              doc.documentID, 
+              LatLng(
+                doc.data['Lat'],
+                doc.data['Long']
+              ),
+              "car"
+            )
+          )
+        )
+      );        
   }
 
 
@@ -75,12 +101,20 @@ class _JotiMapState extends State<JotiMap_test> {
       stream: _locationUpdateStream,
       builder:(context, AsyncSnapshot<QuerySnapshot> snapshot){
         if(snapshot.data != null){
-          snapshot.data.documents.forEach((marker) {
-              print(marker.documentID.toString() + 'element');
-              allMarkers.add(_markerHandler.setSingleMarker(marker.documentID, LatLng(marker.data['Lat'],marker.data['Long']), "car")
-            );
+          snapshot.data.documents.map((marker) {
+              allMarkers.remove(marker.documentID);
+              allMarkers.add(
+                _markerHandler.setSingleMarker(
+                  marker.documentID, 
+                  LatLng(marker.data['Lat'],
+                  marker.data['Long']), 
+                  "car"
+                )
+              );
           });
-        }
+  }
+
+    
       return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,

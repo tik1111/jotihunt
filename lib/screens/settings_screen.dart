@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jotihunt/services/authservice.dart';
+import 'package:jotihunt/services/databaseHandler.dart';
 import 'package:jotihunt/services/markerHandler.dart';
 import 'package:jotihunt/services/locationservice.dart';
 
 
 class SettingsScreen extends StatelessWidget {
   final AuthenticationService _auth = new AuthenticationService();
-  final MarkerHandler _write = new MarkerHandler();
+  final DatabaseHandler _databaseHandler = new DatabaseHandler();
   final LocationService _locationService =  new LocationService();
   
   
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
               children: <Widget>[
                 FlatButton.icon(
                   onPressed: (){
-                    _write.createLocationRecord();
+                    _databaseHandler.writeUserLocation();
                   }, 
                   icon: Icon(Icons.restaurant), 
                   label: Text('Write database')
