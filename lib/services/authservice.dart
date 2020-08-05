@@ -17,7 +17,7 @@ class AuthenticationService{
 
   }
 
-   getCurrentUserUid() async{
+   getCurrentUser() async{
       var user = await _auth.currentUser();
       
       return (user);

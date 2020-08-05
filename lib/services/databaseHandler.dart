@@ -1,9 +1,3 @@
-
-
-
-
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jotihunt/services/authservice.dart';
@@ -14,27 +8,19 @@ class DatabaseHandler{
   //Define Auth service to access user
   final AuthenticationService _auth = new AuthenticationService();
 
+  //Define location service
   final LocationService _locationService =  new LocationService();
 
   //Database reference
-  final databaseReference = Firestore.instance;
+  final _databaseReference = Firestore.instance;
 
   //Define collections in database
   final String locationCollection = 'Locations';
 
-
-  Future<FirebaseUser> getCurrentUserUid()async {
-    //Get current logged in user from authentication service.   
-    try{
-      return await _auth.getCurrentUserUid();
-    }catch (errorMessage){
-      return errorMessage;
-    }
-  }
-
+  //Write userlocation to firebase
   void writeUserLocation()async {
       //Get firebase user and subtrack uid from it
-      FirebaseUser firebaseUser = await getCurrentUserUid();
+      FirebaseUser firebaseUser = await _auth.getCurrentUser();
       String uid =  firebaseUser.uid;
 
       //Get user location in position object
@@ -43,7 +29,7 @@ class DatabaseHandler{
       //Try to write database User, long , lat
       try{
      
-        await databaseReference.collection(locationCollection).document(uid).setData({
+        await _databaseReference.collection(locationCollection).document(uid).setData({
             'User': '${uid}',
             'Long': userLocation.longitude,
             'Lat' : userLocation.latitude
@@ -52,12 +38,16 @@ class DatabaseHandler{
       }catch (errorMessage){
           //! todo error handling on failure
       }
-
   }
 
 
-  void readUserLocation(){
+  Future<DocumentSnapshot> readUserLocation()async{
+    FirebaseUser firebaseUser = await _auth.getCurrentUser();
+    String uid =  firebaseUser.uid;
 
+    var userLocation = _databaseReference.collection(locationCollection).document(uid).get();
+
+    return userLocation;
   }
 
 

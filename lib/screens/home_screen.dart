@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     JotiMap_test(),
-    JotiMap(),
+    JotiMap_test(),
     SettingsScreen(),
     SettingsScreen(),
   ];

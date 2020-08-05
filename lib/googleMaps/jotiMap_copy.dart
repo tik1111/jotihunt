@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jotihunt/models/vehicles/vehicle.dart';
 import 'package:jotihunt/services/databaseHandler.dart';
 import 'package:jotihunt/services/markerHandler.dart';
 
@@ -21,7 +23,7 @@ class _JotiMapState extends State<JotiMap_test> {
   
   DatabaseHandler _databaseHandler = new DatabaseHandler();
 
-  MapType _defaultMapType = MapType.normal;
+  MapType _defaultMapType = MapType.hybrid;
   
   GoogleMapController _googleMapController;
   
@@ -58,13 +60,13 @@ class _JotiMapState extends State<JotiMap_test> {
       (data) =>
         data.documents.forEach(
           (doc) => allMarkers.add(
-            _markerHandler.setSingleMarker(
+            _markerHandler.setHunterMarker(
               doc.documentID, 
               LatLng(
                 doc.data['Lat'],
                 doc.data['Long']
               ),
-              "car"
+              "car" 
             )
           )
         )
@@ -101,16 +103,8 @@ class _JotiMapState extends State<JotiMap_test> {
       stream: _locationUpdateStream,
       builder:(context, AsyncSnapshot<QuerySnapshot> snapshot){
         if(snapshot.data != null){
+          log("Location changed of any user");
           snapshot.data.documents.map((marker) {
-              allMarkers.remove(marker.documentID);
-              allMarkers.add(
-                _markerHandler.setSingleMarker(
-                  marker.documentID, 
-                  LatLng(marker.data['Lat'],
-                  marker.data['Long']), 
-                  "car"
-                )
-              );
           });
   }
 

@@ -76,42 +76,17 @@ class SettingsScreen extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     child: new Image.asset(
-                      'assets/car_icon.png',
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                  Container(
-                    child: new Image.asset(
-                      'assets/car_icon.png',
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                  Container(
-                    child: new Image.asset(
-                      'assets/car_icon.png',
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
-                  Container(
-                    child: new Image.asset(
-                      'assets/car_icon.png',
+                      'assets/car.png',
                       height: 40,
                       width: 40,
                     ),
                   ),
                   
+                  
               ],
               ),
               
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('hi')
-                    ],
-                  ),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
