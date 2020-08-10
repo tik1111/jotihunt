@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jotihunt/screens/settings_screen/vehicle_select.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/databaseHandler.dart';
-import 'package:jotihunt/services/markerHandler.dart';
 import 'package:jotihunt/services/locationservice.dart';
 
 
@@ -12,8 +12,13 @@ class SettingsScreen extends StatelessWidget {
   
   
 
+  
+
   @override
   Widget build(BuildContext context) {
+    
+
+    
     return Scaffold(
 
       body: Container(
@@ -70,23 +75,13 @@ class SettingsScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-              child: Row(
-                
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: new Image.asset(
-                      'assets/car.png',
-                      height: 40,
-                      width: 40,
-                    ),
+              child: 
+                        VehicleRadioSelect()
+                     
                   ),
                   
-                  
-              ],
-              ),
-              
-            ),
+                    
+            
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -115,3 +110,4 @@ class SettingsScreen extends StatelessWidget {
     
   }
 }
+
