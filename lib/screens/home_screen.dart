@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jotihunt/googleMaps/jotiMap_copy.dart';
+import 'package:jotihunt/screens/developerSettings_screen.dart';
 import 'package:jotihunt/screens/settings_screen.dart';
 
 
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<Widget> _widgetOptions = <Widget>[
     SettingsScreen(),
     JotiMap_test(),
-    SettingsScreen(),
+    DeveloperSettingsScreen(),
     SettingsScreen(),
   ];
 

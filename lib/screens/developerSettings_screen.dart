@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
-import 'package:jotihunt/screens/settings_screen/vehicle_select.dart';
+
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/databaseHandler.dart';
 import 'package:jotihunt/services/locationservice.dart';
 
 
-class SettingsScreen extends StatelessWidget {
+class DeveloperSettingsScreen extends StatelessWidget {
   final AuthenticationService _auth = new AuthenticationService();
   final DatabaseHandler _databaseHandler = new DatabaseHandler();
   final LocationService _locationService =  new LocationService();
@@ -37,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    child: Text('Instellingen', style: TextStyle(fontSize: 20),),
+                    child: Text('Developer settings', style: TextStyle(fontSize: 20),),
                   )
                 ],
               ),
@@ -46,19 +45,17 @@ class SettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               child: Divider(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-              child:
-                RaisedButton(
-                  child: Text('Select car'),
-                  onPressed: (){ 
-                    showDialog(
-                      context: context,
-                      builder: (_)=> VehicleSelectDialog(),
-                    );
-                  },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FlatButton.icon(
+                  onPressed: (){
+                    _databaseHandler.writeUserLocation();
+                  }, 
+                  icon: Icon(Icons.restaurant), 
+                  label: Text('Write database')
                   )
-                  //VehicleRadioSelect()
+            ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -67,17 +64,13 @@ class SettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 FlatButton.icon(
-                    onPressed: (){
-                      try{
-                        _auth.signOut();
-                      }catch(e){
-                        print(e);
-                      }
-
-                    },
-                    icon: Icon(Icons.power_settings_new),
-                    label: Text('Uitloggen'))
-              ],
+                  onPressed: (){
+                     print(_locationService.getGeoLocation());
+                  }, 
+                  icon: Icon(Icons.my_location), 
+                  label: Text('Get LatLng')
+                  )
+            ],
             ),
             ),
           ],
@@ -87,3 +80,4 @@ class SettingsScreen extends StatelessWidget {
     
   }
 }
+
