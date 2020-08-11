@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jotihunt/models/userProfileModel.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/locationservice.dart';
 
@@ -16,6 +19,7 @@ class DatabaseHandler{
 
   //Define collections in database
   final String locationCollection = 'Locations';
+  final String userProfileCollection = 'Users';
 
   //Write userlocation to firebase
   void writeUserLocation()async {
@@ -30,7 +34,7 @@ class DatabaseHandler{
       try{
      
         await _databaseReference.collection(locationCollection).document(uid).setData({
-            'User': '${uid}',
+            'User': uid,
             'Long': userLocation.longitude,
             'Lat' : userLocation.latitude
             });
@@ -68,6 +72,30 @@ class DatabaseHandler{
 
   void readSpotLocation(){
     
+  }
+
+  Future<bool> checkUserProfilePresenceOrCreate()async{
+    FirebaseUser firebaseUser = await _auth.getCurrentUser();
+    String uid =  firebaseUser.uid;
+    
+    await _databaseReference.collection(userProfileCollection).document(uid).get().then((DocumentSnapshot ds){
+
+      if(ds.exists){
+        log('Does exist' );
+        return true;
+      }else{
+        UserProfileData _userProfileData = new UserProfileData();
+        Firestore.instance.collection(userProfileCollection).document(uid).setData(_userProfileData.toMap());
+        log('Doesnt exist' );
+        return true;
+    }
+  });
+
+    
+
+
+    
+
   }
 
 

@@ -11,6 +11,11 @@ class VehicleSelectDialog extends StatefulWidget {
 String currentVehicleSelected = 'Skateboard';
 class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
   
+  @override
+  void initState() { 
+    super.initState();
+    //currectVehicle();
+  }
 
   String currectVehicle(){
     switch(currentVehicleSelected){
@@ -40,14 +45,18 @@ class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
       elevation: 50,
       backgroundColor: Colors.white,
       child: Container(
-        
+        height: 400,
+        width: 200,
         child: Column(crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.only(topLeft: Radius.circular(14), topRight: Radius.circular(14)),
               child: Image.asset(
                 currectVehicle(),
-                fit: BoxFit.fill, 
+                fit: BoxFit.fitHeight,
+ 
+                //scale: 4,
                 ), 
             ),
             Padding(padding: EdgeInsets.fromLTRB(10, 20, 10, 5),
@@ -114,17 +123,4 @@ class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
       ),
       );
   }
-}
-
-Widget flatButtonForVehicleDialog(String name,String image, int color){
-  return RaisedButton(
-    child: Text(name),
-    onPressed: (){
-
-    },
-    color: Color(color),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-    textColor: Colors.grey[200],
-    elevation: 4,
-  );
 }

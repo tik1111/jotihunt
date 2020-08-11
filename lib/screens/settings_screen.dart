@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:jotihunt/screens/settings_screen/vehicle_select.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/databaseHandler.dart';
-import 'package:jotihunt/services/locationservice.dart';
 
+  
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   final AuthenticationService _auth = new AuthenticationService();
-  final DatabaseHandler _databaseHandler = new DatabaseHandler();
-  final LocationService _locationService =  new LocationService();
-  
-  
 
+  final DatabaseHandler _databaseHandler = new DatabaseHandler();
   
+  @override
+  void initState() { 
+    super.initState();
+    _databaseHandler.checkUserProfilePresenceOrCreate();
+  }
 
   @override
   Widget build(BuildContext context) {
