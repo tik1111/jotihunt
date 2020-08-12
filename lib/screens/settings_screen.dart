@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jotihunt/screens/settings_screen/vehicle_select.dart';
+import 'package:jotihunt/screens/settings_screen/vehicleSelectDialog.dart';
 import 'package:jotihunt/services/authservice.dart';
 import 'package:jotihunt/services/databaseHandler.dart';
 

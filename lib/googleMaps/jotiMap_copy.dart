@@ -53,7 +53,7 @@ class _JotiMapState extends State<JotiMap_test> {
 
   void setInitialMapMarkers(){
     Firestore.instance
-    .collection('Locations')
+    .collection('Users')
     .snapshots()
     .listen(
       (data) =>
@@ -62,10 +62,10 @@ class _JotiMapState extends State<JotiMap_test> {
             _markerHandler.setHunterMarker(
               doc.documentID, 
               LatLng(
-                doc.data['Lat'],
-                doc.data['Long']
+                doc.data['lat'],
+                doc.data['long']
               ),
-              "car" 
+              doc.data['vehicle'],
             )
           )
         )

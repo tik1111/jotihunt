@@ -17,18 +17,18 @@ class MarkerHandler{
 
     //Switch betreen vehicle types
     switch(vehicleType){
-      case "car":{
+      case "Car":{
         iconImage = "assets/vehicles/images/car.png";
         log("case car");
         break;
       }
         
-      case "bike":{
+      case "Bike":{
         iconImage = "assets/vehicles/images/bike.png";
         break;
       }
 
-      case "skateboard":{
+      case "Skateboard":{
         iconImage = "assets/vehicles/images/skateboard.png";
         break;
       }

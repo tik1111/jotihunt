@@ -20,6 +20,7 @@ class DatabaseHandler{
   //Define collections in database
   final String locationCollection = 'Locations';
   final String userProfileCollection = 'Users';
+  
 
   //Write userlocation to firebase
   void writeUserLocation()async {
@@ -33,10 +34,9 @@ class DatabaseHandler{
       //Try to write database User, long , lat
       try{
      
-        await _databaseReference.collection(locationCollection).document(uid).setData({
-            'User': uid,
-            'Long': userLocation.longitude,
-            'Lat' : userLocation.latitude
+        await _databaseReference.collection(userProfileCollection).document(uid).updateData({
+            'long': userLocation.longitude,
+            'lat' : userLocation.latitude
             });
             
       }catch (errorMessage){
@@ -49,7 +49,7 @@ class DatabaseHandler{
     FirebaseUser firebaseUser = await _auth.getCurrentUser();
     String uid =  firebaseUser.uid;
 
-    var userLocation = _databaseReference.collection(locationCollection).document(uid).get();
+    var userLocation = _databaseReference.collection(userProfileCollection).document(uid).get();
 
     return userLocation;
   }
@@ -90,13 +90,37 @@ class DatabaseHandler{
         return true;
     }
   });
-
-    
-
-
-    
-
   }
 
+
+
+  void changeUserVehicle(String vehicle)async{
+    //Get firebase user and subtrack uid from it
+      FirebaseUser firebaseUser = await _auth.getCurrentUser();
+      String uid =  firebaseUser.uid;
+
+      try{
+     
+        await _databaseReference.collection(userProfileCollection).document(uid).updateData({
+            'vehicle': vehicle,
+            });
+            
+      }catch (errorMessage){
+          //! todo error handling on failure
+      }
+  }
+
+
+  Future<String> readUserVehicle()async{
+    FirebaseUser firebaseUser = await _auth.getCurrentUser();
+    String uid =  firebaseUser.uid;
+    String userVehicle;
+
+    await _databaseReference.collection(locationCollection).document(uid).get().then((DocumentSnapshot ds) => {
+      userVehicle = ds.data['vehicle'],
+    });
+
+    return userVehicle;
+  }
 
 }

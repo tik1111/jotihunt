@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:jotihunt/services/databaseHandler.dart';
 
 class VehicleSelectDialog extends StatefulWidget {
   const VehicleSelectDialog({Key key}) : super(key: key);
@@ -11,10 +13,11 @@ class VehicleSelectDialog extends StatefulWidget {
 String currentVehicleSelected = 'Skateboard';
 class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
   
+  DatabaseHandler _databaseHandler = new DatabaseHandler();
+
   @override
   void initState() { 
     super.initState();
-    //currectVehicle();
   }
 
   String currectVehicle(){
@@ -70,6 +73,7 @@ class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
                     child: Text('Auto'),
                     onPressed: (){
                       setState(() {
+                        _databaseHandler.changeUserVehicle('Car');
                         currentVehicleSelected = 'Car';
                       });
                         
@@ -85,6 +89,7 @@ class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
                     child: Text('Fiets'),
                     onPressed: (){
                       setState(() {
+                        _databaseHandler.changeUserVehicle('Bike');
                         currentVehicleSelected = 'Bike';
                       });
                         
@@ -106,6 +111,7 @@ class _VehicleSelectDialogState extends State<VehicleSelectDialog> {
                     child: Text('Skateboard'),
                     onPressed: (){
                       setState(() {
+                        _databaseHandler.changeUserVehicle('Skateboard');
                         currentVehicleSelected = 'Skateboard';
                       });
                         
