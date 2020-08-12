@@ -30,7 +30,7 @@ class _JotiMapState extends State<JotiMap_test> {
   
   Timer timer;
 
-  Stream<QuerySnapshot> _locationUpdateStream = Firestore.instance.collection("Locations").snapshots();
+  Stream<QuerySnapshot> _locationUpdateStream = Firestore.instance.collection("Users").snapshots();
 
 
 

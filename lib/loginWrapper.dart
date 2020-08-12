@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jotihunt/screens/login_screen.dart';
 import 'package:jotihunt/screens/home_screen.dart';
 
-class loginWrapper extends StatelessWidget {
+class LoginWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
