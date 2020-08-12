@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jotihunt/services/databaseHandler.dart';
 
 class AuthenticationService{
 
   //Firebase auth instance declaration.
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
+  
   Future signIn(String email, String password) async{
 
     try{
-      //print('loggin in');
       return await _auth.signInWithEmailAndPassword(email: email, password: password);
     }catch (error){
       print(error.toString());
@@ -17,7 +17,7 @@ class AuthenticationService{
 
   }
 
-   getCurrentUserUid() async{
+   getCurrentUser() async{
       var user = await _auth.currentUser();
       
       return (user);

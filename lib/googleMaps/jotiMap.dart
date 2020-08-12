@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:jotihunt/services/markerHandler.dart';
 
 
@@ -74,7 +75,7 @@ class _JotiMapState extends State<JotiMap> {
         if(snapshot.data != null){
           snapshot.data.documents.forEach((marker) {
               print(marker.documentID.toString() + 'element');
-              allMarkers.add(_markerHandler.setSingleMarker(marker.documentID, LatLng(marker.data['Lat'],marker.data['Long']), "car")
+              allMarkers.add(_markerHandler.setHunterMarker(marker.documentID, LatLng(marker.data['Lat'],marker.data['Long']), "car" )
             );
           });
         }
