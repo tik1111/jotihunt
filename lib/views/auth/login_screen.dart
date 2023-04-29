@@ -1,0 +1,172 @@
+// ignore: file_names
+import 'package:flutter/material.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final Color orangeCollor = const Color.fromARGB(255, 230, 144, 35);
+
+  final Color backgroundCollor = const Color.fromARGB(255, 33, 34, 45);
+
+  final Color whiteColor = const Color.fromARGB(255, 217, 217, 219);
+
+  final double bannerHeight = 200;
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
+    return Scaffold(
+      backgroundColor: backgroundCollor,
+      body: ListView(children: [
+        Column(children: [
+          Row(
+            children: [
+              Stack(children: [
+                ClipPath(
+                  clipper: CustomClipPath(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: bannerHeight,
+                    color: orangeCollor,
+                  ),
+                ),
+                Container(
+                  child: Column(children: [
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    SizedBox(
+                      //color: Colors.red,
+                      height: 100,
+
+                      width: MediaQuery.of(context).size.width,
+
+                      child: CircleAvatar(
+                        radius: 2,
+                        backgroundColor: whiteColor,
+                        child: ClipOval(
+                            child: Image.network(
+                                'https://i.imgur.com/8qcWcvM.png')),
+                      ),
+                    )
+                  ]),
+                )
+              ]),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 20, 0, 30),
+            child: Row(
+              children: [
+                Text(
+                  "Jotihunt",
+                  style: TextStyle(color: whiteColor, fontSize: 40),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                    cursorColor: const Color.fromARGB(255, 255, 179, 0),
+                    style: TextStyle(color: orangeCollor),
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: orangeCollor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: orangeCollor)),
+                      hintStyle: TextStyle(color: orangeCollor),
+                      labelStyle: TextStyle(color: orangeCollor),
+                      labelText: "Username",
+                      suffixIcon: Icon(
+                        Icons.person,
+                        color: orangeCollor,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                    cursorColor: orangeCollor,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: whiteColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: whiteColor)),
+                      hintStyle: TextStyle(color: whiteColor),
+                      labelStyle: TextStyle(color: whiteColor),
+                      labelText: "Password",
+                      suffixIcon: Icon(
+                        Icons.key_sharp,
+                        color: whiteColor,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text("FORGOT PASSWORD?",
+                      style: TextStyle(color: orangeCollor)),
+                ),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: Text("Register", style: TextStyle(color: whiteColor)),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text("Log in", style: TextStyle(color: orangeCollor)),
+              )
+            ],
+          ),
+        ]),
+      ]),
+    );
+  }
+}
+
+class CustomClipPath extends CustomClipper<Path> {
+  var radius = 5.0;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
