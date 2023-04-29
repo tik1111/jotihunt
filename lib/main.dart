@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
+import 'package:jotihunt/views/profile_page_screen.dart';
 
 void main() {
   runApp(const Jotihunt());
@@ -16,7 +17,12 @@ class Jotihunt extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      //home: const ProfilePage(),
+      routes: {
+        '/': (context) => const ProfilePage(),
+        '/login': (context) => const LoginScreen(),
+        '/profile': (context) => ProfilePage(),
+      },
     );
   }
 }
