@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:jotihunt/auth/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,26 +18,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final double bannerHeight = 200;
 
+  final _loginFormKey = GlobalKey<FormState>();
+
+  final loginEmailFormController = TextEditingController();
+  final loginPasswordFormController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // ignore: avoid_unnecessary_containers
     return Scaffold(
       backgroundColor: backgroundCollor,
       body: ListView(children: [
-        Column(children: [
-          Row(
-            children: [
-              Stack(children: [
-                ClipPath(
-                  clipper: CustomClipPath(),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: bannerHeight,
-                    color: orangeCollor,
+        Form(
+          key: _loginFormKey,
+          child: Column(children: [
+            Row(
+              children: [
+                Stack(children: [
+                  ClipPath(
+                    clipper: CustomClipPath(),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: bannerHeight,
+                      color: orangeCollor,
+                    ),
                   ),
-                ),
-                Container(
-                  child: Column(children: [
+                  Column(children: [
                     SizedBox(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -55,101 +62,109 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'https://i.imgur.com/8qcWcvM.png')),
                       ),
                     )
-                  ]),
-                )
-              ]),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 20, 0, 30),
-            child: Row(
-              children: [
-                Text(
-                  "Jotihunt",
-                  style: TextStyle(color: whiteColor, fontSize: 40),
-                ),
+                  ])
+                ]),
               ],
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    cursorColor: const Color.fromARGB(255, 255, 179, 0),
-                    style: TextStyle(color: orangeCollor),
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: orangeCollor)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: orangeCollor)),
-                      hintStyle: TextStyle(color: orangeCollor),
-                      labelStyle: TextStyle(color: orangeCollor),
-                      labelText: "Username",
-                      suffixIcon: Icon(
-                        Icons.person,
-                        color: orangeCollor,
-                      ),
-                    ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 20, 0, 30),
+              child: Row(
+                children: [
+                  Text(
+                    "Jotihunt",
+                    style: TextStyle(color: whiteColor, fontSize: 40),
                   ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    cursorColor: orangeCollor,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: whiteColor)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: whiteColor)),
-                      hintStyle: TextStyle(color: whiteColor),
-                      labelStyle: TextStyle(color: whiteColor),
-                      labelText: "Password",
-                      suffixIcon: Icon(
-                        Icons.key_sharp,
-                        color: whiteColor,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text("FORGOT PASSWORD?",
-                      style: TextStyle(color: orangeCollor)),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text("Register", style: TextStyle(color: whiteColor)),
+                ],
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text("Log in", style: TextStyle(color: orangeCollor)),
-              )
-            ],
-          ),
-        ]),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      controller: loginEmailFormController,
+                      cursorColor: const Color.fromARGB(255, 255, 179, 0),
+                      style: TextStyle(color: orangeCollor),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: orangeCollor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: orangeCollor)),
+                        hintStyle: TextStyle(color: orangeCollor),
+                        labelStyle: TextStyle(color: orangeCollor),
+                        labelText: "Username",
+                        suffixIcon: Icon(
+                          Icons.person,
+                          color: orangeCollor,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      controller: loginPasswordFormController,
+                      cursorColor: orangeCollor,
+                      style: TextStyle(color: whiteColor),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: whiteColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: whiteColor)),
+                        hintStyle: TextStyle(color: whiteColor),
+                        labelStyle: TextStyle(color: whiteColor),
+                        labelText: "Password",
+                        suffixIcon: Icon(
+                          Icons.key_sharp,
+                          color: whiteColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text("FORGOT PASSWORD?",
+                        style: TextStyle(color: orangeCollor)),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text("Register", style: TextStyle(color: whiteColor)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _loginFormKey.currentState!.validate();
+                    Auth().loginUserWithEmailAndPassword(
+                        loginEmailFormController.text,
+                        loginPasswordFormController.text);
+                  },
+                  child: Text("Log in", style: TextStyle(color: orangeCollor)),
+                )
+              ],
+            ),
+          ]),
+        ),
       ]),
     );
   }

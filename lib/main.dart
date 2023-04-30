@@ -19,9 +19,9 @@ class Jotihunt extends StatelessWidget {
       ),
       //home: const ProfilePage(),
       routes: {
-        '/': (context) => const ProfilePage(),
+        '/': (context) => const LoginScreen(),
         '/login': (context) => const LoginScreen(),
-        '/profile': (context) => ProfilePage(),
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }

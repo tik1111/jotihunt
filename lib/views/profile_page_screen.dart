@@ -187,6 +187,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   ))
             ],
           ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            decoration: BoxDecoration(
+                color: orangeColor,
+                border: Border.all(color: orangeColor),
+                borderRadius: const BorderRadius.all(Radius.circular(20))),
+            height: 100,
+            width: MediaQuery.of(context).size.width - 40,
+            child: Container(),
+          ),
           Row(children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
@@ -211,7 +221,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-          ])
+          ]),
         ],
       ),
     );
