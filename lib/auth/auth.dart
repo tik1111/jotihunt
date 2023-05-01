@@ -25,5 +25,27 @@ class Auth {
     }
   }
 
+  registerUserWithEmailAndPassword(
+      String email, String password, String firstName, String lastName) async {
+    try {
+      dio.options.headers['email'] = email;
+      dio.options.headers['password'] = password;
+      dio.options.headers['first_name'] = "tim";
+      dio.options.headers['last_name'] = "van der Maas";
+
+      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register');
+      print(response.data["_id"]);
+      if (response.data["_id"] != null || response.data["_id"] != "") {
+        loginUserWithEmailAndPassword(email, password);
+      }
+
+      print(response);
+    } on DioError catch (dioError) {
+      print(dioError.response!.data.toString());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   logout() async {}
 }

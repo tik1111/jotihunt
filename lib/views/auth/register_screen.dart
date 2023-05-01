@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/auth/auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final Color orangeCollor = const Color.fromARGB(255, 230, 144, 35);
 
   final Color backgroundCollor = const Color.fromARGB(255, 33, 34, 45);
@@ -21,8 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _loginFormKey = GlobalKey<FormState>();
 
-  final loginEmailFormController = TextEditingController();
-  final loginPasswordFormController = TextEditingController();
+  final registerEmailFormController = TextEditingController();
+  final registerPasswordFormController = TextEditingController();
+  final registerFirstNameFormController = TextEditingController();
+  final registerLastNameFormController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Jotihunt login",
+                    "Jotihunt Register",
                     style: TextStyle(color: whiteColor, fontSize: 40),
                   ),
                 ],
@@ -85,7 +87,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      controller: loginEmailFormController,
+                      controller: registerEmailFormController,
+                      cursorColor: const Color.fromARGB(255, 255, 179, 0),
+                      style: TextStyle(color: orangeCollor),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: orangeCollor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: orangeCollor)),
+                        hintStyle: TextStyle(color: orangeCollor),
+                        labelStyle: TextStyle(color: orangeCollor),
+                        labelText: "Naam",
+                        suffixIcon: Icon(
+                          Icons.person,
+                          color: orangeCollor,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      controller: registerEmailFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
                       style: TextStyle(color: orangeCollor),
                       decoration: InputDecoration(
@@ -113,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      controller: loginPasswordFormController,
+                      controller: registerPasswordFormController,
                       cursorColor: orangeCollor,
                       style: TextStyle(color: whiteColor),
                       decoration: InputDecoration(
@@ -151,17 +181,18 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pushReplacementNamed('/register');
-                    context.go('/register');
+                    //_loginFormKey.currentState!.validate();
+                    Auth().registerUserWithEmailAndPassword(
+                        registerEmailFormController.text,
+                        registerPasswordFormController.text,
+                        registerFirstNameFormController.text,
+                        registerLastNameFormController.text);
                   },
                   child: Text("Register", style: TextStyle(color: whiteColor)),
                 ),
                 TextButton(
                   onPressed: () {
-                    _loginFormKey.currentState!.validate();
-                    Auth().loginUserWithEmailAndPassword(
-                        loginEmailFormController.text,
-                        loginPasswordFormController.text);
+                    context.go("/login");
                   },
                   child: Text("Log in", style: TextStyle(color: orangeCollor)),
                 )
