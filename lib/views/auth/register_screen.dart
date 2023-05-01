@@ -23,8 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final registerEmailFormController = TextEditingController();
   final registerPasswordFormController = TextEditingController();
-  final registerFirstNameFormController = TextEditingController();
-  final registerLastNameFormController = TextEditingController();
+  final registerNameFormController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      controller: registerEmailFormController,
+                      controller: registerNameFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
                       style: TextStyle(color: orangeCollor),
                       decoration: InputDecoration(
@@ -117,18 +116,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextFormField(
                       controller: registerEmailFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
-                      style: TextStyle(color: orangeCollor),
+                      style: TextStyle(color: whiteColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
+                            borderSide: BorderSide(color: whiteColor)),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
-                        hintStyle: TextStyle(color: orangeCollor),
-                        labelStyle: TextStyle(color: orangeCollor),
+                            borderSide: BorderSide(color: whiteColor)),
+                        hintStyle: TextStyle(color: whiteColor),
+                        labelStyle: TextStyle(color: whiteColor),
                         labelText: "Email",
                         suffixIcon: Icon(
                           Icons.email,
-                          color: orangeCollor,
+                          color: whiteColor,
                         ),
                       ),
                     ),
@@ -143,8 +142,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vul iets in ...';
+                        }
+                        if (value.length < 8) {
+                          return "Wachtwoord moet minimaal 8 karakters bevatten";
+                        }
+                        return null;
+                      },
                       controller: registerPasswordFormController,
                       cursorColor: orangeCollor,
+                      obscureText: true,
                       style: TextStyle(color: whiteColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -153,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderSide: BorderSide(color: whiteColor)),
                         hintStyle: TextStyle(color: whiteColor),
                         labelStyle: TextStyle(color: whiteColor),
-                        labelText: "Password",
+                        labelText: "Wachtwoord",
                         suffixIcon: Icon(
                           Icons.key_sharp,
                           color: whiteColor,
@@ -181,12 +190,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    //_loginFormKey.currentState!.validate();
-                    Auth().registerUserWithEmailAndPassword(
-                        registerEmailFormController.text,
-                        registerPasswordFormController.text,
-                        registerFirstNameFormController.text,
-                        registerLastNameFormController.text);
+                    if (_loginFormKey.currentState!.validate()) {
+                      Auth().registerUserWithEmailAndPassword(
+                          registerEmailFormController.text,
+                          registerPasswordFormController.text,
+                          registerNameFormController.text);
+                    }
                   },
                   child: Text("Register", style: TextStyle(color: whiteColor)),
                 ),

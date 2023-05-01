@@ -26,12 +26,14 @@ class Auth {
   }
 
   registerUserWithEmailAndPassword(
-      String email, String password, String firstName, String lastName) async {
+    String email,
+    String password,
+    String name,
+  ) async {
     try {
       dio.options.headers['email'] = email;
       dio.options.headers['password'] = password;
-      dio.options.headers['first_name'] = "tim";
-      dio.options.headers['last_name'] = "van der Maas";
+      dio.options.headers['name'] = name;
 
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register');
       print(response.data["_id"]);

@@ -52,9 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       //color: Colors.red,
                       height: 100,
-
                       width: MediaQuery.of(context).size.width,
-
                       child: CircleAvatar(
                         radius: 2,
                         backgroundColor: whiteColor,
@@ -85,6 +83,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vul iets in ...';
+                        }
+                        return null;
+                      },
                       controller: loginEmailFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
                       style: TextStyle(color: orangeCollor),
@@ -113,6 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vul iets in ...';
+                        }
+                        return null;
+                      },
                       controller: loginPasswordFormController,
                       cursorColor: orangeCollor,
                       style: TextStyle(color: whiteColor),
@@ -158,10 +169,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    _loginFormKey.currentState!.validate();
-                    Auth().loginUserWithEmailAndPassword(
-                        loginEmailFormController.text,
-                        loginPasswordFormController.text);
+                    if (_loginFormKey.currentState!.validate()) {
+                      Auth().loginUserWithEmailAndPassword(
+                          loginEmailFormController.text,
+                          loginPasswordFormController.text);
+                    }
                   },
                   child: Text("Log in", style: TextStyle(color: orangeCollor)),
                 )
