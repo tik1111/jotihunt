@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const Jotihunt());
 }
 

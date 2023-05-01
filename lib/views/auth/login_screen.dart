@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: BorderSide(color: orangeCollor)),
                         hintStyle: TextStyle(color: orangeCollor),
                         labelStyle: TextStyle(color: orangeCollor),
-                        labelText: "Username",
+                        labelText: "Email",
                         suffixIcon: Icon(
                           Icons.person,
                           color: orangeCollor,
