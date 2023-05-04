@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: BorderSide(color: whiteColor)),
                         hintStyle: TextStyle(color: whiteColor),
                         labelStyle: TextStyle(color: whiteColor),
-                        labelText: "Password",
+                        labelText: "Wachtwoord",
                         suffixIcon: Icon(
                           Icons.key_sharp,
                           color: whiteColor,
