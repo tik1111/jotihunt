@@ -10,8 +10,6 @@ class Auth {
   loginUserWithEmailAndPassword(String username, String password) async {
     try {
       dio.options.contentType = Headers.formUrlEncodedContentType;
-      //dio.options.headers['authenticationUsername'] = username;
-      //dio.options.headers['authenticationPassword'] = password;
       dio.options.headers['email'] = username;
       dio.options.headers['password'] = password;
 
@@ -36,11 +34,6 @@ class Auth {
       dio.options.headers['name'] = name;
 
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register');
-      print(response.data["_id"]);
-      if (response.data["_id"] != null || response.data["_id"] != "") {
-        loginUserWithEmailAndPassword(email, password);
-      }
-
       print(response);
     } on DioError catch (dioError) {
       print(dioError.response!.data.toString());
