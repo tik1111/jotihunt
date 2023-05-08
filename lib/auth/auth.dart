@@ -9,7 +9,8 @@ enum AppState { initial, authenticated, authenticating, unauthenticated }
 class Auth with ChangeNotifier {
   var dio = Dio();
 
-  loginUserWithEmailAndPassword(String username, String password) async {
+  Future<bool> loginUserWithEmailAndPassword(
+      String username, String password) async {
     try {
       dio.options.contentType = Headers.formUrlEncodedContentType;
       dio.options.headers['email'] = username;
@@ -22,15 +23,23 @@ class Auth with ChangeNotifier {
         SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
 
+      if (response.data["refreshtoken"] != null &&
+          response.data['refreshtoken'] != "") {
+        print(response.data);
+        return true;
+      }
       print(response.data);
+      return false;
     } on DioError catch (dioError) {
       print(dioError.response!.data.toString());
+      return false;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
-  registerUserWithEmailAndPassword(
+  Future<bool> registerUserWithEmailAndPassword(
     String email,
     String password,
     String name,
@@ -46,12 +55,18 @@ class Auth with ChangeNotifier {
         SecureStorage().writeAccessToken(response.data['token']);
         SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
-
-      print(response);
+      if (response.data["refreshtoken"] != null &&
+          response.data['refreshtoken'] != "") {
+        print(response.data);
+        return true;
+      }
+      return false;
     } on DioError catch (dioError) {
       print(dioError.response!.data.toString());
+      return false;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 

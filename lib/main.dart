@@ -9,7 +9,6 @@ import 'package:jotihunt/cubit/login_state.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
-import 'package:provider/provider.dart';
 
 class AppRouter {
   final LoginCubit loginCubit;
@@ -21,7 +20,7 @@ class AppRouter {
         GoRoute(
           path: "/",
           builder: (BuildContext context, GoRouterState state) {
-            return ProfilePage();
+            return const ProfilePage();
           },
         ),
         GoRoute(
@@ -31,7 +30,8 @@ class AppRouter {
         ),
         GoRoute(
           path: "/register",
-          builder: (context, state) => const RegisterScreen(),
+          builder: (BuildContext context, GoRouterState state) =>
+              const RegisterScreen(),
         ),
         GoRoute(
           path: "/profile",
@@ -42,10 +42,18 @@ class AppRouter {
         final bool loggedIn =
             loginCubit.state.status == AuthStatus.authenticated; //cubit
         final bool loggingIn = state.location == '/login';
+        final bool registering = state.location == '/register';
+
+        if (!loggedIn) {
+          if (state.location == '/register') {
+            return registering ? null : '/register';
+          }
+        }
 
         if (!loggedIn) {
           return loggingIn ? null : '/login';
         }
+
         if (loggingIn) {
           return '/';
         }
@@ -72,7 +80,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 void main() async {
   await dotenv.load(fileName: ".env");
   //runApp(const Jotihunt());
-  runApp(Jotihunt());
+  runApp(const Jotihunt());
 }
 
 class Jotihunt extends StatelessWidget {

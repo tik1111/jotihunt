@@ -169,12 +169,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text("Register", style: TextStyle(color: whiteColor)),
                 ),
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_loginFormKey.currentState!.validate()) {
-                      Auth().loginUserWithEmailAndPassword(
-                          loginEmailFormController.text,
-                          loginPasswordFormController.text);
-                      context.read<LoginCubit>().login();
+                      Future<bool> loginState = Auth()
+                          .loginUserWithEmailAndPassword(
+                              loginEmailFormController.text,
+                              loginPasswordFormController.text);
+                      if (await loginState) {
+                        // ignore: use_build_context_synchronously
+                        context.read<LoginCubit>().login();
+                      }
                     }
                   },
                   child: Text("Log in", style: TextStyle(color: orangeCollor)),

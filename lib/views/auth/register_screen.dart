@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/auth/auth.dart';
+import 'package:jotihunt/cubit/login_cubit.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -189,12 +191,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Row(
               children: [
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_loginFormKey.currentState!.validate()) {
-                      // Auth().registerUserWithEmailAndPassword(
-                      //   registerEmailFormController.text,
-                      // registerPasswordFormController.text,
-                      // registerNameFormController.text);
+                      Future<bool> loginState = Auth()
+                          .registerUserWithEmailAndPassword(
+                              registerEmailFormController.text,
+                              registerPasswordFormController.text,
+                              registerNameFormController.text);
+
+                      if (await loginState) {
+                        context.read<LoginCubit>().login();
+                      }
                     }
                   },
                   child: Text("Register", style: TextStyle(color: whiteColor)),
