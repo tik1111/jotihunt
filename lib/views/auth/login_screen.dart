@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/auth/auth.dart';
+import 'package:jotihunt/cubit/login_cubit.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -162,7 +164,6 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pushReplacementNamed('/register');
                     context.go('/register');
                   },
                   child: Text("Register", style: TextStyle(color: whiteColor)),
@@ -173,6 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Auth().loginUserWithEmailAndPassword(
                           loginEmailFormController.text,
                           loginPasswordFormController.text);
+                      context.read<LoginCubit>().login();
                     }
                   },
                   child: Text("Log in", style: TextStyle(color: orangeCollor)),

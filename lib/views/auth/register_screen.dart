@@ -191,10 +191,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextButton(
                   onPressed: () {
                     if (_loginFormKey.currentState!.validate()) {
-                      Auth().registerUserWithEmailAndPassword(
-                          registerEmailFormController.text,
-                          registerPasswordFormController.text,
-                          registerNameFormController.text);
+                      // Auth().registerUserWithEmailAndPassword(
+                      //   registerEmailFormController.text,
+                      // registerPasswordFormController.text,
+                      // registerNameFormController.text);
                     }
                   },
                   child: Text("Register", style: TextStyle(color: whiteColor)),

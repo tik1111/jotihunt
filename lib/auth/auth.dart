@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_print
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jotihunt/middleware/secure_storage.dart';
 
-class Auth {
+enum AppState { initial, authenticated, authenticating, unauthenticated }
+
+class Auth with ChangeNotifier {
   var dio = Dio();
-
-  //final streamController = StreamController<bool>.broadcast();
 
   loginUserWithEmailAndPassword(String username, String password) async {
     try {
@@ -14,6 +16,11 @@ class Auth {
       dio.options.headers['password'] = password;
 
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login');
+
+      if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
+        SecureStorage().writeAccessToken(response.data['token']);
+        SecureStorage().writeRefreshToken(response.data['refreshtoken']);
+      }
 
       print(response.data);
     } on DioError catch (dioError) {
@@ -34,6 +41,12 @@ class Auth {
       dio.options.headers['name'] = name;
 
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register');
+
+      if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
+        SecureStorage().writeAccessToken(response.data['token']);
+        SecureStorage().writeRefreshToken(response.data['refreshtoken']);
+      }
+
       print(response);
     } on DioError catch (dioError) {
       print(dioError.response!.data.toString());
