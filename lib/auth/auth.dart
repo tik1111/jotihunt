@@ -55,9 +55,8 @@ class Auth with ChangeNotifier {
         SecureStorage().writeAccessToken(response.data['token']);
         SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
-      if (response.data["refreshtoken"] != null &&
-          response.data['refreshtoken'] != "") {
-        print(response.data);
+      if (await response.data["refreshtoken"] != null) {
+        print(response.data['refreshtoken']);
         return true;
       }
       return false;
@@ -70,5 +69,7 @@ class Auth with ChangeNotifier {
     }
   }
 
-  logout() async {}
+  Future<bool> logout() async {
+    return true;
+  }
 }

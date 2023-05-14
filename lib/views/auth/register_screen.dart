@@ -13,7 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final Color orangeCollor = const Color.fromARGB(255, 230, 144, 35);
+  final Color orangeColor = const Color.fromARGB(255, 230, 144, 35);
 
   final Color backgroundCollor = const Color.fromARGB(255, 33, 34, 45);
 
@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: bannerHeight,
-                      color: orangeCollor,
+                      color: orangeColor,
                     ),
                   ),
                   Column(children: [
@@ -90,18 +90,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextFormField(
                       controller: registerNameFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
-                      style: TextStyle(color: orangeCollor),
+                      style: TextStyle(color: orangeColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
+                            borderSide: BorderSide(color: orangeColor)),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
-                        hintStyle: TextStyle(color: orangeCollor),
-                        labelStyle: TextStyle(color: orangeCollor),
+                            borderSide: BorderSide(color: orangeColor)),
+                        hintStyle: TextStyle(color: orangeColor),
+                        labelStyle: TextStyle(color: orangeColor),
                         labelText: "Naam",
                         suffixIcon: Icon(
                           Icons.person,
-                          color: orangeCollor,
+                          color: orangeColor,
                         ),
                       ),
                     ),
@@ -154,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                       controller: registerPasswordFormController,
-                      cursorColor: orangeCollor,
+                      cursorColor: orangeColor,
                       obscureText: true,
                       style: TextStyle(color: whiteColor),
                       decoration: InputDecoration(
@@ -183,13 +183,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text("FORGOT PASSWORD?",
-                        style: TextStyle(color: orangeCollor)),
+                        style: TextStyle(color: orangeColor)),
                   ),
                 )
               ],
             ),
             Row(
               children: [
+                TextButton(
+                  onPressed: () {
+                    context.go("/login");
+                  },
+                  child: Text("Log in", style: TextStyle(color: whiteColor)),
+                ),
                 TextButton(
                   onPressed: () async {
                     if (_loginFormKey.currentState!.validate()) {
@@ -200,18 +206,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               registerNameFormController.text);
 
                       if (await loginState) {
+                        // ignore: use_build_context_synchronously
                         context.read<LoginCubit>().login();
+                        // ignore: use_build_context_synchronously
+                        context.go("/login");
                       }
                     }
                   },
-                  child: Text("Register", style: TextStyle(color: whiteColor)),
+                  child: Text("Register", style: TextStyle(color: orangeColor)),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.go("/login");
-                  },
-                  child: Text("Log in", style: TextStyle(color: orangeCollor)),
-                )
               ],
             ),
           ]),
