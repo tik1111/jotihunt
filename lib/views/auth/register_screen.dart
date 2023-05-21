@@ -210,6 +210,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context.read<LoginCubit>().login();
                         // ignore: use_build_context_synchronously
                         context.go("/login");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: orangeColor,
+                            content: const Text(
+                                'Niet alle velden zijn juist ingevuld of het email adres bestaat al'),
+                            behavior: SnackBarBehavior.floating,
+                            elevation: 20,
+                          ),
+                        );
                       }
                     }
                   },

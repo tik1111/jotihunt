@@ -8,6 +8,7 @@ import 'package:jotihunt/cubit/login_cubit.dart';
 import 'package:jotihunt/cubit/login_state.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
+import 'package:jotihunt/views/maps/jotihunt_map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
 
 class AppRouter {
@@ -37,6 +38,10 @@ class AppRouter {
           path: "/profile",
           builder: (context, state) => const ProfilePage(),
         ),
+        GoRoute(
+          path: "/jotihuntmap",
+          builder: (context, state) => const JotihuntMap(),
+        ),
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final bool loggedIn =
@@ -51,7 +56,7 @@ class AppRouter {
         }
 
         if (!loggedIn) {
-          return loggingIn ? null : '/login';
+          return loggingIn ? null : '/jotihuntmap';
         }
 
         if (loggingIn) {

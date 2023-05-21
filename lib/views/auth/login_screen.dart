@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final Color orangeCollor = const Color.fromARGB(255, 230, 144, 35);
+  final Color orangeColor = const Color.fromARGB(255, 230, 144, 35);
 
   final Color backgroundCollor = const Color.fromARGB(255, 33, 34, 45);
 
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: bannerHeight,
-                      color: orangeCollor,
+                      color: orangeColor,
                     ),
                   ),
                   Column(children: [
@@ -93,18 +93,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       controller: loginEmailFormController,
                       cursorColor: const Color.fromARGB(255, 255, 179, 0),
-                      style: TextStyle(color: orangeCollor),
+                      style: TextStyle(color: orangeColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
+                            borderSide: BorderSide(color: orangeColor)),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: orangeCollor)),
-                        hintStyle: TextStyle(color: orangeCollor),
-                        labelStyle: TextStyle(color: orangeCollor),
+                            borderSide: BorderSide(color: orangeColor)),
+                        hintStyle: TextStyle(color: orangeColor),
+                        labelStyle: TextStyle(color: orangeColor),
                         labelText: "Email",
                         suffixIcon: Icon(
                           Icons.email,
-                          color: orangeCollor,
+                          color: orangeColor,
                         ),
                       ),
                     ),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                       controller: loginPasswordFormController,
-                      cursorColor: orangeCollor,
+                      cursorColor: orangeColor,
                       style: TextStyle(color: whiteColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text("FORGOT PASSWORD?",
-                        style: TextStyle(color: orangeCollor)),
+                        style: TextStyle(color: orangeColor)),
                   ),
                 )
               ],
@@ -178,10 +178,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (await loginState) {
                         // ignore: use_build_context_synchronously
                         context.read<LoginCubit>().login();
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: orangeColor,
+                            content:
+                                const Text('Email of wachtwoord niet juist'),
+                            behavior: SnackBarBehavior.floating,
+                            elevation: 20,
+                          ),
+                        );
                       }
                     }
                   },
-                  child: Text("Log in", style: TextStyle(color: orangeCollor)),
+                  child: Text("Log in", style: TextStyle(color: orangeColor)),
                 )
               ],
             ),
