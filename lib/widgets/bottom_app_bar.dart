@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DefaultBottomAppBar extends StatelessWidget {
   const DefaultBottomAppBar({super.key});
@@ -17,12 +18,16 @@ class DefaultBottomAppBar extends StatelessWidget {
           IconButton(
             color: Colors.grey,
             icon: const Icon(Icons.map_outlined),
-            onPressed: () {},
+            onPressed: () {
+              context.go('/map');
+            },
           ),
           IconButton(
             color: Colors.grey,
             icon: const Icon(Icons.person_2_outlined),
-            onPressed: () {},
+            onPressed: () {
+              context.go('/profile');
+            },
           ),
         ],
       ),

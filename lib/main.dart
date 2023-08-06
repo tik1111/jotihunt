@@ -8,6 +8,7 @@ import 'package:jotihunt/cubit/login_cubit.dart';
 import 'package:jotihunt/cubit/login_state.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
+import 'package:jotihunt/views/maps/map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
 
 class AppRouter {
@@ -37,15 +38,19 @@ class AppRouter {
           path: "/profile",
           builder: (context, state) => const ProfilePage(),
         ),
+        GoRoute(
+          path: "/map",
+          builder: (context, state) => const MainMapWidget(),
+        ),
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final bool loggedIn =
             loginCubit.state.status == AuthStatus.authenticated; //cubit
-        final bool loggingIn = state.location == '/login';
-        final bool registering = state.location == '/register';
+        final bool loggingIn = state.uri.toString() == '/login';
+        final bool registering = state.uri.toString() == '/register';
 
         if (!loggedIn) {
-          if (state.location == '/register') {
+          if (state.uri.toString() == '/register') {
             return registering ? null : '/register';
           }
         }

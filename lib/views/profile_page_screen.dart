@@ -54,24 +54,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
+                          children: [
                             Text('Naam:'),
                             Text('Hunter code:'),
                             Text('Team:'),
                           ],
                         ),
                       ),
-                      Column(
+                      const Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text('Tim'),
                           Text('Zgr23'),
                           Text("Test team"),

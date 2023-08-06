@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,11 +13,11 @@ class Auth with ChangeNotifier {
   Future<bool> loginUserWithEmailAndPassword(
       String username, String password) async {
     try {
-      dio.options.contentType = Headers.formUrlEncodedContentType;
       dio.options.headers['email'] = username;
       dio.options.headers['password'] = password;
-
+      print(username + password);
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login');
+      print(response);
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
         SecureStorage().writeAccessToken(response.data['token']);
@@ -30,8 +31,8 @@ class Auth with ChangeNotifier {
       }
       print(response.data);
       return false;
-    } on DioError catch (dioError) {
-      print(dioError.response!.data.toString());
+    } on DioException catch (dioError) {
+      print(dioError.response);
       return false;
     } catch (e) {
       print(e);
@@ -60,7 +61,7 @@ class Auth with ChangeNotifier {
         return true;
       }
       return false;
-    } on DioError catch (dioError) {
+    } on DioException catch (dioError) {
       print(dioError.response!.data.toString());
       return false;
     } catch (e) {
