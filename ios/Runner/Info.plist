@@ -29,6 +29,14 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>UIBackgroundModes</key>
+	<string>location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>location</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

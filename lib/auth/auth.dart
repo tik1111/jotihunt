@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jotihunt/middleware/secure_storage.dart';
+import 'package:jotihunt/handlers/secure_storage.dart';
 
 enum AppState { initial, authenticated, authenticating, unauthenticated }
 
