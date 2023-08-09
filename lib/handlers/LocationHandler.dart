@@ -1,8 +1,13 @@
 import 'dart:html';
 
+import 'package:dio/dio.dart';
+import 'package:jotihunt/handlers/secure_storage.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationHandler {
+  var dio = Dio();
   Future<bool> verifyLocationPermissionAndServiceAcitve() async {
     Location location = new Location();
 
@@ -43,5 +48,33 @@ class LocationHandler {
     }
 
     throw Error();
+  }
+
+  Future<bool> addHunt(
+    LatLng latLng,
+  ) async {
+    try {
+      dio.options.headers['x-access-token'] =
+          await SecureStorage().getAccessToken();
+
+      Map<String, dynamic> formMap = {
+        "game_id": "64d3e025b248799c2b63b420",
+        "area": "Alpha",
+        "type": "hunt",
+        "lat": latLng.latitude,
+        "long": latLng.longitude
+      };
+
+      var response =
+          await dio.post('${dotenv.env['API_ROOT']!}/fox', data: formMap);
+
+      return false;
+    } on DioException catch (dioError) {
+      print(dioError.response!.data.toString());
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }
