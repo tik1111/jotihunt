@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:jotihunt/auth/auth.dart';
+import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/cubit/login_cubit.dart';
-import 'package:jotihunt/widgets/bottom_app_bar.dart';
+import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

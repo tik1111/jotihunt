@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +9,10 @@ import 'package:jotihunt/cubit/login_cubit.dart';
 import 'package:jotihunt/cubit/login_state.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
-import 'package:jotihunt/views/maps/map_screen.dart';
+import 'package:jotihunt/views/map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 
 class AppRouter {
   final LoginCubit loginCubit;
@@ -85,6 +87,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
 void main() async {
   await dotenv.load(fileName: ".env");
+
   //runApp(const Jotihunt());
   runApp(const Jotihunt());
 }

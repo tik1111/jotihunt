@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jotihunt/auth/auth.dart';
+import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/cubit/login_cubit.dart';
 import 'package:provider/provider.dart';
 

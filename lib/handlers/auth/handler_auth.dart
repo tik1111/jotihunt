@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jotihunt/handlers/secure_storage.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 
 enum AppState { initial, authenticated, authenticating, unauthenticated }
 
@@ -15,7 +15,6 @@ class Auth with ChangeNotifier {
     try {
       dio.options.headers['email'] = username;
       dio.options.headers['password'] = password;
-      print(username + password);
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login');
       print(response);
 
@@ -26,7 +25,6 @@ class Auth with ChangeNotifier {
 
       if (response.data["refreshtoken"] != null &&
           response.data['refreshtoken'] != "") {
-        print(response.data);
         return true;
       }
       print(response.data);

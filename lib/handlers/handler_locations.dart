@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:jotihunt/handlers/secure_storage.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
