@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:dio/dio.dart';
 import 'package:jotihunt/handlers/secure_storage.dart';
 import 'package:latlong2/latlong.dart';
@@ -9,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class LocationHandler {
   var dio = Dio();
   Future<bool> verifyLocationPermissionAndServiceAcitve() async {
-    Location location = new Location();
+    Location location = Location();
 
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -65,8 +63,7 @@ class LocationHandler {
         "long": latLng.longitude
       };
 
-      var response =
-          await dio.post('${dotenv.env['API_ROOT']!}/fox', data: formMap);
+      await dio.post('${dotenv.env['API_ROOT']!}/fox', data: formMap);
 
       return false;
     } on DioException catch (dioError) {

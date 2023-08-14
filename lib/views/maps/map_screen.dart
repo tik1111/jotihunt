@@ -15,6 +15,8 @@ class MainMapWidget extends StatefulWidget {
 class _MainMapWidgetState extends State<MainMapWidget> {
   final mapController = MapController();
   List<Marker> groupMarkers = [];
+  List<Marker> foxLocationMarker = [];
+
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
 
@@ -22,27 +24,41 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return MarkerHandler().getAllGroupMarkers();
   }
 
-  @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    super.setState(fn);
+  Future<List<Marker>> loadfoxLocationMarkers() async {
+    return MarkerHandler().getAllFoxLocations();
   }
 
   @override
   void initState() {
     super.initState();
+    //LocationHandler().verifyLocationPermissionAndServiceAcitve();
     loadGroupMarkers().then((value) {
       setState(() {
         groupMarkers = value;
       });
     });
+    loadfoxLocationMarkers().then((value) {
+      setState(() {
+        foxLocationMarker = value;
+      });
+    });
   }
 
-  bool huntOrSpot = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: const DefaultBottomAppBar(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            loadfoxLocationMarkers().then((value) {
+              setState(() {
+                foxLocationMarker = value;
+              });
+            });
+          },
+          backgroundColor: Colors.green,
+          child: const Icon(Icons.woman),
+        ),
         body: FlutterMap(
           mapController: mapController,
           options: MapOptions(
@@ -57,46 +73,37 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                         content: Stack(
                           clipBehavior: Clip.none,
                           children: <Widget>[
-                            Positioned(
-                              right: -40.0,
-                              top: -40.0,
-                              child: InkResponse(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ),
                             Form(
                               key: _formKey,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
-                                      decoration:
-                                          InputDecoration(hintText: "Huntcode"),
+                                      decoration: const InputDecoration(
+                                          hintText: "Huntcode"),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Switch(
+                                  //Padding(
+                                  //  padding: EdgeInsets.all(8.0),
+                                  //  child: Switch(
 
-                                        // This bool value toggles the switch.
-                                        value: huntOrSpot,
-                                        activeColor: Colors.blue,
-                                        onChanged: (value) {
-                                          // This is called when the user toggles the switch.
-                                          setState(() {
-                                            print("yes");
-                                            huntOrSpot = value;
-                                          });
-                                        }),
-                                  ),
+                                  //      // This bool value toggles the switch.
+                                  //      value: huntOrSpot,
+                                  //      activeColor: Colors.blue,
+                                  //      onChanged: (value) {
+                                  //        // This is called when the user toggles the switch.
+                                  //        setState(() {
+                                  //          huntOrSpot = true;
+                                  //          print("yes");
+                                  //        });
+                                  //      }),
+                                  //),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: ElevatedButton(
-                                      child: Text("Submit"),
+                                      child: const Text("Submit"),
                                       onPressed: () {
                                         LocationHandler().addHunt(point);
                                       },
@@ -115,7 +122,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.app',
             ),
+            //CurrentLocationLayer(),
             MarkerLayer(markers: groupMarkers),
+            MarkerLayer(markers: foxLocationMarker),
           ],
         ));
   }

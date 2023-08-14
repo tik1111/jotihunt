@@ -10,6 +10,7 @@ import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
 import 'package:jotihunt/views/maps/map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class AppRouter {
   final LoginCubit loginCubit;

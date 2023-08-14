@@ -20,8 +20,8 @@ class Auth with ChangeNotifier {
       print(response);
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
-        SecureStorage().writeAccessToken(response.data['token']);
-        SecureStorage().writeRefreshToken(response.data['refreshtoken']);
+        await SecureStorage().writeAccessToken(response.data['token']);
+        await SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
 
       if (response.data["refreshtoken"] != null &&
