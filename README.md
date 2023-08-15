@@ -1,5 +1,5 @@
 # jotihunt
 
-Jotihunt App voor Iphone en Android
+Jotihunt App voor Iphone, Android en Web
 
 
