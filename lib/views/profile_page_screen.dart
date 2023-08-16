@@ -5,7 +5,6 @@ import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/cubit/login_cubit.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
