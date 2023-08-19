@@ -67,9 +67,11 @@ class LocationHandler {
 
       return false;
     } on DioException catch (dioError) {
+      // ignore: avoid_print
       print(dioError.response!.data.toString());
       return false;
     } catch (e) {
+      // ignore: avoid_print
       print(e);
       return false;
     }

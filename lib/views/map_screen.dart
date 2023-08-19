@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:jotihunt/cubit/fox_location_update_cubit.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
@@ -13,9 +17,10 @@ class MainMapWidget extends StatefulWidget {
   State<MainMapWidget> createState() => _MainMapWidgetState();
 }
 
-class _MainMapWidgetState extends State<MainMapWidget> {
+class _MainMapWidgetState extends State<MainMapWidget>
+    implements FoxLocationUpdateObserver {
   final mapController = MapController();
-  //final streamSocket = StreamSocket();
+  final socket = SocketConnection();
 
   List<Marker> groupMarkers = [];
   List<Marker> foxLocationMarker = [];
@@ -32,9 +37,28 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   }
 
   @override
+  void updateState(bool shouldUpdate) {
+    loadfoxLocationMarkers().then((value) {
+      if (mounted) {
+        setState(() {
+          foxLocationMarker = value;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
-    //LocationHandler().verifyLocationPermissionAndServiceAcitve();
+    socket.connectSocket(context);
+    context.read<FoxLocationUpdateCubit>().addObserver(this);
+
     loadGroupMarkers().then((value) {
       setState(() {
         groupMarkers = value;
@@ -45,18 +69,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         foxLocationMarker = value;
       });
     });
-
-    streamSocket.getResponse.listen((event) {
-      print(event.toString() + "event");
-      setState(() {
-        loadfoxLocationMarkers().then((value) {
-          setState(() {
-            print("new socket event in listner");
-            foxLocationMarker = value;
-          });
-        });
-      });
-    });
   }
 
   @override
@@ -65,11 +77,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         bottomNavigationBar: const DefaultBottomAppBar(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            loadfoxLocationMarkers().then((value) {
-              setState(() {
-                foxLocationMarker = value;
-              });
-            });
+            context.read<FoxLocationUpdateCubit>().needUpdate();
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.woman),

@@ -31,16 +31,13 @@ class MarkerHandler {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text(allGroupsList[i]['name'].toString()),
-                            content: Container(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      "Deelgebied: ${allGroupsList[i]['area']}"),
-                                  Text(
-                                      "Adres: ${allGroupsList[i]['street']} ${allGroupsList[i]['housenumber']}")
-                                ],
-                              ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Deelgebied: ${allGroupsList[i]['area']}"),
+                                Text(
+                                    "Adres: ${allGroupsList[i]['street']} ${allGroupsList[i]['housenumber']}")
+                              ],
                             ),
                           );
                         });
@@ -50,6 +47,7 @@ class MarkerHandler {
 
       return groupMarkerList;
     } catch (e) {
+      // ignore: avoid_print
       print(e);
       return [];
     }
@@ -83,14 +81,12 @@ class MarkerHandler {
                           return AlertDialog(
                             title:
                                 Text(allFoxLocationList[i]['type'].toString()),
-                            content: Container(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      "Deelgebied: ${allFoxLocationList[i]['area']}"),
-                                ],
-                              ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    "Deelgebied: ${allFoxLocationList[i]['area']}"),
+                              ],
                             ),
                           );
                         });
@@ -100,6 +96,7 @@ class MarkerHandler {
 
       return foxLocationMarkerList;
     } catch (e) {
+      // ignore: avoid_print
       print(e);
       return [];
     }
