@@ -48,9 +48,7 @@ class LocationHandler {
     throw Error();
   }
 
-  Future<bool> addHunt(
-    LatLng latLng,
-  ) async {
+  Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSport) async {
     try {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
@@ -58,7 +56,7 @@ class LocationHandler {
       Map<String, dynamic> formMap = {
         "game_id": "64d3e025b248799c2b63b420",
         "area": "Alpha",
-        "type": "hunt",
+        "type": huntOrSport,
         "lat": latLng.latitude,
         "long": latLng.longitude
       };

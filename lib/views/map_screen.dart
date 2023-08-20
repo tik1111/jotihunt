@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/cubit/fox_location_update_cubit.dart';
+import 'package:jotihunt/handlers/handler_area_status.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
+import 'package:jotihunt/widgets/alertdiolog_hunt_or_spot.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
-import 'package:jotihunt/widgets/alertdialog_hunt_code.dart';
+
+import 'package:jotihunt/widgets/dropdown_area_status.dart';
 import 'package:latlong2/latlong.dart';
 
 class MainMapWidget extends StatefulWidget {
@@ -77,7 +80,7 @@ class _MainMapWidgetState extends State<MainMapWidget>
         bottomNavigationBar: const DefaultBottomAppBar(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.read<FoxLocationUpdateCubit>().needUpdate();
+            AreaStatusHandler().getAllAreaStatus();
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.woman),
@@ -94,7 +97,7 @@ class _MainMapWidgetState extends State<MainMapWidget>
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return HuntCodeAlertDialogWidget(
+                          return HuntOrSpotAlertDialog(
                             formKey: _formKey,
                             point: point,
                           );
@@ -109,6 +112,17 @@ class _MainMapWidgetState extends State<MainMapWidget>
                 MarkerLayer(markers: groupMarkers),
                 MarkerLayer(markers: foxLocationMarker),
               ],
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [DropdownMenuAreaStatus()],
+                  )
+                ],
+              ),
             ),
           ],
         ));

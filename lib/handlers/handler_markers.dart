@@ -60,6 +60,10 @@ class MarkerHandler {
   Future<List<Marker>> getAllFoxLocations() async {
     try {
       List<Marker> foxLocationMarkerList = [];
+      Icon markerIcon = const Icon(
+        Icons.girl_rounded,
+        color: Colors.redAccent,
+      );
 
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
@@ -69,11 +73,39 @@ class MarkerHandler {
       List allFoxLocationList = allFoxLocationJson.data;
 
       for (var i = 0; i < allFoxLocationList.length; i++) {
+        Icon currentIcon = markerIcon;
+        switch (allFoxLocationList[i]['type']) {
+          case 'hunt':
+            markerIcon = const Icon(
+              Icons.girl_rounded,
+              color: Colors.redAccent,
+            );
+            break;
+          case 'spot':
+            markerIcon = const Icon(
+              Icons.question_mark,
+              color: Colors.amber,
+            );
+            break;
+          case 'hint':
+            markerIcon = const Icon(
+              Icons.radar,
+              color: Colors.purple,
+            );
+            break;
+          default:
+            markerIcon = const Icon(
+              Icons.girl_rounded,
+              color: Colors.redAccent,
+            );
+            break;
+        }
+
         foxLocationMarkerList.add(Marker(
             point: LatLng(double.parse(allFoxLocationList[i]['lat']),
                 double.parse(allFoxLocationList[i]['long'])),
             builder: (context) => IconButton(
-                  icon: const Icon(Icons.girl_rounded, color: Colors.redAccent),
+                  icon: currentIcon,
                   onPressed: () {
                     showDialog(
                         context: context,

@@ -104,6 +104,7 @@ class Jotihunt extends StatelessWidget {
       create: (context) => LoginCubit(),
       child: Builder(builder: (context) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           routerConfig: AppRouter(context.read<LoginCubit>()).router,
         );
       }),

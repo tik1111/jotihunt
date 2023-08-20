@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:latlong2/latlong.dart';
 
-class HuntCodeAlertDialogWidget extends StatelessWidget {
+class HuntOrSpotAlertDialog extends StatelessWidget {
   final LatLng point;
-  const HuntCodeAlertDialogWidget({
-    required this.point,
-    super.key,
-    required GlobalKey<FormState> formKey,
-  }) : _formKey = formKey;
+  const HuntOrSpotAlertDialog(
+      {required this.point, super.key, required GlobalKey<FormState> formKey})
+      : _formKeyHuntOrSpot = formKey;
 
-  final GlobalKey<FormState> _formKey;
-
+  final GlobalKey<FormState> _formKeyHuntOrSpot;
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
@@ -20,22 +17,26 @@ class HuntCodeAlertDialogWidget extends StatelessWidget {
         clipBehavior: Clip.none,
         children: <Widget>[
           Form(
-            key: _formKey,
+            key: _formKeyHuntOrSpot,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: const InputDecoration(hintText: "Huntcode"),
+                  child: ElevatedButton(
+                    child: const Text("Hunt"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    child: const Text("Submit"),
+                    child: const Text("Spot"),
                     onPressed: () {
-                      LocationHandler().addHuntOrSpot(point, "hunt");
+                      LocationHandler().addHuntOrSpot(point, "spot");
+                      Navigator.of(context).pop();
                     },
                   ),
                 )
