@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jotihunt/cubit/fox_location_update_cubit.dart';
-import 'package:jotihunt/cubit/login_cubit.dart';
-import 'package:jotihunt/cubit/login_state.dart';
+
+import 'package:jotihunt/cubitAndStream/login_cubit.dart';
+import 'package:jotihunt/cubitAndStream/login_state.dart';
+import 'package:jotihunt/handlers/handler_streamsocket.dart';
 
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
@@ -87,21 +88,23 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   runApp(
-    BlocProvider(
-      create: (context) => FoxLocationUpdateCubit(),
-      child: const Jotihunt(),
-    ),
+    Jotihunt(),
   );
 }
 
 class Jotihunt extends StatelessWidget {
-  const Jotihunt({super.key});
+  SocketConnection globalSocket = SocketConnection();
+  Jotihunt({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginCubit(),
+        ),
+      ],
       child: Builder(builder: (context) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,

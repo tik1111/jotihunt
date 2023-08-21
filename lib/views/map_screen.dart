@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:jotihunt/cubit/fox_location_update_cubit.dart';
+import 'package:jotihunt/cubitAndStream/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
@@ -20,8 +18,7 @@ class MainMapWidget extends StatefulWidget {
   State<MainMapWidget> createState() => _MainMapWidgetState();
 }
 
-class _MainMapWidgetState extends State<MainMapWidget>
-    implements FoxLocationUpdateObserver {
+class _MainMapWidgetState extends State<MainMapWidget> {
   final mapController = MapController();
   final socket = SocketConnection();
 
@@ -40,17 +37,6 @@ class _MainMapWidgetState extends State<MainMapWidget>
   }
 
   @override
-  void updateState(bool shouldUpdate) {
-    loadfoxLocationMarkers().then((value) {
-      if (mounted) {
-        setState(() {
-          foxLocationMarker = value;
-        });
-      }
-    });
-  }
-
-  @override
   void dispose() {
     mapController.dispose();
     super.dispose();
@@ -59,8 +45,6 @@ class _MainMapWidgetState extends State<MainMapWidget>
   @override
   void initState() {
     super.initState();
-    socket.connectSocket(context);
-    context.read<FoxLocationUpdateCubit>().addObserver(this);
 
     loadGroupMarkers().then((value) {
       setState(() {
@@ -71,6 +55,19 @@ class _MainMapWidgetState extends State<MainMapWidget>
       setState(() {
         foxLocationMarker = value;
       });
+    });
+
+    foxLocationUpdateStream.getResponse.listen((event) {
+      if (mounted) {
+        setState(() {
+          loadfoxLocationMarkers().then((value) {
+            setState(() {
+              print("new socket event in listner");
+              foxLocationMarker = value;
+            });
+          });
+        });
+      }
     });
   }
 

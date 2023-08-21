@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jotihunt/cubit/area_status_update_cubit.dart';
+import 'package:jotihunt/cubitAndStream/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
 
 /// Flutter code sample for [DropdownMenu].
@@ -29,20 +29,19 @@ class DropdownMenuAreaStatus extends StatefulWidget {
   State<DropdownMenuAreaStatus> createState() => _DropdownMenuAreaStatusState();
 }
 
-class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus>
-    implements AreaStatusUpdateObserver {
+class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
   String dropdownValue = list.first;
   List<DropdownMenuEntry<String>> dropdownitems = [];
   String initialarea = "Aplha";
   Color currentIconColor = Colors.red;
-  Future<List<DropdownMenuEntry<String>>> loadGroupMarkers() async {
+  Future<List<DropdownMenuEntry<String>>> loadAreaStatus() async {
     return AreaStatusHandler().getAllAreaStatus();
   }
 
   @override
   void initState() {
     super.initState();
-    loadGroupMarkers().then((value) {
+    loadAreaStatus().then((value) {
       dropdownitems = [];
 
       setState(() {
@@ -62,6 +61,31 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus>
         }
         dropdownitems = value;
       });
+    });
+    areaStatusUpdateStream.getResponse.listen((event) {
+      if (mounted) {
+        setState(() {
+          loadAreaStatus().then((value) {
+            setState(() {
+              switch (value.first.value) {
+                case 'red':
+                  currentIconColor = Colors.red;
+                  break;
+                case 'orange':
+                  currentIconColor = Colors.orange;
+                  break;
+                case 'green':
+                  currentIconColor = Colors.green;
+                  break;
+                default:
+                  currentIconColor = Colors.red;
+                  break;
+              }
+              dropdownitems = value;
+            });
+          });
+        });
+      }
     });
   }
 
@@ -92,6 +116,8 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus>
                 currentIconColor = Colors.green;
                 break;
               default:
+                currentIconColor = Colors.red;
+                break;
             }
             dropdownValue = value!;
           });
@@ -100,7 +126,4 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus>
       ),
     );
   }
-
-  @override
-  void updateState(bool shouldUpdate) {}
 }

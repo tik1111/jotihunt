@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
+import 'package:jotihunt/widgets/alertdialog_hunt_code.dart';
 import 'package:latlong2/latlong.dart';
 
 class HuntOrSpotAlertDialog extends StatelessWidget {
@@ -27,6 +28,12 @@ class HuntOrSpotAlertDialog extends StatelessWidget {
                     child: const Text("Hunt"),
                     onPressed: () {
                       Navigator.of(context).pop();
+
+                      HuntCodeAlertDialogWidget(
+                        point: point,
+                        formKey: _formKeyHuntOrSpot,
+                        context: context,
+                      );
                     },
                   ),
                 ),

@@ -5,8 +5,10 @@ import 'package:latlong2/latlong.dart';
 
 class HuntCodeAlertDialogWidget extends StatelessWidget {
   final LatLng point;
-  const HuntCodeAlertDialogWidget({
+  BuildContext context;
+  HuntCodeAlertDialogWidget({
     required this.point,
+    required this.context,
     super.key,
     required GlobalKey<FormState> formKey,
   }) : _formKey = formKey;
