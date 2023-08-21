@@ -1,0 +1,19 @@
+{1: Area status updates}
+
+3: Hunt code 
+
+4: Hunt showDialog
+
+5: Select area only hunt or spot items on selected area
+
+6: Map performance
+
+2: Login session
+
+7: Fox location radius
+
+8: Polylines between foxmoves
+
+9: Admin area to receve hunt codes and administrate
+
+10: Area status send as once otherwise lister goes crazy
