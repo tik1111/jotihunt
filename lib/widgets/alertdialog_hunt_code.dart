@@ -10,41 +10,45 @@ class HuntCodeAlertDialogWidget extends StatelessWidget {
     required this.point,
     required this.context,
     super.key,
-    required GlobalKey<FormState> formKey,
-  }) : _formKey = formKey;
+    required GlobalKey<FormState> formKeyAlertDialog,
+  }) : _formKeyAlertDialog = formKeyAlertDialog;
 
-  final GlobalKey<FormState> _formKey;
+  final GlobalKey<FormState> _formKeyAlertDialog;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
-      content: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: const InputDecoration(hintText: "Huntcode"),
-                  ),
+      content: StatefulBuilder(
+        builder: ((context, setState) {
+          return Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              Form(
+                key: _formKeyAlertDialog,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(hintText: "Huntcode"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        child: const Text("Submit"),
+                        onPressed: () {
+                          LocationHandler().addHuntOrSpot(point, "hunt");
+                        },
+                      ),
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    child: const Text("Submit"),
-                    onPressed: () {
-                      LocationHandler().addHuntOrSpot(point, "hunt");
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

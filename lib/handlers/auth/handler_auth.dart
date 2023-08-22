@@ -10,6 +10,30 @@ enum AppState { initial, authenticated, authenticating, unauthenticated }
 class Auth with ChangeNotifier {
   var dio = Dio();
 
+  Future<bool> checkUserRefreshTokenAvailableAndValid() async {
+    try {
+      String? possibleRefreshToken = await SecureStorage().getRefreshToken();
+
+      if (possibleRefreshToken != null) {
+        dio.options.headers['x-refresh-token'] = possibleRefreshToken;
+        Response<String> newAccesToken =
+            await dio.post('${dotenv.env['API_ROOT']!}/refresh/atoken');
+        print(newAccesToken.data);
+        if (newAccesToken.data != null &&
+            newAccesToken.data != "Token not valid") {
+          await SecureStorage().writeAccessToken(
+              newAccesToken.data.toString().replaceAll('"', ''));
+
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> loginUserWithEmailAndPassword(
       String username, String password) async {
     try {
@@ -69,6 +93,8 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> logout() async {
+    await SecureStorage().deleteAccessToken();
+    await SecureStorage().deleteRefreshToken();
     return true;
   }
 }
