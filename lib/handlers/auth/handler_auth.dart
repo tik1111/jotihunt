@@ -37,9 +37,8 @@ class Auth with ChangeNotifier {
   Future<bool> loginUserWithEmailAndPassword(
       String username, String password) async {
     try {
-      dio.options.headers['email'] = username;
-      dio.options.headers['password'] = password;
-      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login');
+      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login',
+          data: {'email': username, 'password': password});
       print(response);
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
@@ -68,11 +67,8 @@ class Auth with ChangeNotifier {
     String name,
   ) async {
     try {
-      dio.options.headers['email'] = email;
-      dio.options.headers['password'] = password;
-      dio.options.headers['name'] = name;
-
-      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register');
+      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register',
+          data: {'email': email, 'password': password, 'name': name});
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
         SecureStorage().writeAccessToken(response.data['token']);
