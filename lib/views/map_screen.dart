@@ -45,7 +45,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   @override
   void initState() {
     super.initState();
-
     loadGroupMarkers().then((value) {
       setState(() {
         groupMarkers = value;
@@ -87,8 +86,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             FlutterMap(
               mapController: mapController,
               options: MapOptions(
-                  zoom: 9.2,
-                  maxZoom: 18,
+                  zoom: 14,
+                  minZoom: 10,
+                  maxZoom: 16,
                   center: const LatLng(51.94915, 6.32091),
                   onTap: (tapPosition, point) {
                     showDialog(

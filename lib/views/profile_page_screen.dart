@@ -218,29 +218,13 @@ class _ProfilePageState extends State<ProfilePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: orangeColor),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(40))),
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: FlutterMap(
-                    mapController: MapController(),
-                    options: MapOptions(
-                      zoom: 9.2,
-                      maxZoom: 18,
-                      center: const LatLng(51.94915, 6.32091),
-                      onTap: (tapPosition, point) {},
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
-                      ),
-                    ],
-                  ),
-                ),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: orangeColor),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(40))),
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: Container()),
               ),
             ]),
           ],
