@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/cubitAndStream/login_cubit.dart';
+import 'package:jotihunt/handlers/handler_game.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -190,6 +192,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (await loginState) {
                               // ignore: use_build_context_synchronously
                               context.read<LoginCubit>().login();
+                              String? currentGame = await SecureStorage()
+                                  .getCurrentSelectedGame();
+                              if (currentGame == null) {
+                                List<dynamic> lastGameFromTenant =
+                                    await GameHandler()
+                                        .getAllActiveGamesFromTenant();
+                                SecureStorage().writeCurrentGame(
+                                    lastGameFromTenant[0]['_id']);
+                              }
                             }
                           }
                         },

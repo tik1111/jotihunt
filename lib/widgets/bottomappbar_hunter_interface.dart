@@ -17,7 +17,7 @@ class DefaultBottomAppBar extends StatelessWidget {
         children: <Widget>[
           IconButton(
             color: Colors.grey,
-            icon: const Icon(Icons.map_outlined),
+            icon: const Icon(Icons.navigation),
             onPressed: () {
               context.go('/map');
             },
@@ -29,6 +29,13 @@ class DefaultBottomAppBar extends StatelessWidget {
               context.go('/profile');
             },
           ),
+          IconButton(
+            color: Colors.grey,
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              context.go('/settings');
+            },
+          )
         ],
       ),
     );

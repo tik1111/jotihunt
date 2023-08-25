@@ -53,9 +53,11 @@ class LocationHandler {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
 
+      String? gameId = await SecureStorage().getCurrentSelectedGame();
+
       Map<String, dynamic> formMap = {
-        "game_id": "64d3e025b248799c2b63b420",
-        "area": "Alpha",
+        "game_id": gameId,
+        "area": "Alpha", //! create area selector
         "type": huntOrSport,
         "lat": latLng.latitude,
         "long": latLng.longitude

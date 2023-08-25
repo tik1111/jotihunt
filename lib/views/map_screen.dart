@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/cubitAndStream/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
+import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 import 'package:jotihunt/widgets/alertdiolog_hunt_or_spot.dart';
@@ -45,6 +46,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   @override
   void initState() {
     super.initState();
+
     loadGroupMarkers().then((value) {
       setState(() {
         groupMarkers = value;
@@ -76,7 +78,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         bottomNavigationBar: const DefaultBottomAppBar(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            AreaStatusHandler().getAllAreaStatus();
+            GameHandler().getAllActiveGamesFromTenant();
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.woman),
@@ -103,7 +105,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
+                  userAgentPackageName: 'nl.jotihunters.jotihunt',
                 ),
                 //CurrentLocationLayer(),
                 MarkerLayer(markers: groupMarkers),

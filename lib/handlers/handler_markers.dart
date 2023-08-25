@@ -64,11 +64,15 @@ class MarkerHandler {
         Icons.girl_rounded,
         color: Colors.redAccent,
       );
+      String? accessToken = await SecureStorage().getAccessToken();
+      dio.options.headers['x-access-token'] = accessToken;
 
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
-      Response allFoxLocationJson =
-          await dio.get('${dotenv.env['API_ROOT']!}/fox/');
+      String? gameId = await SecureStorage().getCurrentSelectedGame();
+      String? currentArea = await SecureStorage().getCurrentSelectedArea();
+
+      Response allFoxLocationJson = await dio.get(
+          '${dotenv.env['API_ROOT']!}/fox',
+          queryParameters: {"game_id": gameId});
 
       List allFoxLocationList = allFoxLocationJson.data;
 

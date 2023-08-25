@@ -6,12 +6,15 @@ import 'package:go_router/go_router.dart';
 
 import 'package:jotihunt/cubitAndStream/login_cubit.dart';
 import 'package:jotihunt/cubitAndStream/login_state.dart';
+import 'package:jotihunt/handlers/handler_game.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
 import 'package:jotihunt/views/map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
+import 'package:jotihunt/views/settings_page_screen.dart';
 
 class AppRouter {
   final LoginCubit loginCubit;
@@ -44,6 +47,7 @@ class AppRouter {
           path: "/map",
           builder: (context, state) => const MainMapWidget(),
         ),
+        GoRoute(path: "/settings", builder: (context, state) => SettingsPage())
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final bool loggedIn =
