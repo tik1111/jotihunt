@@ -77,23 +77,22 @@ class MarkerHandler {
       List allFoxLocationList = allFoxLocationJson.data;
 
       for (var i = 0; i < allFoxLocationList.length; i++) {
-        Icon currentIcon = markerIcon;
         switch (allFoxLocationList[i]['type']) {
           case 'hunt':
             markerIcon = const Icon(
-              Icons.girl_rounded,
+              Icons.verified,
               color: Colors.redAccent,
             );
             break;
           case 'spot':
             markerIcon = const Icon(
-              Icons.question_mark,
+              Icons.remove_red_eye,
               color: Colors.amber,
             );
             break;
           case 'hint':
             markerIcon = const Icon(
-              Icons.radar,
+              Icons.help_outline_outlined,
               color: Colors.purple,
             );
             break;
@@ -104,7 +103,7 @@ class MarkerHandler {
             );
             break;
         }
-
+        Icon currentIcon = markerIcon;
         foxLocationMarkerList.add(Marker(
             point: LatLng(double.parse(allFoxLocationList[i]['lat']),
                 double.parse(allFoxLocationList[i]['long'])),

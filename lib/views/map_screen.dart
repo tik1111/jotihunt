@@ -110,6 +110,19 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                 //CurrentLocationLayer(),
                 MarkerLayer(markers: groupMarkers),
                 MarkerLayer(markers: foxLocationMarker),
+                //PolygonLayer(
+                //  polygons: [
+                //    Polygon(
+                //      points: [
+                //        LatLng(51.94915, 6.32091),
+                //        LatLng(20, 50),
+                //        LatLng(25, 45)
+                //      ],
+                //      color: Colors.blue.withOpacity(0.2),
+                //      isFilled: true,
+                //    ),
+                //  ],
+                //),
               ],
             ),
             const Padding(
