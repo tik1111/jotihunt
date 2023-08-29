@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:jotihunt/cubitAndStream/login_cubit.dart';
 import 'package:jotihunt/cubitAndStream/login_state.dart';
-import 'package:jotihunt/handlers/handler_game.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
-
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
 import 'package:jotihunt/views/map_screen.dart';
 import 'package:jotihunt/views/profile_page_screen.dart';
+import 'package:jotihunt/views/settings/settings_add_hint_screen.dart';
+import 'package:jotihunt/views/settings/settings_huntcode_screen.dart';
+import 'package:jotihunt/views/settings/settings_hunters_screen.dart';
+import 'package:jotihunt/views/settings/settings_teams_screen.dart';
 import 'package:jotihunt/views/settings_page_screen.dart';
 
 class AppRouter {
@@ -47,7 +47,23 @@ class AppRouter {
           path: "/map",
           builder: (context, state) => const MainMapWidget(),
         ),
-        GoRoute(path: "/settings", builder: (context, state) => SettingsPage())
+        GoRoute(path: "/settings", builder: (context, state) => SettingsPage()),
+        GoRoute(
+          path: "/hunters",
+          builder: (context, state) => const SettingsHuntersScreen(),
+        ),
+        GoRoute(
+          path: "/teams",
+          builder: (context, state) => const SettingsTeamScreen(),
+        ),
+        GoRoute(
+          path: "/huntcode",
+          builder: (context, state) => const SettingsHuntcodeScreen(),
+        ),
+        GoRoute(
+          path: "/addhint",
+          builder: (context, state) => const SettingsAddHintScreen(),
+        ),
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final bool loggedIn =

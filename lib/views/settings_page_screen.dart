@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
-import 'package:jotihunt/widgets/dropdown_area_status.dart';
+
 import 'package:jotihunt/widgets/dropdown_game.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -46,6 +47,37 @@ class _ProfilePageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<ListTile> menuItems = [
+      ListTile(
+          enabled: true,
+          leading: const Icon(Icons.person),
+          title: const Text('Hunters'),
+          onTap: () {
+            context.push('/hunters');
+          }),
+      ListTile(
+          enabled: false,
+          leading: const Icon(Icons.people),
+          title: const Text('Teams'),
+          onTap: () {
+            context.push('/teams');
+          }),
+      ListTile(
+          enabled: false,
+          leading: const Icon(Icons.format_list_numbered),
+          title: const Text('Huntcodes'),
+          onTap: () {
+            context.push('/huntcode');
+          }),
+      ListTile(
+          enabled: false,
+          leading: const Icon(Icons.question_mark_outlined),
+          title: const Text('Hint toevoegen'),
+          onTap: () {
+            context.push('/addhint');
+          }),
+    ];
+
     return Scaffold(
       //bottomNavigationBar: const Navigator(),
       backgroundColor: backgroundColor,
@@ -63,11 +95,25 @@ class _ProfilePageState extends State<SettingsPage> {
               width: MediaQuery.of(context).size.width - 40,
               child: Row(
                 children: [
-                  const Text("Kies actieve Game"),
+                  const Text("Kies actieve Game "),
                   const DropdownMenuCurrentGame(),
                   Text(GameID)
                 ],
               ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+              decoration: BoxDecoration(
+                  color: orangeColor,
+                  border: Border.all(color: orangeColor),
+                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+              height: MediaQuery.of(context).size.height / 4,
+              width: MediaQuery.of(context).size.width - 40,
+              child: ListView.builder(
+                  itemCount: menuItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return menuItems[index];
+                  }),
             ),
           ],
         ),
