@@ -81,6 +81,10 @@ class _AlertdialogEditUserState extends State<AlertdialogEditUser> {
     // You can implement your logic to update the user data here
   }
 
+  void _removeUser(String userId) async {
+    await HandlerUser().deleteUserById(userId);
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -91,13 +95,25 @@ class _AlertdialogEditUserState extends State<AlertdialogEditUser> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(orangeColor),
-          textStyle:
-              MaterialStateProperty.all(TextStyle(color: backgroundColor))),
-      onPressed: _showEditDialog,
-      child: const Text('Aanpassen'),
-    );
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(orangeColor),
+            textStyle:
+                MaterialStateProperty.all(TextStyle(color: backgroundColor))),
+        onPressed: _showEditDialog,
+        child: const Text('Aanpassen'),
+      ),
+      IconButton(
+          onPressed: () {
+            setState(() {
+              _removeUser(widget.userData['id']!);
+            });
+          },
+          icon: const Icon(
+            Icons.delete_forever,
+            color: Colors.red,
+          ))
+    ]);
   }
 }

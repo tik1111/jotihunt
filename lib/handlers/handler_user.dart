@@ -57,6 +57,18 @@ class HandlerUser {
     }
   }
 
+  Future<bool> deleteUserById(String user_id) async {
+    try {
+      dio.options.headers['x-access-token'] =
+          await SecureStorage().getAccessToken();
+
+      await dio.delete('${dotenv.env['API_ROOT']!}/users/$user_id');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> updateUserById(
       String user_id, String name, String email, String role) async {
     try {
@@ -75,8 +87,6 @@ class HandlerUser {
               options: Options(
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
               ));
-
-      //!make it work submit changes
 
       return true;
     } catch (e) {
