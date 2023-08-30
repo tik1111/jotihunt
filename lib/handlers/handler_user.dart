@@ -62,7 +62,7 @@ class HandlerUser {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
 
-      await dio.delete('${dotenv.env['API_ROOT']!}/users/$user_id');
+      await dio.delete('${dotenv.env['API_ROOT']!}/users/$user_id', data: {});
       return true;
     } catch (e) {
       return false;

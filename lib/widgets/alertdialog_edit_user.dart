@@ -106,9 +106,7 @@ class _AlertdialogEditUserState extends State<AlertdialogEditUser> {
       ),
       IconButton(
           onPressed: () {
-            setState(() {
-              _removeUser(widget.userData['id']!);
-            });
+            _removeUser(widget.userData['id']!);
           },
           icon: const Icon(
             Icons.delete_forever,
