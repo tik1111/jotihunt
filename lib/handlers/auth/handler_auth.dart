@@ -16,14 +16,11 @@ class Auth with ChangeNotifier {
 
       if (possibleRefreshToken != null) {
         dio.options.headers['x-refresh-token'] = possibleRefreshToken;
-        Response<String> newAccesToken =
+        var newAccesToken =
             await dio.post('${dotenv.env['API_ROOT']!}/refresh/atoken');
-        print(newAccesToken.data);
+
         if (newAccesToken.data != null &&
             newAccesToken.data != "Token not valid") {
-          await SecureStorage().writeAccessToken(
-              newAccesToken.data.toString().replaceAll('"', ''));
-
           return true;
         }
       }
@@ -71,8 +68,8 @@ class Auth with ChangeNotifier {
           data: {'email': email, 'password': password, 'name': name});
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
-        SecureStorage().writeAccessToken(response.data['token']);
-        SecureStorage().writeRefreshToken(response.data['refreshtoken']);
+        await SecureStorage().writeAccessToken(response.data['token']);
+        await SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
       if (await response.data["refreshtoken"] != null) {
         print(response.data['refreshtoken']);

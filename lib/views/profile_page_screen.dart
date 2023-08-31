@@ -44,12 +44,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              radius: 35,
-                              child: ClipOval(
-                                  child: Image.network(
-                                      'https://i.imgur.com/8qcWcvM.png')),
-                            ),
+                            //CircleAvatar(
+                            //  radius: 35,
+                            //  child: ClipOval(
+                            //      child: Image.network(
+                            //          'https://i.imgur.com/8qcWcvM.png')),
+                            //),
                           ],
                         ),
                       ),

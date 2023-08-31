@@ -37,7 +37,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
   Color currentIconColor = Colors.red;
 
   Future<List<DropdownMenuEntry<String>>> loadAreaStatus() async {
-    SecureStorage().writeCurrentArea(initialarea);
+    await SecureStorage().writeCurrentArea(initialarea);
 
     return AreaStatusHandler().getAllAreaStatus();
   }

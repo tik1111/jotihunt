@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
+            print('hasdata');
             if (snapshot.data == true) {
               context.read<LoginCubit>().login();
             }
@@ -64,18 +65,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 50,
                             width: MediaQuery.of(context).size.width,
                           ),
-                          SizedBox(
-                            //color: Colors.red,
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: CircleAvatar(
-                              radius: 2,
-                              backgroundColor: whiteColor,
-                              child: ClipOval(
-                                  child: Image.network(
-                                      'https://i.imgur.com/8qcWcvM.png')),
-                            ),
-                          )
+                          //SizedBox(
+                          //  //color: Colors.red,
+                          //  height: 100,
+                          //  width: MediaQuery.of(context).size.width,
+                          //  child: CircleAvatar(
+                          //    radius: 2,
+                          //    backgroundColor: whiteColor,
+                          //    child: ClipOval(
+                          //        child: Image.network(
+                          //            'https://i.imgur.com/8qcWcvM.png')),
+                          //  ),
+                          //)
                         ])
                       ]),
                     ],
@@ -198,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 List<dynamic> lastGameFromTenant =
                                     await GameHandler()
                                         .getAllActiveGamesFromTenant();
-                                SecureStorage().writeCurrentGame(
+                                await SecureStorage().writeCurrentGame(
                                     lastGameFromTenant[0]['_id']);
                               }
                             }

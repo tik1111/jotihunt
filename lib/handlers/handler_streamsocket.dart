@@ -6,7 +6,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 class SocketConnection {
   Socket? socket;
 
-  void connectSocket() {
+  void connectSocket() async {
     socket = io(
         dotenv.env['API_ROOT'],
         OptionBuilder()
