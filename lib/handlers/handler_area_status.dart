@@ -47,7 +47,7 @@ class AreaStatusHandler {
         }
 
         newdropdownitems.add(DropdownMenuEntry(
-            value: allAreaStatusList[i]['status'],
+            value: allAreaStatusList[i]['name'],
             label: allAreaStatusList[i]['name'],
             trailingIcon: thisicon));
       }

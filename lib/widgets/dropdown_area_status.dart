@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jotihunt/cubitAndStream/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 
 /// Flutter code sample for [DropdownMenu].
 
@@ -32,9 +33,12 @@ class DropdownMenuAreaStatus extends StatefulWidget {
 class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
   String dropdownValue = list.first;
   List<DropdownMenuEntry<String>> dropdownitems = [];
-  String initialarea = "Aplha";
+  String initialarea = "Bravo";
   Color currentIconColor = Colors.red;
+
   Future<List<DropdownMenuEntry<String>>> loadAreaStatus() async {
+    SecureStorage().writeCurrentArea(initialarea);
+
     return AreaStatusHandler().getAllAreaStatus();
   }
 
@@ -59,6 +63,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
             currentIconColor = Colors.red;
             break;
         }
+
         dropdownitems = value;
       });
     });
@@ -102,8 +107,9 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
           Icons.circle,
           color: currentIconColor,
         ),
-        onSelected: (String? value) {
+        onSelected: (String? value) async {
           // This is called when the user selects an item.
+          await SecureStorage().writeCurrentArea(value.toString());
           setState(() {
             switch (value) {
               case 'red':
@@ -119,6 +125,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
                 currentIconColor = Colors.red;
                 break;
             }
+
             dropdownValue = value!;
           });
         },

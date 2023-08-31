@@ -54,10 +54,11 @@ class LocationHandler {
           await SecureStorage().getAccessToken();
 
       String? gameId = await SecureStorage().getCurrentSelectedGame();
+      String? activeArea = await SecureStorage().getCurrentSelectedArea();
 
       Map<String, dynamic> formMap = {
         "game_id": gameId,
-        "area": "Alpha", //! create area selector
+        "area": activeArea,
         "type": huntOrSport,
         "lat": latLng.latitude,
         "long": latLng.longitude

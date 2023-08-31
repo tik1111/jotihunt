@@ -63,7 +63,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         setState(() {
           loadfoxLocationMarkers().then((value) {
             setState(() {
-              print("new socket event in listner");
               foxLocationMarker = value;
             });
           });
@@ -107,22 +106,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'nl.jotihunters.jotihunt',
                 ),
-                //CurrentLocationLayer(),
                 MarkerLayer(markers: groupMarkers),
                 MarkerLayer(markers: foxLocationMarker),
-                //PolygonLayer(
-                //  polygons: [
-                //    Polygon(
-                //      points: [
-                //        LatLng(51.94915, 6.32091),
-                //        LatLng(20, 50),
-                //        LatLng(25, 45)
-                //      ],
-                //      color: Colors.blue.withOpacity(0.2),
-                //      isFilled: true,
-                //    ),
-                //  ],
-                //),
               ],
             ),
             const Padding(
