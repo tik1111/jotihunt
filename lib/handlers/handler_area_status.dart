@@ -6,7 +6,22 @@ import 'package:jotihunt/handlers/handler_secure_storage.dart';
 class AreaStatusHandler {
   var dio = Dio();
 
-  Future<List<DropdownMenuEntry<String>>> getAllAreaStatus() async {
+  Future<List<dynamic>> getAllAreaStatusString() async {
+    try {
+      dio.options.headers['x-access-token'] =
+          await SecureStorage().getAccessToken();
+      Response allGroupsJson =
+          await dio.get('${dotenv.env['API_ROOT']!}/areastatus');
+
+      List allAreaStatusList = allGroupsJson.data;
+      return allAreaStatusList;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<DropdownMenuEntry<String>>>
+      getAllAreaStatusDropDownMenuEntry() async {
     try {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();

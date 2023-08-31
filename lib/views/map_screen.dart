@@ -89,7 +89,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
               options: MapOptions(
                   zoom: 14,
                   minZoom: 10,
-                  maxZoom: 16,
+                  maxZoom: 17,
                   center: const LatLng(51.94915, 6.32091),
                   onTap: (tapPosition, point) {
                     showDialog(
@@ -111,7 +111,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
               ],
             ),
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(0, 40, 8, 8),
               child: Column(
                 children: [
                   Row(

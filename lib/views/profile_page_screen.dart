@@ -19,7 +19,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //bottomNavigationBar: const Navigator(),
       backgroundColor: backgroundColor,
       bottomNavigationBar: const DefaultBottomAppBar(),
       body: ListView(children: [
