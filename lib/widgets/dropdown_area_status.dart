@@ -81,6 +81,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
       setState(() {
         initialarea = value;
       });
+      updateIconBasedOnAreaStatus(initialarea);
     });
 
     areaStatusUpdateStream.getResponse.listen((event) {

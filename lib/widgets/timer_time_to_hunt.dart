@@ -69,7 +69,7 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
 
   @override
   Widget build(BuildContext context) {
-    if (timeRemaining!.isNegative) {
+    if (timeRemaining.isNegative) {
       return Container(
         padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
         decoration: BoxDecoration(
