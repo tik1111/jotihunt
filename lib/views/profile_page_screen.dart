@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jotihunt/handlers/auth/handler_auth.dart';
-import 'package:jotihunt/cubitAndStream/login_cubit.dart';
+import 'package:jotihunt/Cubit/login_cubit.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 
 class ProfilePage extends StatefulWidget {

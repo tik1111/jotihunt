@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jotihunt/cubitAndStream/fox_timer_cubit.dart';
-import 'package:jotihunt/cubitAndStream/stream_provider.dart';
+import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
+import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';

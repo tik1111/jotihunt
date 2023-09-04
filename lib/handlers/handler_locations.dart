@@ -50,18 +50,23 @@ class LocationHandler {
   }
 
   Future<List<dynamic>> getFoxLocationsToList() async {
-    String? accessToken = await SecureStorage().getAccessToken();
-    dio.options.headers['x-access-token'] = accessToken;
+    try {
+      String? accessToken = await SecureStorage().getAccessToken();
+      dio.options.headers['x-access-token'] = accessToken;
 
-    String? gameId = await SecureStorage().getCurrentSelectedGame();
+      String? gameId = await SecureStorage().getCurrentSelectedGame();
 
-    Response allFoxLocationJson = await dio.get(
-        '${dotenv.env['API_ROOT']!}/fox',
-        queryParameters: {"game_id": gameId});
+      Response allFoxLocationJson = await dio.get(
+          '${dotenv.env['API_ROOT']!}/fox',
+          queryParameters: {"game_id": gameId});
 
-    List allFoxLocationList = allFoxLocationJson.data;
+      List allFoxLocationList = allFoxLocationJson.data;
 
-    return allFoxLocationList;
+      return allFoxLocationList;
+    } on Exception catch (e) {
+      // TODO
+      return [];
+    }
   }
 
   Future<DateTime> getLastLocationByArea(

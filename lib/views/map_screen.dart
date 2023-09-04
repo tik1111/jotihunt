@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:jotihunt/cubitAndStream/fox_timer_cubit.dart';
-import 'package:jotihunt/cubitAndStream/stream_provider.dart';
+import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
+import 'package:jotihunt/Cubit/stream_provider.dart';
+import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_polyline.dart';
@@ -26,6 +27,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   final mapController = MapController();
   final socket = SocketConnection();
 
+  bool isGameSelected = false;
   List<Marker> groupMarkers = [];
   List<Marker> foxLocationMarker = [];
   List<Polyline> foxLocationPolyline = [];
@@ -39,6 +41,14 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
         .getLastLocationByArea(
             await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
+  }
+
+  Future<bool> isGameSelectedFromStorage() async {
+    String? currentGame = await SecureStorage().getCurrentSelectedGame();
+    if (currentGame != null && currentGame != "") {
+      return true;
+    }
+    return false;
   }
 
   Future<List<Marker>> loadGroupMarkers() async {
@@ -63,42 +73,51 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   @override
   void initState() {
     super.initState();
-    updateHuntTime();
-    loadGroupMarkers().then((value) {
-      setState(() {
-        groupMarkers = value;
-      });
-    });
-    loadfoxLocationMarkers().then((value) {
-      setState(() {
-        foxLocationMarker = value;
-      });
-    });
-    loadPolylineFromFoxLocations().then((value) {
-      setState(() {
-        foxLocationPolyline = value;
-      });
-    });
-
-    //updateHuntTime();
-
-    foxLocationUpdateStream.getResponse.listen((event) async {
-      if (mounted) {
+    isGameSelectedFromStorage().then((value) {
+      if (value) {
         setState(() {
-          loadfoxLocationMarkers().then((value) {
-            setState(() {
-              foxLocationMarker = value;
-            });
+          isGameSelected = value;
+        });
+        updateHuntTime();
+        loadGroupMarkers().then((value) {
+          setState(() {
+            groupMarkers = value;
           });
-          loadPolylineFromFoxLocations().then((value) {
-            setState(() {
-              updateHuntTime();
-              foxLocationPolyline = value;
-            });
+        });
+        loadfoxLocationMarkers().then((value) {
+          setState(() {
+            foxLocationMarker = value;
           });
+        });
+        loadPolylineFromFoxLocations().then((value) {
+          setState(() {
+            foxLocationPolyline = value;
+          });
+        });
+
+        //updateHuntTime();
+
+        foxLocationUpdateStream.getResponse.listen((event) async {
+          if (mounted) {
+            setState(() {
+              loadfoxLocationMarkers().then((value) {
+                setState(() {
+                  foxLocationMarker = value;
+                });
+              });
+              loadPolylineFromFoxLocations().then((value) {
+                setState(() {
+                  updateHuntTime();
+                  foxLocationPolyline = value;
+                });
+              });
+            });
+          }
         });
       }
     });
+
+    if (isGameSelected) {}
   }
 
   @override
@@ -107,13 +126,15 @@ class _MainMapWidgetState extends State<MainMapWidget> {
       builder: (context, state) {
         return Scaffold(
             bottomNavigationBar: const DefaultBottomAppBar(),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                LocationHandler().getLastLocationByArea('Delta');
-              },
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.line_axis),
-            ),
+
+            //Debug buttom ;-)
+            //floatingActionButton: FloatingActionButton(
+            //  onPressed: () {
+            //    LocationHandler().getLastLocationByArea('Delta');
+            //  },
+            //  backgroundColor: Colors.green,
+            //  child: const Icon(Icons.line_axis),
+            //),
             body: Stack(
               children: [
                 FlutterMap(
@@ -153,20 +174,22 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         // ignore: prefer_const_constructors
-                        children: [
-                          BlocBuilder<HuntTimeCubit, DateTime>(
-                            builder: (context, huntTime) {
-                              print('frombloc');
-
-                              if (huntTime == DateTime.utc(2000, 1, 1)) {
-                                return Text("Waiting for time...");
-                              } else {
-                                return TimerTimeToNextHunt(createdAt: huntTime);
-                              }
-                            },
-                          ),
-                          const DropdownMenuAreaStatus()
-                        ],
+                        children: isGameSelected == true
+                            ? [
+                                BlocBuilder<HuntTimeCubit, DateTime>(
+                                  builder: (context, huntTime) {
+                                    if (huntTime == DateTime.utc(2000, 1, 1)) {
+                                      return const Text(
+                                          "Tijd tot hunt berekenen ...");
+                                    } else {
+                                      return TimerTimeToNextHunt(
+                                          createdAt: huntTime);
+                                    }
+                                  },
+                                ),
+                                const DropdownMenuAreaStatus()
+                              ]
+                            : [],
                       )
                     ],
                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jotihunt/cubitAndStream/login_state.dart';
+import 'package:jotihunt/Cubit/login_state.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 
 class LoginCubit extends Cubit<LoginState> {

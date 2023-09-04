@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/auth/handler_auth.dart';
-import 'package:jotihunt/cubitAndStream/login_cubit.dart';
+import 'package:jotihunt/Cubit/login_cubit.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:provider/provider.dart';

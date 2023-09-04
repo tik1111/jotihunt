@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:jotihunt/cubitAndStream/stream_provider.dart';
+import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketConnection {

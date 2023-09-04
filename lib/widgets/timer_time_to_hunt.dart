@@ -12,7 +12,7 @@ class TimerTimeToNextHunt extends StatefulWidget {
 
 class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   late Duration timeRemaining;
-  late Timer timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
 
     if (oldWidget.createdAt != widget.createdAt) {
       // Cancel the old timer
-      timer.cancel();
+      //timer.cancel();
 
       // Calculate the new time remaining based on the new createdAt value
       DateTime now = DateTime.now();
@@ -51,19 +51,21 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   }
 
   void _updateTime(Timer timer) {
-    setState(() {
-      if (timeRemaining.inSeconds == 0) {
-        timer.cancel();
-        print("Een uur is verstreken!");
-      } else {
-        timeRemaining = timeRemaining - Duration(seconds: 1);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (timeRemaining.inSeconds == 0) {
+          timer.cancel();
+          print("Een uur is verstreken!");
+        } else {
+          timeRemaining = timeRemaining - Duration(seconds: 1);
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    //timer.cancel();
     super.dispose();
   }
 
