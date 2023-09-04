@@ -35,10 +35,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           const BorderRadius.all(Radius.circular(20))),
                   height: 100,
                   width: MediaQuery.of(context).size.width - 40,
-                  child: Row(
+                  child: const Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                        padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      const Column(
+                      Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,

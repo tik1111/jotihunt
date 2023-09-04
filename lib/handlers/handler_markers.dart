@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -60,21 +61,12 @@ class MarkerHandler {
   Future<List<Marker>> getAllFoxLocations() async {
     try {
       List<Marker> foxLocationMarkerList = [];
+      List allFoxLocationList = await LocationHandler().getFoxLocationsToList();
+
       Icon markerIcon = const Icon(
         Icons.girl_rounded,
         color: Colors.redAccent,
       );
-      String? accessToken = await SecureStorage().getAccessToken();
-      dio.options.headers['x-access-token'] = accessToken;
-
-      String? gameId = await SecureStorage().getCurrentSelectedGame();
-      String? currentArea = await SecureStorage().getCurrentSelectedArea();
-
-      Response allFoxLocationJson = await dio.get(
-          '${dotenv.env['API_ROOT']!}/fox',
-          queryParameters: {"game_id": gameId});
-
-      List allFoxLocationList = allFoxLocationJson.data;
 
       for (var i = 0; i < allFoxLocationList.length; i++) {
         switch (allFoxLocationList[i]['type']) {
@@ -92,13 +84,13 @@ class MarkerHandler {
             break;
           case 'hint':
             markerIcon = const Icon(
-              Icons.help_outline_outlined,
+              Icons.help_rounded,
               color: Colors.purple,
             );
             break;
           default:
             markerIcon = const Icon(
-              Icons.girl_rounded,
+              Icons.help_rounded,
               color: Colors.redAccent,
             );
             break;

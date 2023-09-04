@@ -32,11 +32,13 @@
 	<key>UIBackgroundModes</key>
 	<string>location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>location</string>
+	<string>We hebben jouw locatie nodig om jouw positie op de kaart te tonen.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>location</string>
+	<string>We hebben jouw locatie nodig om jouw positie op de kaart te tonen.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>location</string>
+	<string>We hebben jouw locatie nodig om jouw positie op de kaart te tonen.</string>
+	<key>UIBackgroundModes</key>
+	<string>Location</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

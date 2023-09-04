@@ -67,7 +67,7 @@ class _DropdownMenuCurrentGameState extends State<DropdownMenuCurrentGame> {
           // This is called when the user selects an item.
           await SecureStorage().writeCurrentGame(value!);
           setState(() {
-            dropdownValue = value!;
+            dropdownValue = value;
           });
         },
         dropdownMenuEntries: dropdownitems,

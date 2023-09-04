@@ -7,7 +7,7 @@ import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 import 'package:jotihunt/widgets/dropdown_game.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({super.key});
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _ProfilePageState();
@@ -19,7 +19,8 @@ class _ProfilePageState extends State<SettingsPage> {
   final Color whiteColor = const Color.fromARGB(255, 217, 217, 219);
 
   List dropdownMenuEntries = [];
-  String GameID = "";
+
+  String gameID = "";
 
   Future<List<DropdownMenuEntry<String>>> getAllDropDownMenu() async {
     return GameHandler().getAllActiveGameInDropdownMenuEntry();
@@ -31,7 +32,6 @@ class _ProfilePageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     getAllDropDownMenu().then((value) {
@@ -40,7 +40,7 @@ class _ProfilePageState extends State<SettingsPage> {
 
     getSecureStorage().then((value) {
       setState(() {
-        GameID = value!;
+        gameID = value!;
       });
     });
   }
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<SettingsPage> {
                 children: [
                   const Text("Kies actieve Game "),
                   const DropdownMenuCurrentGame(),
-                  Text(GameID)
+                  Text(gameID)
                 ],
               ),
             ),

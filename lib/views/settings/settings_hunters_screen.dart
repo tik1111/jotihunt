@@ -19,7 +19,6 @@ class _SettingsHuntersScreenState extends State<SettingsHuntersScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     getAllUsers().then((value) {

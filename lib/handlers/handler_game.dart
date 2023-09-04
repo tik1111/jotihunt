@@ -12,9 +12,9 @@ class GameHandler {
           await SecureStorage().getAccessToken();
       Response allGameJson = await dio.get('${dotenv.env['API_ROOT']!}/game');
       return allGameJson.data;
-    } catch (e) {}
-
-    return [];
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<DropdownMenuEntry<String>>>

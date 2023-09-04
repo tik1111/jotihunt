@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:latlong2/latlong.dart';
 
+// ignore: must_be_immutable
 class HuntCodeAlertDialogWidget extends StatelessWidget {
   final LatLng point;
   BuildContext context;

@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:jotihunt/cubitAndStream/fox_timer_cubit.dart';
 import 'package:jotihunt/cubitAndStream/stream_provider.dart';
-import 'package:jotihunt/handlers/handler_area_status.dart';
-import 'package:jotihunt/handlers/handler_game.dart';
+import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
+import 'package:jotihunt/handlers/handler_polyline.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 import 'package:jotihunt/widgets/alertdiolog_hunt_or_spot.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
-
 import 'package:jotihunt/widgets/dropdown_area_status.dart';
+import 'package:jotihunt/widgets/timer_time_to_hunt.dart';
 import 'package:latlong2/latlong.dart';
 
 class MainMapWidget extends StatefulWidget {
@@ -25,9 +28,18 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
   List<Marker> groupMarkers = [];
   List<Marker> foxLocationMarker = [];
+  List<Polyline> foxLocationPolyline = [];
+  DateTime timeToHunt = DateTime.parse("2023-09-04T12:14:07.649+00:00");
 
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
+
+  void updateHuntTime() async {
+    // ignore: use_build_context_synchronously
+    context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
+        .getLastLocationByArea(
+            await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
+  }
 
   Future<List<Marker>> loadGroupMarkers() async {
     return MarkerHandler().getAllGroupMarkers();
@@ -37,16 +49,21 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return MarkerHandler().getAllFoxLocations();
   }
 
+  Future<List<Polyline>> loadPolylineFromFoxLocations() async {
+    return HandlerPolyLine().getAllPolyLineToDraw();
+  }
+
   @override
   void dispose() {
     mapController.dispose();
+
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-
+    updateHuntTime();
     loadGroupMarkers().then((value) {
       setState(() {
         groupMarkers = value;
@@ -57,13 +74,26 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         foxLocationMarker = value;
       });
     });
+    loadPolylineFromFoxLocations().then((value) {
+      setState(() {
+        foxLocationPolyline = value;
+      });
+    });
 
-    foxLocationUpdateStream.getResponse.listen((event) {
+    //updateHuntTime();
+
+    foxLocationUpdateStream.getResponse.listen((event) async {
       if (mounted) {
         setState(() {
           loadfoxLocationMarkers().then((value) {
             setState(() {
               foxLocationMarker = value;
+            });
+          });
+          loadPolylineFromFoxLocations().then((value) {
+            setState(() {
+              updateHuntTime();
+              foxLocationPolyline = value;
             });
           });
         });
@@ -73,55 +103,77 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        bottomNavigationBar: const DefaultBottomAppBar(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            GameHandler().getAllActiveGamesFromTenant();
-          },
-          backgroundColor: Colors.green,
-          child: const Icon(Icons.woman),
-        ),
-        body: Stack(
-          children: [
-            FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                  zoom: 14,
-                  minZoom: 10,
-                  maxZoom: 17,
-                  center: const LatLng(51.94915, 6.32091),
-                  onTap: (tapPosition, point) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return HuntOrSpotAlertDialog(
-                            formKey: _formKey,
-                            point: point,
-                          );
-                        });
-                  }),
+    return BlocBuilder<HuntTimeCubit, DateTime>(
+      builder: (context, state) {
+        return Scaffold(
+            bottomNavigationBar: const DefaultBottomAppBar(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                LocationHandler().getLastLocationByArea('Delta');
+              },
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.line_axis),
+            ),
+            body: Stack(
               children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'nl.jotihunters.jotihunt',
+                FlutterMap(
+                  mapController: mapController,
+                  options: MapOptions(
+                      zoom: 14,
+                      minZoom: 10,
+                      maxZoom: 19,
+                      center: const LatLng(51.94915, 6.32091),
+                      onTap: (tapPosition, point) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return HuntOrSpotAlertDialog(
+                                formKey: _formKey,
+                                point: point,
+                              );
+                            });
+                      }),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'nl.jotihunters.jotihunt',
+                    ),
+                    MarkerLayer(markers: groupMarkers),
+                    PolylineLayer(
+                      polylines: foxLocationPolyline,
+                    ),
+                    MarkerLayer(markers: foxLocationMarker),
+                  ],
                 ),
-                MarkerLayer(markers: groupMarkers),
-                MarkerLayer(markers: foxLocationMarker),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 40, 8, 8),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // ignore: prefer_const_constructors
+                        children: [
+                          BlocBuilder<HuntTimeCubit, DateTime>(
+                            builder: (context, huntTime) {
+                              print('frombloc');
+
+                              if (huntTime == DateTime.utc(2000, 1, 1)) {
+                                return Text("Waiting for time...");
+                              } else {
+                                return TimerTimeToNextHunt(createdAt: huntTime);
+                              }
+                            },
+                          ),
+                          const DropdownMenuAreaStatus()
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 40, 8, 8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [DropdownMenuAreaStatus()],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ));
+            ));
+      },
+    );
   }
 }

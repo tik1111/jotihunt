@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jotihunt/cubitAndStream/fox_timer_cubit.dart';
 import 'package:jotihunt/cubitAndStream/login_cubit.dart';
 import 'package:jotihunt/cubitAndStream/login_state.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
@@ -47,7 +48,9 @@ class AppRouter {
           path: "/map",
           builder: (context, state) => const MainMapWidget(),
         ),
-        GoRoute(path: "/settings", builder: (context, state) => SettingsPage()),
+        GoRoute(
+            path: "/settings",
+            builder: (context, state) => const SettingsPage()),
         GoRoute(
           path: "/hunters",
           builder: (context, state) => const SettingsHuntersScreen(),
@@ -124,6 +127,9 @@ class Jotihunt extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => LoginCubit(),
+        ),
+        BlocProvider(
+          create: (context) => HuntTimeCubit(),
         ),
       ],
       child: Builder(builder: (context) {

@@ -35,10 +35,34 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
     String? getCurrentSelectedArea =
         await SecureStorage().getCurrentSelectedArea();
 
-    if (getCurrentSelectedArea != "" || getCurrentSelectedArea != null) {
-      initialarea = getCurrentSelectedArea!;
+    if (getCurrentSelectedArea != "" && getCurrentSelectedArea != null) {
+      initialarea = getCurrentSelectedArea;
     }
     return getCurrentSelectedArea.toString();
+  }
+
+  void updateIconBasedOnAreaStatus(String area) async {
+    var areaStatus = await AreaStatusHandler().getAllAreaStatusString();
+    for (var element in areaStatus) {
+      if (element['name'] == area) {
+        setState(() {
+          switch (element['status']) {
+            case 'red':
+              currentIconColor = Colors.red;
+              break;
+            case 'orange':
+              currentIconColor = Colors.orange;
+              break;
+            case 'green':
+              currentIconColor = Colors.green;
+              break;
+            default:
+              currentIconColor = Colors.red;
+              break;
+          }
+        });
+      }
+    }
   }
 
   @override
@@ -58,12 +82,10 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
 
     areaStatusUpdateStream.getResponse.listen((event) {
       if (mounted) {
-        setState(() {
-          loadAreaStatus().then((value) {
-            setState(() {
-              //! do the same as onselected
-              dropdownitems = value;
-            });
+        loadAreaStatus().then((value) {
+          setState(() {
+            dropdownitems = value;
+            updateIconBasedOnAreaStatus(initialarea);
           });
         });
       }
@@ -84,27 +106,8 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         ),
         onSelected: (String? value) async {
           await SecureStorage().writeCurrentArea(value.toString());
-          var AreaStatus = await AreaStatusHandler().getAllAreaStatusString();
-          AreaStatus.forEach((element) {
-            if (element['name'] == value.toString()) {
-              setState(() {
-                switch (element['status']) {
-                  case 'red':
-                    currentIconColor = Colors.red;
-                    break;
-                  case 'orange':
-                    currentIconColor = Colors.orange;
-                    break;
-                  case 'green':
-                    currentIconColor = Colors.green;
-                    break;
-                  default:
-                    currentIconColor = Colors.red;
-                    break;
-                }
-              });
-            }
-          });
+
+          updateIconBasedOnAreaStatus(value.toString());
         },
         dropdownMenuEntries: dropdownitems,
       ),

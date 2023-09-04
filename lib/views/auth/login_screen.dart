@@ -41,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            print('hasdata');
             if (snapshot.data == true) {
               context.read<LoginCubit>().login();
             }

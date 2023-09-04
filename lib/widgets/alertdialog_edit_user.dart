@@ -4,7 +4,7 @@ import 'package:jotihunt/handlers/handler_user.dart';
 class AlertdialogEditUser extends StatefulWidget {
   final Map<String, String> userData;
 
-  AlertdialogEditUser({super.key, required this.userData});
+  const AlertdialogEditUser({super.key, required this.userData});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -29,7 +29,7 @@ class _AlertdialogEditUserState extends State<AlertdialogEditUser> {
   }
 
   void _showEditDialog() {
-    String user_id = widget.userData['id'] ?? "";
+    String userId = widget.userData['id'] ?? "";
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -62,7 +62,7 @@ class _AlertdialogEditUserState extends State<AlertdialogEditUser> {
             TextButton(
               onPressed: () {
                 // Save edited data
-                _saveUserData(user_id);
+                _saveUserData(userId);
                 Navigator.of(dialogContext).pop();
                 // Close dialog
               },

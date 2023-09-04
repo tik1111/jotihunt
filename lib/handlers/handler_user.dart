@@ -9,14 +9,6 @@ class HandlerUser {
   final Color orangeColor = const Color.fromARGB(255, 230, 144, 35);
   final Color whiteColor = const Color.fromARGB(255, 217, 217, 219);
   Future<List<ListTile>> getAllTenantUsers() async {
-    List<ListTile> allUserListItems = [
-      ListTile(
-        enabled: true,
-        leading: Icon(Icons.person),
-        title: Text("Geen hunters gevonden"),
-        onTap: (() {}),
-      )
-    ];
     try {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
@@ -57,12 +49,12 @@ class HandlerUser {
     }
   }
 
-  Future<bool> deleteUserById(String user_id) async {
+  Future<bool> deleteUserById(String userId) async {
     try {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
 
-      await dio.delete('${dotenv.env['API_ROOT']!}/users/$user_id', data: {});
+      await dio.delete('${dotenv.env['API_ROOT']!}/users/$userId', data: {});
       return true;
     } catch (e) {
       return false;
@@ -70,23 +62,22 @@ class HandlerUser {
   }
 
   Future<bool> updateUserById(
-      String user_id, String name, String email, String role) async {
+      String userId, String name, String email, String role) async {
     try {
       dio.options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
 
-      Response responseUser =
-          await dio.put('${dotenv.env['API_ROOT']!}/users/$user_id',
-              data: {'name': name, 'email': email},
-              options: Options(
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-              ));
-      Response responseRole =
-          await dio.put('${dotenv.env['API_ROOT']!}/auth/role/$user_id',
-              data: {'role': role},
-              options: Options(
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-              ));
+      await dio.put('${dotenv.env['API_ROOT']!}/users/$userId',
+          data: {'name': name, 'email': email},
+          options: Options(
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          ));
+
+      await dio.put('${dotenv.env['API_ROOT']!}/auth/role/$userId',
+          data: {'role': role},
+          options: Options(
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          ));
 
       return true;
     } catch (e) {
