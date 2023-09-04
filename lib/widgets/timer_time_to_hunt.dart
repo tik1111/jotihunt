@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 class TimerTimeToNextHunt extends StatefulWidget {
   final DateTime createdAt;
 
-  TimerTimeToNextHunt({required this.createdAt});
+  const TimerTimeToNextHunt({required this.createdAt});
 
   @override
+  // ignore: library_private_types_in_public_api
   _TimerTimeToNextHuntState createState() => _TimerTimeToNextHuntState();
 }
 
@@ -19,11 +20,9 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
     super.initState();
     DateTime now = DateTime.now();
     Duration timePassed = now.difference(widget.createdAt);
-    timeRemaining = Duration(hours: 1) - timePassed;
+    timeRemaining = const Duration(hours: 1) - timePassed;
 
-    if (timeRemaining.isNegative) {
-      print("Hunt time");
-    } else {
+    if (!timeRemaining.isNegative) {
       timer = Timer.periodic(Duration(seconds: 1), _updateTime);
     }
   }
@@ -39,13 +38,10 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
       // Calculate the new time remaining based on the new createdAt value
       DateTime now = DateTime.now();
       Duration timePassed = now.difference(widget.createdAt);
-      timeRemaining = Duration(hours: 1) - timePassed;
+      timeRemaining = const Duration(hours: 1) - timePassed;
 
-      if (timeRemaining.isNegative) {
-        print("Hunt time");
-      } else {
-        // Start a new timer
-        timer = Timer.periodic(Duration(seconds: 1), _updateTime);
+      if (!timeRemaining.isNegative) {
+        timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
       }
     }
   }
@@ -55,9 +51,8 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
       setState(() {
         if (timeRemaining.inSeconds == 0) {
           timer.cancel();
-          print("Een uur is verstreken!");
         } else {
-          timeRemaining = timeRemaining - Duration(seconds: 1);
+          timeRemaining = timeRemaining - const Duration(seconds: 1);
         }
       });
     }
