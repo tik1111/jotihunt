@@ -70,14 +70,52 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   @override
   Widget build(BuildContext context) {
     if (timeRemaining!.isNegative) {
-      return Text(
-        "Hunt time",
-        style: TextStyle(fontSize: 18),
+      return Container(
+        padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+        decoration: BoxDecoration(
+          color: Colors.white70,
+          border: Border.all(
+            color: Colors.grey.withOpacity(1),
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.verified,
+              color: Colors.green,
+            ),
+            SizedBox(width: 8),
+            Text(
+              "Hunt time",
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
       );
     } else {
-      return Text(
-        "Hunt over: ${timeRemaining!.inMinutes}:${(timeRemaining!.inSeconds % 60).toString().padLeft(2, '0')}",
-        style: TextStyle(fontSize: 18),
+      return Container(
+        padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+        decoration: BoxDecoration(
+          color: Colors.white70,
+          border: Border.all(
+            color: Colors.grey.withOpacity(1),
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.verified,
+              color: Colors.red,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "Hunt: ${timeRemaining.inMinutes}:${(timeRemaining.inSeconds % 60).toString().padLeft(2, '0')}",
+              style: const TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
       );
     }
   }

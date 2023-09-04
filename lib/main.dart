@@ -27,7 +27,7 @@ class AppRouter {
         GoRoute(
           path: "/",
           builder: (BuildContext context, GoRouterState state) {
-            return const ProfilePage();
+            return const MainMapWidget();
           },
         ),
         GoRoute(

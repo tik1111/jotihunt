@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jotihunt/cubitAndStream/fox_timer_cubit.dart';
 import 'package:jotihunt/cubitAndStream/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_area_status.dart';
+import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 
 class DropdownMenuApp extends StatelessWidget {
@@ -106,7 +109,10 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         ),
         onSelected: (String? value) async {
           await SecureStorage().writeCurrentArea(value.toString());
-
+          // ignore: use_build_context_synchronously
+          context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
+              .getLastLocationByArea(
+                  await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
           updateIconBasedOnAreaStatus(value.toString());
         },
         dropdownMenuEntries: dropdownitems,
