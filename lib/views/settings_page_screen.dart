@@ -21,9 +21,16 @@ class _ProfilePageState extends State<SettingsPage> {
   List dropdownMenuEntries = [];
 
   String gameID = "";
+  bool isGameAvailable = false;
 
   Future<List<DropdownMenuEntry<String>>> getAllDropDownMenu() async {
-    return GameHandler().getAllActiveGameInDropdownMenuEntry();
+    List<DropdownMenuEntry<String>> allGames =
+        await GameHandler().getAllActiveGameInDropdownMenuEntry();
+
+    if (allGames != []) {
+      isGameAvailable == true;
+    }
+    return allGames;
   }
 
   Future<String?> getSecureStorage() async {
@@ -35,13 +42,14 @@ class _ProfilePageState extends State<SettingsPage> {
     super.initState();
 
     getAllDropDownMenu().then((value) {
-      dropdownMenuEntries = value;
-    });
-
-    getSecureStorage().then((value) {
-      setState(() {
-        gameID = value!;
-      });
+      if (isGameAvailable) {
+        dropdownMenuEntries = value;
+        getSecureStorage().then((value) {
+          setState(() {
+            gameID = value!;
+          });
+        });
+      }
     });
   }
 

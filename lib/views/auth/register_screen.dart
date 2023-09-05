@@ -213,7 +213,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     }
                   },
-                  child: Text("Register", style: TextStyle(color: orangeColor)),
+                  child:
+                      Text("Registreer", style: TextStyle(color: orangeColor)),
                 ),
               ],
             ),

@@ -116,8 +116,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         });
       }
     });
-
-    if (isGameSelected) {}
   }
 
   @override
@@ -128,14 +126,14 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             bottomNavigationBar: const DefaultBottomAppBar(),
 
             //Debug buttom ;-)
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                await SecureStorage().writeAccessToken("bla");
-                GameHandler().getAllActiveGamesFromTenant();
-              },
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.line_axis),
-            ),
+            //floatingActionButton: FloatingActionButton(
+            //  onPressed: () async {
+            //    await SecureStorage().writeAccessToken("bla");
+            //    GameHandler().getAllActiveGamesFromTenant();
+            //  },
+            //  backgroundColor: Colors.green,
+            //  child: const Icon(Icons.line_axis),
+            //),
             body: Stack(
               children: [
                 FlutterMap(
@@ -190,7 +188,29 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                                 ),
                                 const DropdownMenuAreaStatus()
                               ]
-                            : [],
+                            : [
+                                // Deze Text widget zal worden getoond als isGameSelected == false
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        color: Colors.white,
+                                        padding: EdgeInsets.all(16.0),
+                                        child: const Text(
+                                          "Er is geen game geselecteerd of beschikbaar",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                       )
                     ],
                   ),

@@ -66,7 +66,11 @@ class Auth with ChangeNotifier {
   ) async {
     try {
       var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/register',
-          data: {'email': email, 'password': password, 'name': name});
+          data: {
+            'email': email.toLowerCase(),
+            'password': password,
+            'name': name
+          });
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
         await SecureStorage().writeAccessToken(response.data['token']);
@@ -106,6 +110,8 @@ class Auth with ChangeNotifier {
   Future<bool> logout() async {
     await SecureStorage().deleteAccessToken();
     await SecureStorage().deleteRefreshToken();
+    await SecureStorage().deleteCurrentGame();
+    await SecureStorage().deleteCurrentArea();
     return true;
   }
 }

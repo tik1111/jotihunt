@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {},
-                          child: Text("FORGOT PASSWORD?",
+                          child: Text("Wachtwoord vergeten?",
                               style: TextStyle(color: orangeCollor)),
                         ),
                       )
@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           context.go('/register');
                         },
-                        child: Text("Register",
+                        child: Text("Registreer",
                             style: TextStyle(color: whiteColor)),
                       ),
                       TextButton(
