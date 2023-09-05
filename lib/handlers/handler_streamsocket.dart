@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:jotihunt/Cubit/stream_provider.dart';
@@ -17,12 +18,17 @@ class SocketConnection {
     socket?.connect();
 
     socket?.on('foxlocation', (data) async {
-      print(data + "socket message recived");
+      //ignore_print
+      if (kDebugMode) {
+        print(data + "socket message recived");
+      }
       foxLocationUpdateStream.addResponse(data.toString());
     });
 
     socket?.on('areastatus', (data) async {
-      print(data + "socket message recived for aera");
+      if (kDebugMode) {
+        print(data + "socket message recived for aera");
+      }
       areaStatusUpdateStream.addResponse(data.toString());
     });
   }

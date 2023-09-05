@@ -7,6 +7,7 @@ import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/login_cubit.dart';
 import 'package:jotihunt/Cubit/login_state.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
 import 'package:jotihunt/views/auth/register_screen.dart';
 import 'package:jotihunt/views/map_screen.dart';
@@ -110,12 +111,14 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  HandlerWebRequests.init();
 
   runApp(
     Jotihunt(),
   );
 }
 
+// ignore: must_be_immutable
 class Jotihunt extends StatelessWidget {
   SocketConnection globalSocket = SocketConnection();
   Jotihunt({super.key});

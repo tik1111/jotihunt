@@ -1,15 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 
 class AreaStatusHandler {
-  var dio = Dio();
-
   Future<List<dynamic>> getAllAreaStatusString() async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
       Response allGroupsJson =
           await dio.get('${dotenv.env['API_ROOT']!}/areastatus');
 
@@ -23,8 +20,7 @@ class AreaStatusHandler {
   Future<List<DropdownMenuEntry<String>>>
       getAllAreaStatusDropDownMenuEntry() async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
       Response allGroupsJson =
           await dio.get('${dotenv.env['API_ROOT']!}/areastatus');
 

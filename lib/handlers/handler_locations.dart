@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationHandler {
-  var dio = Dio();
   Future<bool> verifyLocationPermissionAndServiceAcitve() async {
     Location location = Location();
 
@@ -51,8 +51,7 @@ class LocationHandler {
 
   Future<List<dynamic>> getFoxLocationsToList() async {
     try {
-      String? accessToken = await SecureStorage().getAccessToken();
-      dio.options.headers['x-access-token'] = accessToken;
+      Dio dio = HandlerWebRequests.dio;
 
       String? gameId = await SecureStorage().getCurrentSelectedGame();
 
@@ -63,8 +62,7 @@ class LocationHandler {
       List allFoxLocationList = allFoxLocationJson.data;
 
       return allFoxLocationList;
-    } on Exception catch (e) {
-      // TODO
+    } catch (e) {
       return [];
     }
   }
@@ -75,7 +73,6 @@ class LocationHandler {
     List<dynamic> initialList = await getFoxLocationsToList();
     List<Map<String, dynamic>> data = List.from(initialList);
 
-    // Filter locaties op basis van het gebied
     var filteredData = data
         .where((map) => map['area'] == area && map['type'] == 'hunt')
         .toList();
@@ -84,20 +81,15 @@ class LocationHandler {
       return DateTime.now();
     }
 
-    // Sorteer de locaties op aanmaakdatum
     filteredData.sort((a, b) => DateTime.parse(b['created_at'])
         .compareTo(DateTime.parse(a['created_at'])));
-
-    // Neem de meest recent toegevoegde locatie
-    //Map<String, dynamic> lastLocation = filteredData.first;
 
     return DateTime.parse(filteredData.first['created_at']);
   }
 
   Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSport) async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      var dio = HandlerWebRequests.dio;
 
       String? gameId = await SecureStorage().getCurrentSelectedGame();
       String? activeArea = await SecureStorage().getCurrentSelectedArea();

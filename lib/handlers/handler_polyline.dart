@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
 
 class HandlerPolyLine {
-  var dio = Dio();
-
   Future<Map<String, List<dynamic>>> getPolylinesForAllAreasToList() async {
     //Get all foxLocations filted on atleast tenant_id if area is empty than get all.
-    String? accessToken = await SecureStorage().getAccessToken();
-    dio.options.headers['x-access-token'] = accessToken;
-
+    Dio dio = HandlerWebRequests.dio;
     String? gameId = await SecureStorage().getCurrentSelectedGame();
 
     Response allFoxLocationJson = await dio.get(

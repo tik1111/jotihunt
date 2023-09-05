@@ -1,13 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TimerTimeToNextHunt extends StatefulWidget {
   final DateTime createdAt;
 
-  const TimerTimeToNextHunt({required this.createdAt});
+  const TimerTimeToNextHunt({super.key, required this.createdAt});
 
   @override
-  // ignore: library_private_types_in_public_api
   _TimerTimeToNextHuntState createState() => _TimerTimeToNextHuntState();
 }
 
@@ -22,8 +24,12 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
     Duration timePassed = now.difference(widget.createdAt);
     timeRemaining = const Duration(hours: 1) - timePassed;
 
-    if (!timeRemaining.isNegative) {
-      timer = Timer.periodic(Duration(seconds: 1), _updateTime);
+    if (timeRemaining.isNegative) {
+      if (kDebugMode) {
+        print("Hunt time");
+      }
+    } else {
+      timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
     }
   }
 
@@ -33,14 +39,19 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
 
     if (oldWidget.createdAt != widget.createdAt) {
       // Cancel the old timer
-      //timer.cancel();
+      timer?.cancel();
 
       // Calculate the new time remaining based on the new createdAt value
       DateTime now = DateTime.now();
       Duration timePassed = now.difference(widget.createdAt);
       timeRemaining = const Duration(hours: 1) - timePassed;
 
-      if (!timeRemaining.isNegative) {
+      if (timeRemaining.isNegative) {
+        if (kDebugMode) {
+          print("Hunt time");
+        }
+      } else {
+        // Start a new timer
         timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
       }
     }
@@ -51,6 +62,9 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
       setState(() {
         if (timeRemaining.inSeconds == 0) {
           timer.cancel();
+          if (kDebugMode) {
+            print("Een uur is verstreken!");
+          }
         } else {
           timeRemaining = timeRemaining - const Duration(seconds: 1);
         }
@@ -60,7 +74,7 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
 
   @override
   void dispose() {
-    //timer.cancel();
+    timer?.cancel();
     super.dispose();
   }
 

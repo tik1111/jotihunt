@@ -3,18 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
 
 class MarkerHandler {
-  var dio = Dio();
-
   Future<List<Marker>> getAllGroupMarkers() async {
     try {
       List<Marker> groupMarkerList = [];
 
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
       Response allGroupsJson =
           await dio.get('${dotenv.env['API_ROOT']!}/groups/');
 

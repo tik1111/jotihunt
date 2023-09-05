@@ -40,6 +40,7 @@ class Auth with ChangeNotifier {
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
         await SecureStorage().writeAccessToken(response.data['token']);
+
         await SecureStorage().writeRefreshToken(response.data['refreshtoken']);
       }
 
@@ -83,6 +84,23 @@ class Auth with ChangeNotifier {
       print(e);
       return false;
     }
+  }
+
+  Future<bool> refreshAccessToken() async {
+    String? currentRefreshtoken = await SecureStorage().getRefreshToken();
+    print('from refresh access token');
+    if (currentRefreshtoken != null && currentRefreshtoken != "") {
+      dio.options.headers["x-refresh-token"] = currentRefreshtoken;
+      Response newAccessToken =
+          await dio.post('${dotenv.env['API_ROOT']!}/refresh/atoken');
+      print(newAccessToken.data['token']);
+      await SecureStorage()
+          .writeAccessToken(newAccessToken.data['token'].toString());
+
+      return true;
+    }
+
+    return false;
   }
 
   Future<bool> logout() async {

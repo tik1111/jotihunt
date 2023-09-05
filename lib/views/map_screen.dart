@@ -128,13 +128,14 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             bottomNavigationBar: const DefaultBottomAppBar(),
 
             //Debug buttom ;-)
-            //floatingActionButton: FloatingActionButton(
-            //  onPressed: () {
-            //    LocationHandler().getLastLocationByArea('Delta');
-            //  },
-            //  backgroundColor: Colors.green,
-            //  child: const Icon(Icons.line_axis),
-            //),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                await SecureStorage().writeAccessToken("bla");
+                GameHandler().getAllActiveGamesFromTenant();
+              },
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.line_axis),
+            ),
             body: Stack(
               children: [
                 FlutterMap(

@@ -1,20 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
+
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 
 class GameHandler {
-  var dio = Dio();
-
   Future<List<dynamic>> getAllActiveGamesFromTenant() async {
-    try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
-      Response allGameJson = await dio.get('${dotenv.env['API_ROOT']!}/game');
-      return allGameJson.data;
-    } catch (e) {
-      return [];
-    }
+    var dio = HandlerWebRequests.dio;
+    Response allGameJson = await dio.get('${dotenv.env['API_ROOT']!}/game');
+
+    return allGameJson.data;
   }
 
   Future<List<DropdownMenuEntry<String>>>

@@ -7,11 +7,12 @@ class HuntOrSpotAlertDialog extends StatefulWidget {
   final LatLng point;
   final GlobalKey<FormState> _formKeyHuntOrSpot;
 
-  HuntOrSpotAlertDialog(
+  const HuntOrSpotAlertDialog(
       {required this.point, super.key, required GlobalKey<FormState> formKey})
       : _formKeyHuntOrSpot = formKey;
 
   @override
+  // ignore: library_private_types_in_public_api
   _HuntOrSpotAlertDialogState createState() => _HuntOrSpotAlertDialogState();
 }
 
@@ -36,12 +37,8 @@ class _HuntOrSpotAlertDialogState extends State<HuntOrSpotAlertDialog> {
                     child: const Text("Hunt"),
                     onPressed: () {
                       if (widget._formKeyHuntOrSpot.currentState!.validate()) {
-                        // Voer actie uit met de tekst uit het tekstveld
-                        print("Submitted text: ${textController.text}");
                         Navigator.of(context).pop();
                         LocationHandler().addHuntOrSpot(widget.point, "hunt");
-                      } else {
-                        print("Validation failed");
                       }
                     },
                   ),
@@ -52,7 +49,7 @@ class _HuntOrSpotAlertDialogState extends State<HuntOrSpotAlertDialog> {
                     child: TextFormField(
                       controller: textController,
                       decoration:
-                          InputDecoration(labelText: 'Voer huntcode in'),
+                          const InputDecoration(labelText: 'Voer huntcode in'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a hunt code';
@@ -78,7 +75,6 @@ class _HuntOrSpotAlertDialogState extends State<HuntOrSpotAlertDialog> {
                       child: const Text("Submit"),
                       onPressed: () {
                         // Voer actie uit met de tekst uit het tekstveld
-                        print("Submitted text: ${textController.text}");
                         Navigator.of(context).pop();
                         LocationHandler().addHuntOrSpot(widget.point, "hunt");
                       },

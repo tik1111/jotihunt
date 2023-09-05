@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:jotihunt/widgets/alertdialog_edit_user.dart';
 
 class HandlerUser {
-  var dio = Dio();
   final Color orangeColor = const Color.fromARGB(255, 230, 144, 35);
   final Color whiteColor = const Color.fromARGB(255, 217, 217, 219);
   Future<List<ListTile>> getAllTenantUsers() async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
       Response allUsersJson = await dio.get('${dotenv.env['API_ROOT']!}/users');
       Response allUserRoleJson =
           await dio.get('${dotenv.env['API_ROOT']!}/auth/role');
@@ -51,8 +49,7 @@ class HandlerUser {
 
   Future<bool> deleteUserById(String userId) async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
 
       await dio.delete('${dotenv.env['API_ROOT']!}/users/$userId', data: {});
       return true;
@@ -64,8 +61,7 @@ class HandlerUser {
   Future<bool> updateUserById(
       String userId, String name, String email, String role) async {
     try {
-      dio.options.headers['x-access-token'] =
-          await SecureStorage().getAccessToken();
+      Dio dio = HandlerWebRequests.dio;
 
       await dio.put('${dotenv.env['API_ROOT']!}/users/$userId',
           data: {'name': name, 'email': email},
