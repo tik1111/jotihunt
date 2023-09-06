@@ -194,7 +194,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                                     Center(
                                       child: Container(
                                         color: Colors.white,
-                                        padding: EdgeInsets.all(16.0),
+                                        padding: const EdgeInsets.all(16.0),
                                         child: const Text(
                                           "Er is geen game geselecteerd of beschikbaar",
                                           style: TextStyle(

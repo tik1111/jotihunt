@@ -36,7 +36,7 @@ class SecureStorage {
   }
 
   deleteAccessToken() async {
-    await storage.delete(key: "AccesToken");
+    await storage.delete(key: "AccessToken");
   }
 
   deleteRefreshToken() async {
