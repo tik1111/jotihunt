@@ -79,11 +79,19 @@ class _ProfilePageState extends State<SettingsPage> {
           }),
       ListTile(
           enabled: false,
-          leading: const Icon(Icons.question_mark_outlined),
+          leading: const Icon(Icons.question_mark),
           title: const Text('Hint toevoegen'),
           onTap: () {
             context.push('/addhint');
           }),
+      ListTile(
+        enabled: true,
+        leading: const Icon(Icons.playlist_add),
+        title: const Text('Game editor'),
+        onTap: () {
+          context.push('/gameEditor');
+        },
+      ),
     ];
 
     return Scaffold(
@@ -115,7 +123,7 @@ class _ProfilePageState extends State<SettingsPage> {
                   color: orangeColor,
                   border: Border.all(color: orangeColor),
                   borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width - 40,
               child: ListView.builder(
                   itemCount: menuItems.length,

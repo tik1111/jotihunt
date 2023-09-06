@@ -29,4 +29,11 @@ class GameHandler {
       return [];
     }
   }
+
+  Future<bool> createNewGame(String gameName) async {
+    var dio = HandlerWebRequests.dio;
+    Response newGame = await dio.post('${dotenv.env['API_ROOT']!}/game');
+
+    return true;
+  }
 }

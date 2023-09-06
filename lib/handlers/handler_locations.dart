@@ -102,7 +102,9 @@ class LocationHandler {
         "long": latLng.longitude
       };
 
-      await dio.post('${dotenv.env['API_ROOT']!}/fox', data: formMap);
+      await dio.post('${dotenv.env['API_ROOT']!}/fox',
+          data: formMap,
+          options: Options(contentType: Headers.formUrlEncodedContentType));
 
       return false;
     } on DioException catch (dioError) {

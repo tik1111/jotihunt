@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/stream_provider.dart';
-import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_polyline.dart';
@@ -189,7 +188,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                                 const DropdownMenuAreaStatus()
                               ]
                             : [
-                                // Deze Text widget zal worden getoond als isGameSelected == false
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

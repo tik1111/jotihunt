@@ -41,7 +41,6 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
       // Cancel the old timer
       timer?.cancel();
 
-      // Calculate the new time remaining based on the new createdAt value
       DateTime now = DateTime.now();
       Duration timePassed = now.difference(widget.createdAt);
       timeRemaining = const Duration(hours: 1) - timePassed;
