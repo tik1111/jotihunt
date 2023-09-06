@@ -59,11 +59,14 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   void _updateTime(Timer timer) {
     if (mounted) {
       setState(() {
-        if (timeRemaining.inSeconds == 0) {
+        if (timeRemaining.inSeconds <= 0) {
           timer.cancel();
+          // ignore: prefer_const_constructors
+          timeRemaining = Duration(seconds: -1);
           if (kDebugMode) {
             print("Een uur is verstreken!");
           }
+          setState(() {}); // Force rebuild
         } else {
           timeRemaining = timeRemaining - const Duration(seconds: 1);
         }
