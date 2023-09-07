@@ -36,10 +36,16 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   final huntCodeFormController = TextEditingController();
 
   void updateHuntTime() async {
-    // ignore: use_build_context_synchronously
-    context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
+    DateTime currentAreaHuntTime = await LocationHandler()
         .getLastLocationByArea(
-            await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
+            await SecureStorage().getCurrentSelectedArea() ?? "Alpha");
+    if (currentAreaHuntTime == DateTime.now()) {
+      context
+          .read<HuntTimeCubit>()
+          .updateHuntTime(DateTime.parse("2023-09-04T12:14:07.649+00:00"));
+    } else {
+      context.read<HuntTimeCubit>().updateHuntTime(currentAreaHuntTime);
+    }
   }
 
   Future<bool> isGameSelectedFromStorage() async {
