@@ -18,17 +18,10 @@ class SocketConnection {
     socket?.connect();
 
     socket?.on('foxlocation', (data) async {
-      //ignore_print
-      if (kDebugMode) {
-        print(data + "socket message recived");
-      }
       foxLocationUpdateStream.addResponse(data.toString());
     });
 
     socket?.on('areastatus', (data) async {
-      if (kDebugMode) {
-        print(data + "socket message recived for aera");
-      }
       areaStatusUpdateStream.addResponse(data.toString());
     });
   }

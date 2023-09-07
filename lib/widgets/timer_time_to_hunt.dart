@@ -22,6 +22,7 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
     super.initState();
     DateTime now = DateTime.now();
     Duration timePassed = now.difference(widget.createdAt);
+
     timeRemaining = const Duration(hours: 1) - timePassed;
 
     if (timeRemaining.isNegative) {

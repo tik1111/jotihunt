@@ -158,11 +158,11 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'nl.jotihunters.jotihunt',
                     ),
-                    MarkerLayer(markers: groupMarkers),
                     PolylineLayer(
                       polylines: foxLocationPolyline,
                     ),
                     MarkerLayer(markers: foxLocationMarker),
+                    MarkerLayer(markers: groupMarkers),
                   ],
                 ),
                 Padding(

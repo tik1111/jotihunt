@@ -36,9 +36,9 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
 
   Future<String> getLastKnownSelectedArea() async {
     String? getCurrentSelectedArea =
-        await SecureStorage().getCurrentSelectedArea();
+        await SecureStorage().getCurrentSelectedArea() ?? "Alpha";
 
-    if (getCurrentSelectedArea != "" && getCurrentSelectedArea != null) {
+    if (getCurrentSelectedArea != "") {
       initialarea = getCurrentSelectedArea;
     }
     return getCurrentSelectedArea.toString();
@@ -81,7 +81,8 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
       setState(() {
         initialarea = value;
       });
-      updateIconBasedOnAreaStatus(initialarea);
+
+      updateIconBasedOnAreaStatus(value);
     });
 
     areaStatusUpdateStream.getResponse.listen((event) {
@@ -89,8 +90,16 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         loadAreaStatus().then((value) {
           setState(() {
             dropdownitems = value;
-            updateIconBasedOnAreaStatus(initialarea);
+            updateIconBasedOnAreaStatus(event);
           });
+        });
+
+        getLastKnownSelectedArea().then((value) {
+          setState(() {
+            initialarea = value;
+          });
+
+          updateIconBasedOnAreaStatus(value);
         });
       }
     });
@@ -114,6 +123,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
           context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
               .getLastLocationByArea(
                   await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
+
           updateIconBasedOnAreaStatus(value.toString());
         },
         dropdownMenuEntries: dropdownitems,
