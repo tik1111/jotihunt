@@ -22,7 +22,8 @@ class MarkerHandler {
             point: LatLng(double.parse(allGroupsList[i]['lat']),
                 double.parse(allGroupsList[i]['long'])),
             builder: (context) => IconButton(
-                  icon: const Icon(Icons.house, color: Colors.green),
+                  icon: const Icon(Icons.house,
+                      color: Color.fromARGB(255, 35, 83, 156)),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -55,10 +56,11 @@ class MarkerHandler {
     return [];
   }
 
-  Future<List<Marker>> getAllFoxLocations() async {
+  Future<List<Marker>> getAllOrPerAreaFoxLocations(String area) async {
     try {
       List<Marker> foxLocationMarkerList = [];
-      List allFoxLocationList = await LocationHandler().getFoxLocationsToList();
+      List allFoxLocationList =
+          await LocationHandler().getFoxLocationsToList(area);
 
       Icon markerIcon = const Icon(
         Icons.girl_rounded,

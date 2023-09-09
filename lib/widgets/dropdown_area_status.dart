@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
@@ -35,11 +37,13 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
   }
 
   Future<String> getLastKnownSelectedArea() async {
-    String? getCurrentSelectedArea =
+    String getCurrentSelectedArea =
         await SecureStorage().getCurrentSelectedArea() ?? "Alpha";
 
-    if (getCurrentSelectedArea != "") {
+    if (getCurrentSelectedArea != "Alpha") {
       initialarea = getCurrentSelectedArea;
+    } else {
+      await SecureStorage().writeCurrentArea("Alpha");
     }
     return getCurrentSelectedArea.toString();
   }
@@ -119,7 +123,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         ),
         onSelected: (String? value) async {
           await SecureStorage().writeCurrentArea(value.toString());
-          // ignore: use_build_context_synchronously
+
           DateTime currentAreaHuntTime = await LocationHandler()
               .getLastLocationByArea(
                   await SecureStorage().getCurrentSelectedArea() ?? "Alpha");

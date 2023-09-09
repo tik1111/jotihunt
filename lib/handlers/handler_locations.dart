@@ -49,19 +49,26 @@ class LocationHandler {
     throw Error();
   }
 
-  Future<List<dynamic>> getFoxLocationsToList() async {
+  Future<List<dynamic>> getFoxLocationsToList(String area) async {
     try {
       Dio dio = HandlerWebRequests.dio;
 
       String? gameId = await SecureStorage().getCurrentSelectedGame();
 
-      Response allFoxLocationJson = await dio.get(
-          '${dotenv.env['API_ROOT']!}/fox',
-          queryParameters: {"game_id": gameId});
+      if (area.isNotEmpty) {
+        Response allFoxLocationJson = await dio.get(
+            '${dotenv.env['API_ROOT']!}/fox',
+            queryParameters: {"game_id": gameId, "area": area});
+        List allFoxLocationList = allFoxLocationJson.data;
+        return allFoxLocationList;
+      } else {
+        Response allFoxLocationJson = await dio.get(
+            '${dotenv.env['API_ROOT']!}/fox',
+            queryParameters: {"game_id": gameId});
 
-      List allFoxLocationList = allFoxLocationJson.data;
-
-      return allFoxLocationList;
+        List allFoxLocationList = allFoxLocationJson.data;
+        return allFoxLocationList;
+      }
     } catch (e) {
       return [];
     }
@@ -70,7 +77,7 @@ class LocationHandler {
   Future<DateTime> getLastLocationByArea(
     String area,
   ) async {
-    List<dynamic> initialList = await getFoxLocationsToList();
+    List<dynamic> initialList = await getFoxLocationsToList(area);
     List<Map<String, dynamic>> data = List.from(initialList);
 
     var filteredData = data
@@ -87,7 +94,8 @@ class LocationHandler {
     return DateTime.parse(filteredData.first['created_at']);
   }
 
-  Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSport) async {
+  Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSportOrHint,
+      DateTime time, String huntCode) async {
     try {
       var dio = HandlerWebRequests.dio;
 
@@ -97,9 +105,11 @@ class LocationHandler {
       Map<String, dynamic> formMap = {
         "game_id": gameId,
         "area": activeArea,
-        "type": huntOrSport,
+        "type": huntOrSportOrHint,
         "lat": latLng.latitude,
-        "long": latLng.longitude
+        "long": latLng.longitude,
+        "huntcode": huntCode,
+        "hunt_time": time.toIso8601String()
       };
 
       await dio.post('${dotenv.env['API_ROOT']!}/fox',

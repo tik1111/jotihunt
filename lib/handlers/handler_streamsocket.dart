@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -23,6 +21,10 @@ class SocketConnection {
 
     socket?.on('areastatus', (data) async {
       areaStatusUpdateStream.addResponse(data.toString());
+    });
+
+    socket?.on('foxLocationAreaChange', (data) {
+      foxLocationUpdateSingleAreaStream.addResponse(data.toString());
     });
   }
 }

@@ -22,13 +22,13 @@ class DefaultBottomAppBar extends StatelessWidget {
               context.go('/map');
             },
           ),
-          //IconButton(
-          // color: Colors.grey,
-          //icon: const Icon(Icons.person_2_outlined),
-          //onPressed: () {
-          // context.go('/profile');
-          //},
-          //),
+          IconButton(
+            color: Colors.grey,
+            icon: const Icon(Icons.person_2_outlined),
+            onPressed: () {
+              context.go('/profile');
+            },
+          ),
           IconButton(
             color: Colors.grey,
             icon: const Icon(Icons.settings),

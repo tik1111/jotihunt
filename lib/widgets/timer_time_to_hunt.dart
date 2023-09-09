@@ -24,25 +24,21 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   }
 
   void _setupTimer() {
-    // Controleer of er een "hunt" beschikbaar is of niet.
     if (widget.createdAt != DateTime(0)) {
-      print(widget.createdAt);
-      // Stel een voorwaarde in om te controleren of er een "hunt" is.
       DateTime now = DateTime.now();
       Duration timePassed = now.difference(widget.createdAt);
-      timeRemaining = Duration(hours: 1) - timePassed;
+      timeRemaining = const Duration(hours: 1) - timePassed;
 
       if (timeRemaining.isNegative) {
         if (kDebugMode) {
           print("Hunt time");
         }
       } else {
-        print("${widget.createdAt} NOT Hunt time");
-        timer = Timer.periodic(Duration(seconds: 1), _updateTime);
+        timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
       }
     } else {
-      timeRemaining =
-          Duration(seconds: -1); // Zet de timer op 0 als er geen "hunt" is.
+      timeRemaining = const Duration(
+          seconds: -1); // Zet de timer op 0 als er geen "hunt" is.
     }
   }
 
