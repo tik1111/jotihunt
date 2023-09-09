@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -35,6 +38,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
 
+  LatLng center = const LatLng(51.94916, 6.32094);
+  double initialRadius = 100;
+
   void updateHuntTime() async {
     DateTime currentAreaHuntTime = await LocationHandler()
         .getLastLocationByArea(
@@ -60,12 +66,12 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return MarkerHandler().getAllGroupMarkers();
   }
 
-  Future<List<Marker>> loadfoxLocationMarkers() async {
-    return MarkerHandler().getAllFoxLocations();
+  Future<List<Marker>> loadfoxLocationMarkers(String area) async {
+    return MarkerHandler().getAllOrPerAreaFoxLocations(area);
   }
 
-  Future<List<Polyline>> loadPolylineFromFoxLocations() async {
-    return HandlerPolyLine().getAllPolyLineToDraw();
+  Future<List<Polyline>> loadPolylineFromFoxLocations(String area) async {
+    return HandlerPolyLine().getAllPolyLineToDraw(area);
   }
 
   @override
@@ -78,6 +84,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   @override
   void initState() {
     super.initState();
+
     isGameSelectedFromStorage().then((value) {
       if (value) {
         setState(() {
@@ -89,35 +96,54 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             groupMarkers = value;
           });
         });
-        loadfoxLocationMarkers().then((value) {
+        loadfoxLocationMarkers("").then((value) {
           setState(() {
             foxLocationMarker = value;
           });
         });
-        loadPolylineFromFoxLocations().then((value) {
+        loadPolylineFromFoxLocations("").then((value) {
           setState(() {
             foxLocationPolyline = value;
           });
         });
 
-        //updateHuntTime();
-
-        foxLocationUpdateStream.getResponse.listen((event) async {
-          if (mounted) {
-            setState(() {
-              loadfoxLocationMarkers().then((value) {
-                setState(() {
-                  foxLocationMarker = value;
-                });
-              });
-              loadPolylineFromFoxLocations().then((value) {
-                setState(() {
-                  updateHuntTime();
-                  foxLocationPolyline = value;
-                });
-              });
-            });
+        foxLocationUpdateSingleAreaStream.getResponse
+            .listen((deelgebiedUpdate) {
+          if (kDebugMode) {
+            print(
+                "$deelgebiedUpdate is het deelgebied welke bijgewerkt moet worden");
           }
+
+          loadfoxLocationMarkers(deelgebiedUpdate).then((newMarkers) {
+            updateHuntTime();
+            for (var newMarker in newMarkers) {
+              int index = foxLocationMarker.indexWhere(
+                  (oldMarker) => oldMarker.point == newMarker.point);
+
+              if (index != -1) {
+                foxLocationMarker[index] = newMarker;
+              } else {
+                foxLocationMarker.add(newMarker);
+              }
+            }
+            setState(() {});
+          });
+
+          loadPolylineFromFoxLocations(deelgebiedUpdate).then((newPolyLines) {
+            for (var newPloyline in newPolyLines) {
+              int index = foxLocationMarker.indexWhere(
+                  // ignore: unrelated_type_equality_checks
+                  (oldMarker) => oldMarker.point == newPloyline.points);
+
+              if (index != -1) {
+                foxLocationPolyline[index] = newPloyline;
+              } else {
+                foxLocationPolyline.add(newPloyline);
+              }
+            }
+
+            setState(() {});
+          });
         });
       }
     });
@@ -169,6 +195,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                     ),
                     MarkerLayer(markers: foxLocationMarker),
                     MarkerLayer(markers: groupMarkers),
+                    //  CircleForLastHuntWidget(
+                    //      center: center, initialRadius: initialRadius),
                   ],
                 ),
                 Padding(
