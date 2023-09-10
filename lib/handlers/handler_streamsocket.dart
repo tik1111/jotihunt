@@ -15,16 +15,16 @@ class SocketConnection {
             .build());
     socket?.connect();
 
-    socket?.on('foxlocation', (data) async {
-      foxLocationUpdateStream.addResponse(data.toString());
-    });
-
     socket?.on('areastatus', (data) async {
       areaStatusUpdateStream.addResponse(data.toString());
     });
 
     socket?.on('foxLocationAreaChange', (data) {
       foxLocationUpdateSingleAreaStream.addResponse(data.toString());
+    });
+
+    socket?.on('userLocationChange', (data) {
+      userLocationUpdateStream.addResponse(data.toString());
     });
   }
 }

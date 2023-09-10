@@ -37,7 +37,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   List<Polyline> foxLocationPolylines = [];
 
   DateTime timeToHunt = DateTime.parse("2023-09-04T12:14:07.649+00:00");
-  StreamSubscription<String>? deelgebiedUpdateSubscription;
+  StreamSubscription<String>? deelareaUpdateSubscription;
+  StreamSubscription<String>? userLocationUpdateSubscription;
 
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
@@ -74,8 +75,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return MarkerHandler().getAllOrPerAreaFoxLocations(area);
   }
 
-  Future<List<Marker>> loadUserLocationMarkers() async {
-    return MarkerHandler().getAllUserLocations();
+  Future<List<Marker>> loadUserLocationMarkers(String userId) async {
+    return MarkerHandler().getAllUserLocations(userId);
   }
 
   Future<List<Polyline>> loadPolylineFromFoxLocations(String area) async {
@@ -89,7 +90,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   @override
   void dispose() {
     mapController.dispose();
-    deelgebiedUpdateSubscription?.cancel();
+    deelareaUpdateSubscription?.cancel();
+    userLocationUpdateSubscription?.cancel();
     super.dispose();
   }
 
@@ -119,14 +121,28 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             foxLocationPolylines = value;
           });
         });
-        loadUserLocationMarkers().then((value) {
-          print('all user locations');
+        loadUserLocationMarkers("").then((value) {
           setState(() {
             userLocationMarkers = value;
           });
         });
 
-        deelgebiedUpdateSubscription = foxLocationUpdateSingleAreaStream
+        userLocationUpdateSubscription =
+            userLocationUpdateStream.getResponse.listen(
+          (userId) {
+            if (kDebugMode) {
+              print("$userId is de user welke bijgewerkt moet worden");
+            }
+            loadUserLocationMarkers("").then((value) {
+              setState(() {
+                print('update user');
+                userLocationMarkers = value;
+              });
+            });
+          },
+        );
+
+        deelareaUpdateSubscription = foxLocationUpdateSingleAreaStream
             .getResponse
             .listen((deelgebiedUpdate) {
           if (kDebugMode) {

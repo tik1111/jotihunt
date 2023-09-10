@@ -52,11 +52,11 @@ class MarkerHandler {
     }
   }
 
-  Future<List<Marker>> getAllUserLocations() async {
+  Future<List<Marker>> getAllUserLocations(String userId) async {
     try {
       List<Marker> userLocationMarkerList = [];
       List allUserLocationList =
-          await LocationHandler().getAllCurrentHunterLocations();
+          await LocationHandler().getAllCurrentHunterLocations(userId);
       Icon markerIcon = const Icon(
         Icons.directions_car,
         color: Colors.black87,

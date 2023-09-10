@@ -90,12 +90,13 @@ class LocationHandler {
     }
   }
 
-  Future<List<dynamic>> getAllCurrentHunterLocations() async {
+  Future<List<dynamic>> getAllCurrentHunterLocations(String userId) async {
     Dio dio = HandlerWebRequests.dio;
+
     Response allUserLocationJson =
         await dio.get('${dotenv.env['API_ROOT']!}/users/location');
-
     List allUserLocationList = allUserLocationJson.data;
+
     return allUserLocationList;
   }
 }
