@@ -53,10 +53,50 @@ class MarkerHandler {
   }
 
   Future<List<Marker>> getAllUserLocations() async {
-    return [];
+    try {
+      List<Marker> userLocationMarkerList = [];
+      List allUserLocationList =
+          await LocationHandler().getAllCurrentHunterLocations();
+      Icon markerIcon = const Icon(
+        Icons.directions_car,
+        color: Colors.black87,
+      );
+
+      for (var i = 0; i < allUserLocationList.length; i++) {
+        userLocationMarkerList.add(Marker(
+            point: LatLng(double.parse(allUserLocationList[i]['lat']),
+                double.parse(allUserLocationList[i]['long'])),
+            builder: (context) => IconButton(
+                  icon: markerIcon,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                                allUserLocationList[i]['tenant_id'].toString()),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("${allUserLocationList[i]['user_id']}"),
+                                Text(
+                                    "Laatste update: ${allUserLocationList[i]['created_at']}"),
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                )));
+      }
+
+      return userLocationMarkerList;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Marker>> getAllOrPerAreaFoxLocations(String area) async {
+    // Use the area parameter with an area to get specific data or use "" for all areas available.
     try {
       List<Marker> foxLocationMarkerList = [];
       List allFoxLocationList =

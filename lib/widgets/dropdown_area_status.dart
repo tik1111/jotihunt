@@ -125,7 +125,7 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
           await SecureStorage().writeCurrentArea(value.toString());
 
           DateTime currentAreaHuntTime = await LocationHandler()
-              .getLastLocationByArea(
+              .getLastLocationByAreaToCreatedAt(
                   await SecureStorage().getCurrentSelectedArea() ?? "Alpha");
           if (currentAreaHuntTime == DateTime.now()) {
             context.read<HuntTimeCubit>().updateHuntTime(

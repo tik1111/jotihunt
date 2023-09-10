@@ -51,7 +51,10 @@ class Auth with ChangeNotifier {
       print(response.data);
       return false;
     } on DioException catch (dioError) {
-      print(dioError.response);
+      if (dioError.error == 400) {
+        print(dioError.response);
+        return false;
+      }
       return false;
     } catch (e) {
       print(e);

@@ -3,52 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationHandler {
-  Future<bool> verifyLocationPermissionAndServiceAcitve() async {
-    Location location = Location();
-
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await location.serviceEnabled();
-
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return false;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  Future<LocationData> getLastKnowLocationOfCurrentUser() async {
-    Location location = Location();
-    LocationData locationData;
-
-    bool isLocationPermissionGranted =
-        await verifyLocationPermissionAndServiceAcitve();
-
-    if (isLocationPermissionGranted) {
-      locationData = await location.getLocation();
-      return locationData;
-    }
-
-    throw Error();
-  }
-
   Future<List<dynamic>> getFoxLocationsToList(String area) async {
     try {
       Dio dio = HandlerWebRequests.dio;
@@ -74,15 +31,20 @@ class LocationHandler {
     }
   }
 
-  Future<DateTime> getLastLocationByArea(
-    String area,
-  ) async {
+  Future<List<dynamic>> getLastFoxLocationByArea(String area) async {
     List<dynamic> initialList = await getFoxLocationsToList(area);
     List<Map<String, dynamic>> data = List.from(initialList);
 
     var filteredData = data
         .where((map) => map['area'] == area && map['type'] == 'hunt')
         .toList();
+    return filteredData;
+  }
+
+  Future<DateTime> getLastLocationByAreaToCreatedAt(
+    String area,
+  ) async {
+    var filteredData = await getLastFoxLocationByArea(area);
 
     if (filteredData.isEmpty) {
       return DateTime.now();
@@ -126,5 +88,14 @@ class LocationHandler {
       print(e);
       return false;
     }
+  }
+
+  Future<List<dynamic>> getAllCurrentHunterLocations() async {
+    Dio dio = HandlerWebRequests.dio;
+    Response allUserLocationJson =
+        await dio.get('${dotenv.env['API_ROOT']!}/users/location');
+
+    List allUserLocationList = allUserLocationJson.data;
+    return allUserLocationList;
   }
 }

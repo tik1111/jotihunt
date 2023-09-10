@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/stream_provider.dart';
+import 'package:jotihunt/handlers/handler_circles.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_polyline.dart';
@@ -31,9 +32,12 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
   bool isGameSelected = false;
   List<Marker> groupMarkers = [];
-  List<Marker> foxLocationMarker = [];
-  List<Polyline> foxLocationPolyline = [];
+  List<Marker> userLocationMarkers = [];
+  List<Marker> foxLocationMarkers = [];
+  List<Polyline> foxLocationPolylines = [];
+
   DateTime timeToHunt = DateTime.parse("2023-09-04T12:14:07.649+00:00");
+  StreamSubscription<String>? deelgebiedUpdateSubscription;
 
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
@@ -43,7 +47,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
   void updateHuntTime() async {
     DateTime currentAreaHuntTime = await LocationHandler()
-        .getLastLocationByArea(
+        .getLastLocationByAreaToCreatedAt(
             await SecureStorage().getCurrentSelectedArea() ?? "Alpha");
     if (currentAreaHuntTime == DateTime.now()) {
       context
@@ -70,14 +74,22 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return MarkerHandler().getAllOrPerAreaFoxLocations(area);
   }
 
+  Future<List<Marker>> loadUserLocationMarkers() async {
+    return MarkerHandler().getAllUserLocations();
+  }
+
   Future<List<Polyline>> loadPolylineFromFoxLocations(String area) async {
     return HandlerPolyLine().getAllPolyLineToDraw(area);
+  }
+
+  Future<List> loadCircleMarkersFromLastFoxLocations(String area) async {
+    return HandlerCircles().getAllCircles(area);
   }
 
   @override
   void dispose() {
     mapController.dispose();
-
+    deelgebiedUpdateSubscription?.cancel();
     super.dispose();
   }
 
@@ -90,6 +102,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         setState(() {
           isGameSelected = value;
         });
+
         updateHuntTime();
         loadGroupMarkers().then((value) {
           setState(() {
@@ -98,16 +111,23 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         });
         loadfoxLocationMarkers("").then((value) {
           setState(() {
-            foxLocationMarker = value;
+            foxLocationMarkers = value;
           });
         });
         loadPolylineFromFoxLocations("").then((value) {
           setState(() {
-            foxLocationPolyline = value;
+            foxLocationPolylines = value;
+          });
+        });
+        loadUserLocationMarkers().then((value) {
+          print('all user locations');
+          setState(() {
+            userLocationMarkers = value;
           });
         });
 
-        foxLocationUpdateSingleAreaStream.getResponse
+        deelgebiedUpdateSubscription = foxLocationUpdateSingleAreaStream
+            .getResponse
             .listen((deelgebiedUpdate) {
           if (kDebugMode) {
             print(
@@ -117,13 +137,13 @@ class _MainMapWidgetState extends State<MainMapWidget> {
           loadfoxLocationMarkers(deelgebiedUpdate).then((newMarkers) {
             updateHuntTime();
             for (var newMarker in newMarkers) {
-              int index = foxLocationMarker.indexWhere(
+              int index = foxLocationMarkers.indexWhere(
                   (oldMarker) => oldMarker.point == newMarker.point);
 
               if (index != -1) {
-                foxLocationMarker[index] = newMarker;
+                foxLocationMarkers[index] = newMarker;
               } else {
-                foxLocationMarker.add(newMarker);
+                foxLocationMarkers.add(newMarker);
               }
             }
             setState(() {});
@@ -131,14 +151,14 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
           loadPolylineFromFoxLocations(deelgebiedUpdate).then((newPolyLines) {
             for (var newPloyline in newPolyLines) {
-              int index = foxLocationMarker.indexWhere(
+              int index = foxLocationMarkers.indexWhere(
                   // ignore: unrelated_type_equality_checks
                   (oldMarker) => oldMarker.point == newPloyline.points);
 
               if (index != -1) {
-                foxLocationPolyline[index] = newPloyline;
+                foxLocationPolylines[index] = newPloyline;
               } else {
-                foxLocationPolyline.add(newPloyline);
+                foxLocationPolylines.add(newPloyline);
               }
             }
 
@@ -191,10 +211,12 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                       userAgentPackageName: 'nl.jotihunters.jotihunt',
                     ),
                     PolylineLayer(
-                      polylines: foxLocationPolyline,
+                      polylines: foxLocationPolylines,
                     ),
-                    MarkerLayer(markers: foxLocationMarker),
+                    MarkerLayer(markers: foxLocationMarkers),
+                    MarkerLayer(markers: userLocationMarkers),
                     MarkerLayer(markers: groupMarkers),
+
                     //  CircleForLastHuntWidget(
                     //      center: center, initialRadius: initialRadius),
                   ],
