@@ -123,7 +123,7 @@ class _ProfilePageState extends State<SettingsPage> {
                   color: orangeColor,
                   border: Border.all(color: orangeColor),
                   borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: MediaQuery.of(context).size.height / 3,
+              height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width - 40,
               child: ListView.builder(
                   itemCount: menuItems.length,

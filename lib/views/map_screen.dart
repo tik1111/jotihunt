@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart'
+    if (dart.library.html) '';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_circles.dart';
@@ -18,6 +20,7 @@ import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 import 'package:jotihunt/widgets/dropdown_area_status.dart';
 import 'package:jotihunt/widgets/timer_time_to_hunt.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 
 class MainMapWidget extends StatefulWidget {
   const MainMapWidget({super.key});
@@ -36,15 +39,55 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   List<Marker> foxLocationMarkers = [];
   List<Polyline> foxLocationPolylines = [];
 
+  Location location = Location();
+  late LocationData currentLocation;
+
   DateTime timeToHunt = DateTime.parse("2023-09-04T12:14:07.649+00:00");
   StreamSubscription<String>? deelareaUpdateSubscription;
   StreamSubscription<String>? userLocationUpdateSubscription;
+  StreamSubscription<LocationData>? locationUpdate;
 
   final _formKey = GlobalKey<FormState>();
   final huntCodeFormController = TextEditingController();
 
   LatLng center = const LatLng(51.94916, 6.32094);
   double initialRadius = 100;
+
+  _initLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    location.changeSettings(
+        distanceFilter: 250, accuracy: LocationAccuracy.high, interval: 30000);
+    currentLocation = await location.getLocation();
+
+    await LocationHandler().postNewHunterLocation(currentLocation);
+
+    locationUpdate =
+        location.onLocationChanged.listen((LocationData updatedLocation) async {
+      await LocationHandler().postNewHunterLocation(updatedLocation);
+      if (mounted) {
+        setState(() {
+          currentLocation = updatedLocation;
+        });
+      }
+    });
+  }
 
   void updateHuntTime() async {
     DateTime currentAreaHuntTime = await LocationHandler()
@@ -92,6 +135,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     mapController.dispose();
     deelareaUpdateSubscription?.cancel();
     userLocationUpdateSubscription?.cancel();
+    locationUpdate?.cancel();
+
     super.dispose();
   }
 
@@ -99,6 +144,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   void initState() {
     super.initState();
 
+    _initLocation();
     isGameSelectedFromStorage().then((value) {
       if (value) {
         setState(() {
@@ -135,7 +181,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             }
             loadUserLocationMarkers("").then((value) {
               setState(() {
-                print('update user');
                 userLocationMarkers = value;
               });
             });
@@ -192,7 +237,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         return Scaffold(
             bottomNavigationBar: const DefaultBottomAppBar(),
 
-            //Debug buttom ;-)
+            //Debug button ;-)
             //floatingActionButton: FloatingActionButton(
             //  onPressed: () async {
             //    await SecureStorage().writeAccessToken("bla");
@@ -208,7 +253,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                   options: MapOptions(
                       zoom: 14,
                       minZoom: 10,
-                      maxZoom: 19,
+                      maxZoom: 18,
                       center: const LatLng(51.94915, 6.32091),
                       onTap: (tapPosition, point) {
                         showDialog(
@@ -225,6 +270,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'nl.jotihunters.jotihunt',
+                      // tileProvider: kIsWeb
+                      //   ? null
+                      // : FMTC.instance('mapStore').getTileProvider(),
                     ),
                     PolylineLayer(
                       polylines: foxLocationPolylines,
@@ -232,9 +280,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                     MarkerLayer(markers: foxLocationMarkers),
                     MarkerLayer(markers: userLocationMarkers),
                     MarkerLayer(markers: groupMarkers),
-
-                    //  CircleForLastHuntWidget(
-                    //      center: center, initialRadius: initialRadius),
                   ],
                 ),
                 Padding(

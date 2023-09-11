@@ -4,6 +4,7 @@ import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:location/location.dart';
 
 class LocationHandler {
   Future<List<dynamic>> getFoxLocationsToList(String area) async {
@@ -98,5 +99,23 @@ class LocationHandler {
     List allUserLocationList = allUserLocationJson.data;
 
     return allUserLocationList;
+  }
+
+  Future<bool> postNewHunterLocation(LocationData newLocation) async {
+    Dio dio = HandlerWebRequests.dio;
+
+    Map<String, dynamic> postMap = {
+      "lat": newLocation.latitude,
+      "long": newLocation.longitude,
+    };
+
+    Response newHunterLocation = await dio.post(
+        '${dotenv.env['API_ROOT']!}/users/location',
+        data: postMap,
+        options: Options(contentType: Headers.formUrlEncodedContentType));
+    if (newHunterLocation.statusCode == 201) {
+      return true;
+    }
+    return false;
   }
 }

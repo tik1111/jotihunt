@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/login_cubit.dart';
 import 'package:jotihunt/Cubit/login_state.dart';
+import 'package:jotihunt/handlers/handler_caching.dart';
 import 'package:jotihunt/handlers/handler_streamsocket.dart';
 import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:jotihunt/views/auth/login_screen.dart';
@@ -116,6 +119,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 void main() async {
   await dotenv.load(fileName: ".env");
   HandlerWebRequests.init();
+  HandlerMapCaching().init();
 
   runApp(
     Jotihunt(),
