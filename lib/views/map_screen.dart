@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart'
-    if (dart.library.html) '';
+    if (dart.library.html) '../handlers/dummy.dart'
+    if (dart.library.io) 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_circles.dart';
@@ -176,9 +177,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         userLocationUpdateSubscription =
             userLocationUpdateStream.getResponse.listen(
           (userId) {
-            if (kDebugMode) {
-              print("$userId is de user welke bijgewerkt moet worden");
-            }
             loadUserLocationMarkers("").then((value) {
               setState(() {
                 userLocationMarkers = value;
@@ -190,11 +188,6 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         deelareaUpdateSubscription = foxLocationUpdateSingleAreaStream
             .getResponse
             .listen((deelgebiedUpdate) {
-          if (kDebugMode) {
-            print(
-                "$deelgebiedUpdate is het deelgebied welke bijgewerkt moet worden");
-          }
-
           loadfoxLocationMarkers(deelgebiedUpdate).then((newMarkers) {
             updateHuntTime();
             for (var newMarker in newMarkers) {
@@ -246,6 +239,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
             //  backgroundColor: Colors.green,
             //  child: const Icon(Icons.line_axis),
             //),
+
             body: Stack(
               children: [
                 FlutterMap(
@@ -270,9 +264,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'nl.jotihunters.jotihunt',
-                      // tileProvider: kIsWeb
-                      //   ? null
-                      // : FMTC.instance('mapStore').getTileProvider(),
+                      //tileProvider: FMTC.instance('mapStore').getTileProvider(),
                     ),
                     PolylineLayer(
                       polylines: foxLocationPolylines,
