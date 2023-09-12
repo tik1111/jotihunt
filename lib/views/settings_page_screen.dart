@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jotihunt/Cubit/login_cubit.dart';
+import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
@@ -45,9 +48,11 @@ class _ProfilePageState extends State<SettingsPage> {
       if (isGameAvailable) {
         dropdownMenuEntries = value;
         getSecureStorage().then((value) {
-          setState(() {
-            gameID = value!;
-          });
+          if (mounted) {
+            setState(() {
+              gameID = value!;
+            });
+          }
         });
       }
     });
@@ -90,6 +95,18 @@ class _ProfilePageState extends State<SettingsPage> {
         title: const Text('Game editor'),
         onTap: () {
           context.push('/gameEditor');
+        },
+      ),
+      ListTile(
+        enabled: true,
+        leading: const Icon(Icons.logout),
+        title: const Text('Uitloggen'),
+        onTap: () async {
+          Future<bool> loginState = Auth().logout();
+          if (await loginState) {
+            // ignore: use_build_context_synchronously
+            context.read<LoginCubit>().logout();
+          }
         },
       ),
     ];

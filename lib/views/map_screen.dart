@@ -11,6 +11,7 @@ import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart'
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
 import 'package:jotihunt/Cubit/stream_provider.dart';
 import 'package:jotihunt/handlers/handler_circles.dart';
+import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_locations.dart';
 import 'package:jotihunt/handlers/handler_markers.dart';
 import 'package:jotihunt/handlers/handler_polyline.dart';
@@ -107,8 +108,16 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     String? currentGame = await SecureStorage().getCurrentSelectedGame();
     if (currentGame != null && currentGame != "") {
       return true;
+    } else {
+      //await getAllGamesFromTenantPickFirst();
+      return true;
     }
-    return false;
+  }
+
+  Future<List<dynamic>> getAllGamesFromTenantPickFirst() async {
+    List allGames = await GameHandler().getAllActiveGamesFromTenant();
+    await SecureStorage().writeCurrentGame(allGames.first);
+    return allGames.first;
   }
 
   Future<List<Marker>> loadGroupMarkers() async {
