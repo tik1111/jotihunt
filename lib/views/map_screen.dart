@@ -96,11 +96,15 @@ class _MainMapWidgetState extends State<MainMapWidget> {
         .getLastLocationByAreaToCreatedAt(
             await SecureStorage().getCurrentSelectedArea() ?? "Alpha");
     if (currentAreaHuntTime == DateTime.now()) {
-      context
-          .read<HuntTimeCubit>()
-          .updateHuntTime(DateTime.parse("2023-09-04T12:14:07.649+00:00"));
+      if (mounted) {
+        context
+            .read<HuntTimeCubit>()
+            .updateHuntTime(DateTime.parse("2023-09-04T12:14:07.649+00:00"));
+      }
     } else {
-      context.read<HuntTimeCubit>().updateHuntTime(currentAreaHuntTime);
+      if (mounted) {
+        context.read<HuntTimeCubit>().updateHuntTime(currentAreaHuntTime);
+      }
     }
   }
 
@@ -109,15 +113,23 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     if (currentGame != null && currentGame != "") {
       return true;
     } else {
-      //await getAllGamesFromTenantPickFirst();
-      return true;
+      bool currentGame = await getAllGamesFromTenantPickFirst();
+      if (currentGame) {
+        return true;
+      }
     }
+    return false;
   }
 
-  Future<List<dynamic>> getAllGamesFromTenantPickFirst() async {
-    List allGames = await GameHandler().getAllActiveGamesFromTenant();
-    await SecureStorage().writeCurrentGame(allGames.first);
-    return allGames.first;
+  Future<bool> getAllGamesFromTenantPickFirst() async {
+    List? allGames = await GameHandler().getAllActiveGamesFromTenant();
+    print(allGames.isNotEmpty);
+    if (allGames.isNotEmpty) {
+      print('$allGames allGames');
+      await SecureStorage().writeCurrentGame(allGames[0]['_id'].toString());
+      return true;
+    }
+    return false;
   }
 
   Future<List<Marker>> loadGroupMarkers() async {
@@ -157,39 +169,50 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     _initLocation();
     isGameSelectedFromStorage().then((value) {
       if (value) {
-        setState(() {
-          isGameSelected = value;
-        });
-
+        if (mounted) {
+          setState(() {
+            isGameSelected = value;
+          });
+        }
         updateHuntTime();
         loadGroupMarkers().then((value) {
-          setState(() {
-            groupMarkers = value;
-          });
+          if (mounted) {
+            setState(() {
+              groupMarkers = value;
+            });
+          }
         });
         loadfoxLocationMarkers("").then((value) {
-          setState(() {
-            foxLocationMarkers = value;
-          });
+          if (mounted) {
+            setState(() {
+              foxLocationMarkers = value;
+            });
+          }
         });
         loadPolylineFromFoxLocations("").then((value) {
-          setState(() {
-            foxLocationPolylines = value;
-          });
+          if (mounted) {
+            setState(() {
+              foxLocationPolylines = value;
+            });
+          }
         });
         loadUserLocationMarkers("").then((value) {
-          setState(() {
-            userLocationMarkers = value;
-          });
+          if (mounted) {
+            setState(() {
+              userLocationMarkers = value;
+            });
+          }
         });
 
         userLocationUpdateSubscription =
             userLocationUpdateStream.getResponse.listen(
           (userId) {
             loadUserLocationMarkers("").then((value) {
-              setState(() {
-                userLocationMarkers = value;
-              });
+              if (mounted) {
+                setState(() {
+                  userLocationMarkers = value;
+                });
+              }
             });
           },
         );
@@ -209,7 +232,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                 foxLocationMarkers.add(newMarker);
               }
             }
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
           });
 
           loadPolylineFromFoxLocations(deelgebiedUpdate).then((newPolyLines) {
@@ -224,8 +249,9 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                 foxLocationPolylines.add(newPloyline);
               }
             }
-
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
           });
         });
       }

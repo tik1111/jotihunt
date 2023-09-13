@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 
 import 'package:jotihunt/handlers/handler_webrequests.dart';
@@ -8,9 +9,9 @@ import 'package:jotihunt/handlers/handler_webrequests.dart';
 class GameHandler {
   Future<List<dynamic>> getAllActiveGamesFromTenant() async {
     var dio = HandlerWebRequests.dio;
-    Response allGameJson = await dio.get('${dotenv.env['API_ROOT']!}/game');
+    Response? allGameJson = await dio.get('${dotenv.env['API_ROOT']!}/game');
 
-    return allGameJson.data;
+    return allGameJson.data ?? [];
   }
 
   Future<List<DropdownMenuEntry<String>>>
@@ -31,7 +32,7 @@ class GameHandler {
     }
   }
 
-  Future<List<ListTile>> getAllActiveGameListTile() async {
+  Future<List<ListTile>> getAllActiveGameListTile(BuildContext context) async {
     List<ListTile> listTiles = [];
     String? currentGameId = await SecureStorage().getCurrentSelectedGame();
 
@@ -45,7 +46,9 @@ class GameHandler {
           title: Text(allTenantGames[i]['_id']),
           onTap: () async {
             await SecureStorage().writeCurrentGame(allTenantGames[i]['_id']);
-            // Refresh the list to show the new selected item.
+
+            // ignore: use_build_context_synchronously
+            context.pushReplacement('/gameEditor');
           },
           trailing:
               isSelected ? const Icon(Icons.check, color: Colors.green) : null,
@@ -57,7 +60,7 @@ class GameHandler {
           title: Text('Geen game geselecteerd'),
         ));
       }
-      return listTiles;
+      return listTiles.reversed.toList();
     } catch (e) {
       return [];
     }

@@ -65,6 +65,7 @@ class _DropdownMenuCurrentGameState extends State<DropdownMenuCurrentGame> {
         ),
         onSelected: (String? value) async {
           // This is called when the user selects an item.
+          print(value);
           await SecureStorage().writeCurrentGame(value!);
           setState(() {
             dropdownValue = value;

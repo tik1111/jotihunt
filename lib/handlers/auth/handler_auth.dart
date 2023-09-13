@@ -34,9 +34,14 @@ class Auth with ChangeNotifier {
   Future<bool> loginUserWithEmailAndPassword(
       String username, String password) async {
     try {
-      var response = await dio.post('${dotenv.env['API_ROOT']!}/auth/login',
+      Response response = await dio.post(
+          '${dotenv.env['API_ROOT']!}/auth/login',
           data: {'email': username, 'password': password});
-      print(response);
+      print("invalid Credentials");
+
+      if (response.statusCode == 400) {
+        print("invalid Credentials");
+      }
 
       if (response.data['token'] != "" && response.data['refreshtoken'] != "") {
         await SecureStorage().writeAccessToken(response.data['token']);

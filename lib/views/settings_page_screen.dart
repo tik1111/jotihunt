@@ -102,10 +102,12 @@ class _ProfilePageState extends State<SettingsPage> {
         leading: const Icon(Icons.logout),
         title: const Text('Uitloggen'),
         onTap: () async {
-          Future<bool> loginState = Auth().logout();
-          if (await loginState) {
-            // ignore: use_build_context_synchronously
-            context.read<LoginCubit>().logout();
+          if (mounted) {
+            Future<bool> loginState = Auth().logout();
+            if (await loginState) {
+              // ignore: use_build_context_synchronously
+              context.read<LoginCubit>().logout();
+            }
           }
         },
       ),
@@ -118,21 +120,61 @@ class _ProfilePageState extends State<SettingsPage> {
       body: ListView(children: [
         Column(
           children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-              decoration: BoxDecoration(
-                  color: orangeColor,
-                  border: Border.all(color: orangeColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: 100,
-              width: MediaQuery.of(context).size.width - 40,
-              child: Row(
-                children: [
-                  const Text("Kies actieve Game "),
-                  const DropdownMenuCurrentGame(),
-                  Text(gameID)
-                ],
-              ),
+            Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                  decoration: BoxDecoration(
+                      color: orangeColor,
+                      border: Border.all(color: orangeColor),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              child: ClipOval(
+                                  child: Image.network(
+                                      'https://i.imgur.com/8qcWcvM.png')),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text('Naam:'),
+                            Text('Hunter code:'),
+                            Text('Team:'),
+                          ],
+                        ),
+                      ),
+                      const Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('{name}'),
+                          Text('{hunt_code}'),
+                          Text("{team_name}"),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),

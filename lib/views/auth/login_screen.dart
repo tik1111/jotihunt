@@ -1,4 +1,6 @@
 // ignore: file_names
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/auth/handler_auth.dart';
@@ -192,15 +194,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (await loginState) {
                               // ignore: use_build_context_synchronously
                               context.read<LoginCubit>().login();
-                              String? currentGame = await SecureStorage()
-                                  .getCurrentSelectedGame();
-                              if (currentGame == null) {
-                                List<dynamic> lastGameFromTenant =
-                                    await GameHandler()
-                                        .getAllActiveGamesFromTenant();
-                                await SecureStorage().writeCurrentGame(
-                                    lastGameFromTenant[0]['_id']);
-                              }
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                duration: Duration(seconds: 5),
+                                content: Text(
+                                    "Login gegevens onjuist of account bestaat niet"),
+                              ));
                             }
                           }
                         },
