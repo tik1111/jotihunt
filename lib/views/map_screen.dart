@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+// ignore: unused_import
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart'
     if (dart.library.html) '../handlers/dummy.dart'
     if (dart.library.io) 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
@@ -123,9 +124,8 @@ class _MainMapWidgetState extends State<MainMapWidget> {
 
   Future<bool> getAllGamesFromTenantPickFirst() async {
     List? allGames = await GameHandler().getAllActiveGamesFromTenant();
-    print(allGames.isNotEmpty);
+
     if (allGames.isNotEmpty) {
-      print('$allGames allGames');
       await SecureStorage().writeCurrentGame(allGames[0]['_id'].toString());
       return true;
     }

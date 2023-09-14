@@ -7,8 +7,6 @@ import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
 
-import 'package:jotihunt/widgets/dropdown_game.dart';
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 

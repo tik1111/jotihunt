@@ -1,12 +1,8 @@
 // ignore: file_names
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/Cubit/login_cubit.dart';
-import 'package:jotihunt/handlers/handler_game.dart';
-import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -195,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // ignore: use_build_context_synchronously
                               context.read<LoginCubit>().login();
                             } else {
+                              // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 duration: Duration(seconds: 5),

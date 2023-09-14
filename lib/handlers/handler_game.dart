@@ -45,7 +45,7 @@ class GameHandler {
         listTiles.add(ListTile(
           title: Text(
               allTenantGames[i]['userFriendlyName'] ?? allTenantGames[i]['_id'],
-              style: TextStyle(color: Colors.white70)),
+              style: const TextStyle(color: Colors.white70)),
           onTap: () async {
             await SecureStorage().writeCurrentGame(allTenantGames[i]['_id']);
 

@@ -10,7 +10,7 @@ class Manage {
 
 class FlutterMapTileCaching {
   final Manage manage = Manage();
-  final TileProvider t = new FileTileProvider();
+  final TileProvider t = FileTileProvider();
 
   TileProvider getTileProvider() {
     // Dummy logic
