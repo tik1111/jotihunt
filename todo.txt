@@ -4,7 +4,7 @@
 
 3: Hunt code 
 
-4: Hunt showDialog
+{4: Hunt showDialog} 
 
 5: {Select area only hunt or spot items on selected area}
     {Settings page to select game}
@@ -17,10 +17,12 @@
 
 7: Fox location radius
 
-8: Polylines between foxmoves
+{8: Polylines between foxmoves}
 
 9: Admin area to receve hunt codes and administrate
 
 10: Area status send as once otherwise lister goes crazy
 
-11: AccessTokenRefresh on expire
+{11: AccessTokenRefresh on expire}
+
+{12: first area selected Alpha not selecting}

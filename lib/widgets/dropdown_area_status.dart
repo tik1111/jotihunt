@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jotihunt/Cubit/fox_timer_cubit.dart';
@@ -35,11 +37,13 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
   }
 
   Future<String> getLastKnownSelectedArea() async {
-    String? getCurrentSelectedArea =
-        await SecureStorage().getCurrentSelectedArea();
+    String getCurrentSelectedArea =
+        await SecureStorage().getCurrentSelectedArea() ?? "Alpha";
 
-    if (getCurrentSelectedArea != "" && getCurrentSelectedArea != null) {
+    if (getCurrentSelectedArea != "Alpha") {
       initialarea = getCurrentSelectedArea;
+    } else {
+      await SecureStorage().writeCurrentArea("Alpha");
     }
     return getCurrentSelectedArea.toString();
   }
@@ -81,7 +85,8 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
       setState(() {
         initialarea = value;
       });
-      updateIconBasedOnAreaStatus(initialarea);
+
+      updateIconBasedOnAreaStatus(value);
     });
 
     areaStatusUpdateStream.getResponse.listen((event) {
@@ -89,8 +94,16 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         loadAreaStatus().then((value) {
           setState(() {
             dropdownitems = value;
-            updateIconBasedOnAreaStatus(initialarea);
+            updateIconBasedOnAreaStatus(event);
           });
+        });
+
+        getLastKnownSelectedArea().then((value) {
+          setState(() {
+            initialarea = value;
+          });
+
+          updateIconBasedOnAreaStatus(value);
         });
       }
     });
@@ -110,10 +123,17 @@ class _DropdownMenuAreaStatusState extends State<DropdownMenuAreaStatus> {
         ),
         onSelected: (String? value) async {
           await SecureStorage().writeCurrentArea(value.toString());
-          // ignore: use_build_context_synchronously
-          context.read<HuntTimeCubit>().updateHuntTime(await LocationHandler()
-              .getLastLocationByArea(
-                  await SecureStorage().getCurrentSelectedArea() ?? "Alpha"));
+
+          DateTime currentAreaHuntTime = await LocationHandler()
+              .getLastLocationByAreaToCreatedAt(
+                  await SecureStorage().getCurrentSelectedArea() ?? "Alpha");
+          if (currentAreaHuntTime == DateTime.now()) {
+            context.read<HuntTimeCubit>().updateHuntTime(
+                DateTime.parse("2023-09-04T12:14:07.649+00:00"));
+          } else {
+            context.read<HuntTimeCubit>().updateHuntTime(currentAreaHuntTime);
+          }
+
           updateIconBasedOnAreaStatus(value.toString());
         },
         dropdownMenuEntries: dropdownitems,

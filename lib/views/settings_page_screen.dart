@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jotihunt/Cubit/login_cubit.dart';
+import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/widgets/bottomappbar_hunter_interface.dart';
@@ -45,9 +48,11 @@ class _ProfilePageState extends State<SettingsPage> {
       if (isGameAvailable) {
         dropdownMenuEntries = value;
         getSecureStorage().then((value) {
-          setState(() {
-            gameID = value!;
-          });
+          if (mounted) {
+            setState(() {
+              gameID = value!;
+            });
+          }
         });
       }
     });
@@ -92,6 +97,20 @@ class _ProfilePageState extends State<SettingsPage> {
           context.push('/gameEditor');
         },
       ),
+      ListTile(
+        enabled: true,
+        leading: const Icon(Icons.logout),
+        title: const Text('Uitloggen'),
+        onTap: () async {
+          if (mounted) {
+            Future<bool> loginState = Auth().logout();
+            if (await loginState) {
+              // ignore: use_build_context_synchronously
+              context.read<LoginCubit>().logout();
+            }
+          }
+        },
+      ),
     ];
 
     return Scaffold(
@@ -101,21 +120,61 @@ class _ProfilePageState extends State<SettingsPage> {
       body: ListView(children: [
         Column(
           children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-              decoration: BoxDecoration(
-                  color: orangeColor,
-                  border: Border.all(color: orangeColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: 100,
-              width: MediaQuery.of(context).size.width - 40,
-              child: Row(
-                children: [
-                  const Text("Kies actieve Game "),
-                  const DropdownMenuCurrentGame(),
-                  Text(gameID)
-                ],
-              ),
+            Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                  decoration: BoxDecoration(
+                      color: orangeColor,
+                      border: Border.all(color: orangeColor),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              child: ClipOval(
+                                  child: Image.network(
+                                      'https://i.imgur.com/8qcWcvM.png')),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text('Naam:'),
+                            Text('Hunter code:'),
+                            Text('Team:'),
+                          ],
+                        ),
+                      ),
+                      const Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('{name}'),
+                          Text('{hunt_code}'),
+                          Text("{team_name}"),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -123,7 +182,7 @@ class _ProfilePageState extends State<SettingsPage> {
                   color: orangeColor,
                   border: Border.all(color: orangeColor),
                   borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: MediaQuery.of(context).size.height / 3,
+              height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width - 40,
               child: ListView.builder(
                   itemCount: menuItems.length,

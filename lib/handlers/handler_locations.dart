@@ -3,79 +3,49 @@ import 'package:dio/dio.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:location/location.dart';
 
 class LocationHandler {
-  Future<bool> verifyLocationPermissionAndServiceAcitve() async {
-    Location location = Location();
-
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await location.serviceEnabled();
-
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return false;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  Future<LocationData> getLastKnowLocationOfCurrentUser() async {
-    Location location = Location();
-    LocationData locationData;
-
-    bool isLocationPermissionGranted =
-        await verifyLocationPermissionAndServiceAcitve();
-
-    if (isLocationPermissionGranted) {
-      locationData = await location.getLocation();
-      return locationData;
-    }
-
-    throw Error();
-  }
-
-  Future<List<dynamic>> getFoxLocationsToList() async {
+  Future<List<dynamic>> getFoxLocationsToList(String area) async {
     try {
       Dio dio = HandlerWebRequests.dio;
 
       String? gameId = await SecureStorage().getCurrentSelectedGame();
 
-      Response allFoxLocationJson = await dio.get(
-          '${dotenv.env['API_ROOT']!}/fox',
-          queryParameters: {"game_id": gameId});
+      if (area.isNotEmpty) {
+        Response allFoxLocationJson = await dio.get(
+            '${dotenv.env['API_ROOT']!}/fox',
+            queryParameters: {"game_id": gameId, "area": area});
+        List allFoxLocationList = allFoxLocationJson.data;
+        return allFoxLocationList;
+      } else {
+        Response allFoxLocationJson = await dio.get(
+            '${dotenv.env['API_ROOT']!}/fox',
+            queryParameters: {"game_id": gameId});
 
-      List allFoxLocationList = allFoxLocationJson.data;
-
-      return allFoxLocationList;
+        List allFoxLocationList = allFoxLocationJson.data;
+        return allFoxLocationList;
+      }
     } catch (e) {
       return [];
     }
   }
 
-  Future<DateTime> getLastLocationByArea(
-    String area,
-  ) async {
-    List<dynamic> initialList = await getFoxLocationsToList();
+  Future<List<dynamic>> getLastFoxLocationByArea(String area) async {
+    List<dynamic> initialList = await getFoxLocationsToList(area);
     List<Map<String, dynamic>> data = List.from(initialList);
 
     var filteredData = data
         .where((map) => map['area'] == area && map['type'] == 'hunt')
         .toList();
+    return filteredData;
+  }
+
+  Future<DateTime> getLastLocationByAreaToCreatedAt(
+    String area,
+  ) async {
+    var filteredData = await getLastFoxLocationByArea(area);
 
     if (filteredData.isEmpty) {
       return DateTime.now();
@@ -87,7 +57,8 @@ class LocationHandler {
     return DateTime.parse(filteredData.first['created_at']);
   }
 
-  Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSport) async {
+  Future<bool> addHuntOrSpot(LatLng latLng, String huntOrSportOrHint,
+      DateTime time, String huntCode) async {
     try {
       var dio = HandlerWebRequests.dio;
 
@@ -97,9 +68,11 @@ class LocationHandler {
       Map<String, dynamic> formMap = {
         "game_id": gameId,
         "area": activeArea,
-        "type": huntOrSport,
+        "type": huntOrSportOrHint,
         "lat": latLng.latitude,
-        "long": latLng.longitude
+        "long": latLng.longitude,
+        "huntcode": huntCode,
+        "hunt_time": time.toIso8601String()
       };
 
       await dio.post('${dotenv.env['API_ROOT']!}/fox',
@@ -116,5 +89,33 @@ class LocationHandler {
       print(e);
       return false;
     }
+  }
+
+  Future<List<dynamic>> getAllCurrentHunterLocations(String userId) async {
+    Dio dio = HandlerWebRequests.dio;
+
+    Response allUserLocationJson =
+        await dio.get('${dotenv.env['API_ROOT']!}/users/location');
+    List allUserLocationList = allUserLocationJson.data;
+
+    return allUserLocationList;
+  }
+
+  Future<bool> postNewHunterLocation(LocationData newLocation) async {
+    Dio dio = HandlerWebRequests.dio;
+
+    Map<String, dynamic> postMap = {
+      "lat": newLocation.latitude,
+      "long": newLocation.longitude,
+    };
+
+    Response newHunterLocation = await dio.post(
+        '${dotenv.env['API_ROOT']!}/users/location',
+        data: postMap,
+        options: Options(contentType: Headers.formUrlEncodedContentType));
+    if (newHunterLocation.statusCode == 201) {
+      return true;
+    }
+    return false;
   }
 }

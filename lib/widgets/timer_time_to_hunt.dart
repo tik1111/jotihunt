@@ -20,27 +20,11 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
   @override
   void initState() {
     super.initState();
-    DateTime now = DateTime.now();
-    Duration timePassed = now.difference(widget.createdAt);
-    timeRemaining = const Duration(hours: 1) - timePassed;
-
-    if (timeRemaining.isNegative) {
-      if (kDebugMode) {
-        print("Hunt time");
-      }
-    } else {
-      timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
-    }
+    _setupTimer();
   }
 
-  @override
-  void didUpdateWidget(covariant TimerTimeToNextHunt oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.createdAt != widget.createdAt) {
-      // Cancel the old timer
-      timer?.cancel();
-
+  void _setupTimer() {
+    if (widget.createdAt != DateTime(0)) {
       DateTime now = DateTime.now();
       Duration timePassed = now.difference(widget.createdAt);
       timeRemaining = const Duration(hours: 1) - timePassed;
@@ -50,9 +34,21 @@ class _TimerTimeToNextHuntState extends State<TimerTimeToNextHunt> {
           print("Hunt time");
         }
       } else {
-        // Start a new timer
         timer = Timer.periodic(const Duration(seconds: 1), _updateTime);
       }
+    } else {
+      timeRemaining = const Duration(
+          seconds: -1); // Zet de timer op 0 als er geen "hunt" is.
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant TimerTimeToNextHunt oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.createdAt != widget.createdAt) {
+      timer?.cancel(); // Annuleer de oude timer.
+      _setupTimer(); // Stel de nieuwe timer in.
     }
   }
 

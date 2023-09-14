@@ -22,7 +22,8 @@ class MarkerHandler {
             point: LatLng(double.parse(allGroupsList[i]['lat']),
                 double.parse(allGroupsList[i]['long'])),
             builder: (context) => IconButton(
-                  icon: const Icon(Icons.house, color: Colors.green),
+                  icon: const Icon(Icons.house,
+                      color: Color.fromARGB(255, 35, 83, 156)),
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -51,14 +52,55 @@ class MarkerHandler {
     }
   }
 
-  Future<List<Marker>> getAllUserLocations() async {
-    return [];
+  Future<List<Marker>> getAllUserLocations(String userId) async {
+    try {
+      List<Marker> userLocationMarkerList = [];
+      List allUserLocationList =
+          await LocationHandler().getAllCurrentHunterLocations(userId);
+      Icon markerIcon = const Icon(
+        Icons.directions_car,
+        color: Colors.black87,
+      );
+
+      for (var i = 0; i < allUserLocationList.length; i++) {
+        userLocationMarkerList.add(Marker(
+            point: LatLng(double.parse(allUserLocationList[i]['lat']),
+                double.parse(allUserLocationList[i]['long'])),
+            builder: (context) => IconButton(
+                  icon: markerIcon,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                                allUserLocationList[i]['tenant_id'].toString()),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("${allUserLocationList[i]['user_id']}"),
+                                Text(
+                                    "Laatste update: ${allUserLocationList[i]['created_at']}"),
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                )));
+      }
+
+      return userLocationMarkerList;
+    } catch (e) {
+      return [];
+    }
   }
 
-  Future<List<Marker>> getAllFoxLocations() async {
+  Future<List<Marker>> getAllOrPerAreaFoxLocations(String area) async {
+    // Use the area parameter with an area to get specific data or use "" for all areas available.
     try {
       List<Marker> foxLocationMarkerList = [];
-      List allFoxLocationList = await LocationHandler().getFoxLocationsToList();
+      List allFoxLocationList =
+          await LocationHandler().getFoxLocationsToList(area);
 
       Icon markerIcon = const Icon(
         Icons.girl_rounded,

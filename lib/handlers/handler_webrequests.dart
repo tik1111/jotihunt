@@ -8,15 +8,11 @@ class HandlerWebRequests {
   static void init() async {
     int retryCount = 0;
     dio.interceptors.clear();
-    dio.interceptors.add(InterceptorsWrapper(
-        onRequest: (options, handler) async {
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (options, handler) async {
       options.headers['x-access-token'] =
           await SecureStorage().getAccessToken();
       return handler.next(options);
-    }, onResponse:
-            (Response response, ResponseInterceptorHandler handler) async {
-      //!! index out of range error??!
-      return handler.next(response);
     }, onError: (DioException e, ErrorInterceptorHandler handler) async {
       if (e.response?.statusCode == 401 && retryCount < 4) {
         retryCount++;

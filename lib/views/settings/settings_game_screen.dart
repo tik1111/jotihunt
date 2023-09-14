@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 
 class SettingsGameScreen extends StatefulWidget {
@@ -12,11 +13,6 @@ class _SettingsGameScreenState extends State<SettingsGameScreen> {
   final Color backgroundColor = const Color.fromARGB(255, 33, 34, 45);
   String? selectedGame;
   final TextEditingController gameNameController = TextEditingController();
-  final List<String> availableGames = [
-    'Fake spel 1',
-    'Fake spel 2',
-    'Fake spel 3'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +42,9 @@ class _SettingsGameScreenState extends State<SettingsGameScreen> {
             ),
             const SizedBox(height: 18),
             ElevatedButton(
-              onPressed: () {
-                GameHandler().createNewGame('gameName');
+              onPressed: () async {
+                await GameHandler().createNewGame('gameName');
+                context.pushReplacement('/gameEditor');
               },
               child: const Text("Aanmaken"),
             ),
@@ -58,7 +55,7 @@ class _SettingsGameScreenState extends State<SettingsGameScreen> {
             ),
             Expanded(
                 child: FutureBuilder<List<ListTile>>(
-              future: GameHandler().getAllActiveGameListTile(),
+              future: GameHandler().getAllActiveGameListTile(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container();
