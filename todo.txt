@@ -1,28 +1,14 @@
-{1: Area status updates}
-
-{2: Login session}
-
-3: Hunt code 
-
-{4: Hunt showDialog} 
-
-5: {Select area only hunt or spot items on selected area}
-    {Settings page to select game}
-    {Get game from tenant}
-    {Global game var}
-    {Add game field to hunt/spot/hint}
-    {Map get only markers from current game} 
-
-{6: Map performance}
-
-7: Fox location radius
-
-{8: Polylines between foxmoves}
+7: Fox location radius 500m circles
 
 9: Admin area to receve hunt codes and administrate
 
-10: Area status send as once otherwise lister goes crazy
+14: Beamer view 
 
-{11: AccessTokenRefresh on expire}
+15: Poi (pondjes enz)
 
-{12: first area selected Alpha not selecting}
+16: forgot password functionality
+
+17: Registration code
+
+18: admin area
+

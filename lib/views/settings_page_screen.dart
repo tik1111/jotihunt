@@ -89,6 +89,14 @@ class _ProfilePageState extends State<SettingsPage> {
           }),
       ListTile(
         enabled: true,
+        leading: const Icon(Icons.settings),
+        title: const Text('Mijn instellingen'),
+        onTap: () {
+          context.push('/userSettings');
+        },
+      ),
+      ListTile(
+        enabled: true,
         leading: const Icon(Icons.playlist_add),
         title: const Text('Game editor'),
         onTap: () {

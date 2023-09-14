@@ -120,6 +120,8 @@ class Auth with ChangeNotifier {
     await SecureStorage().deleteRefreshToken();
     await SecureStorage().deleteCurrentGame();
     await SecureStorage().deleteCurrentArea();
+    await SecureStorage().deleteUserPrefCircle();
+    await SecureStorage().logout();
     return true;
   }
 }

@@ -20,6 +20,7 @@ import 'package:jotihunt/views/settings/settings_add_hint_screen.dart';
 import 'package:jotihunt/views/settings/settings_game_screen.dart';
 import 'package:jotihunt/views/settings/settings_huntcode_screen.dart';
 import 'package:jotihunt/views/settings/settings_hunters_screen.dart';
+import 'package:jotihunt/views/settings/settings_personal.dart';
 import 'package:jotihunt/views/settings/settings_teams_screen.dart';
 import 'package:jotihunt/views/settings_page_screen.dart';
 
@@ -73,6 +74,9 @@ class AppRouter {
           path: "/addhint",
           builder: (context, state) => const SettingsAddHintScreen(),
         ),
+        GoRoute(
+            path: "/userSettings",
+            builder: ((context, state) => const SettingsPersonalScreen())),
         GoRoute(
             path: '/gameEditor',
             builder: (context, state) => const SettingsGameScreen()),

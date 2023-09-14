@@ -19,29 +19,34 @@ class MarkerHandler {
 
       for (var i = 0; i < allGroupsList.length; i++) {
         groupMarkerList.add(Marker(
-            point: LatLng(double.parse(allGroupsList[i]['lat']),
-                double.parse(allGroupsList[i]['long'])),
-            builder: (context) => IconButton(
-                  icon: const Icon(Icons.house,
-                      color: Color.fromARGB(255, 35, 83, 156)),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(allGroupsList[i]['name'].toString()),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text("Deelgebied: ${allGroupsList[i]['area']}"),
-                                Text(
-                                    "Adres: ${allGroupsList[i]['street']} ${allGroupsList[i]['housenumber']}")
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                )));
+          point: LatLng(double.parse(allGroupsList[i]['lat']),
+              double.parse(allGroupsList[i]['long'])),
+          builder: (context) => Transform.translate(
+            offset: const Offset(-5,
+                -5), //Offcenter marker by 5 px to center it with the circles
+            child: IconButton(
+              icon: const Icon(Icons.house,
+                  color: Color.fromARGB(255, 35, 83, 156)),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(allGroupsList[i]['name'].toString()),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Deelgebied: ${allGroupsList[i]['area']}"),
+                            Text(
+                                "Adres: ${allGroupsList[i]['street']} ${allGroupsList[i]['housenumber']}")
+                          ],
+                        ),
+                      );
+                    });
+              },
+            ),
+          ),
+        ));
       }
 
       return groupMarkerList;

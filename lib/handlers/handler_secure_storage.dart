@@ -19,6 +19,10 @@ class SecureStorage {
     return storage.read(key: 'CurrentArea');
   }
 
+  Future<String?> getUserPrefCircle() {
+    return storage.read(key: 'CircleEnabled');
+  }
+
   writeAccessToken(String accessToken) async {
     await storage.write(key: "AccessToken", value: accessToken);
   }
@@ -35,6 +39,10 @@ class SecureStorage {
     await storage.write(key: "CurrentArea", value: currentArea);
   }
 
+  writeUserPrefCircle(String isEnabled) async {
+    await storage.write(key: "CircleEnabled", value: isEnabled);
+  }
+
   deleteAccessToken() async {
     await storage.delete(key: "AccessToken");
   }
@@ -49,5 +57,13 @@ class SecureStorage {
 
   deleteCurrentArea() async {
     await storage.delete(key: "CurrentArea");
+  }
+
+  deleteUserPrefCircle() async {
+    await storage.delete(key: "CircleEnabled");
+  }
+
+  logout() async {
+    await storage.deleteAll();
   }
 }

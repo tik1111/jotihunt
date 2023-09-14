@@ -41,6 +41,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
   List<Marker> userLocationMarkers = [];
   List<Marker> foxLocationMarkers = [];
   List<Polyline> foxLocationPolylines = [];
+  List<CircleMarker> allGroupCircles = [];
 
   Location location = Location();
   late LocationData currentLocation;
@@ -152,6 +153,14 @@ class _MainMapWidgetState extends State<MainMapWidget> {
     return HandlerCircles().getAllCircles(area);
   }
 
+  Future<List<CircleMarker>> loadCircleMarkersFromAllGroups() async {
+    String? toggleCircle = await SecureStorage().getUserPrefCircle();
+    if (toggleCircle == 'false') {
+      return [];
+    }
+    return HandlerCircles().getAllGroupCircle();
+  }
+
   @override
   void dispose() {
     mapController.dispose();
@@ -200,6 +209,13 @@ class _MainMapWidgetState extends State<MainMapWidget> {
           if (mounted) {
             setState(() {
               userLocationMarkers = value;
+            });
+          }
+        });
+        loadCircleMarkersFromAllGroups().then((value) {
+          if (mounted) {
+            setState(() {
+              allGroupCircles = value;
             });
           }
         });
@@ -304,6 +320,7 @@ class _MainMapWidgetState extends State<MainMapWidget> {
                     PolylineLayer(
                       polylines: foxLocationPolylines,
                     ),
+                    CircleLayer(circles: allGroupCircles),
                     MarkerLayer(markers: foxLocationMarkers),
                     MarkerLayer(markers: userLocationMarkers),
                     MarkerLayer(markers: groupMarkers),
