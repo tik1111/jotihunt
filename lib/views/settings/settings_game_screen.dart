@@ -45,7 +45,8 @@ class _SettingsGameScreenState extends State<SettingsGameScreen> {
             const SizedBox(height: 18),
             ElevatedButton(
               onPressed: () async {
-                await GameHandler().createNewGame('gameName');
+                await GameHandler()
+                    .createNewGame(gameNameController.value.text);
                 context.pushReplacement('/gameEditor');
               },
               child: const Text("Aanmaken"),

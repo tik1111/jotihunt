@@ -70,7 +70,11 @@ class GameHandler {
 
   Future<bool> createNewGame(String gameName) async {
     var dio = HandlerWebRequests.dio;
-    await dio.post('${dotenv.env['API_ROOT']!}/game');
+    await dio.post('${dotenv.env['API_ROOT']!}/game',
+        data: {
+          'name': gameName,
+        },
+        options: Options(contentType: Headers.formUrlEncodedContentType));
 
     return true;
   }
