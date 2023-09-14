@@ -43,7 +43,9 @@ class GameHandler {
         bool isSelected = allTenantGames[i]['_id'] == currentGameId;
 
         listTiles.add(ListTile(
-          title: Text(allTenantGames[i]['_id']),
+          title: Text(
+              allTenantGames[i]['userFriendlyName'] ?? allTenantGames[i]['_id'],
+              style: TextStyle(color: Colors.white70)),
           onTap: () async {
             await SecureStorage().writeCurrentGame(allTenantGames[i]['_id']);
 
