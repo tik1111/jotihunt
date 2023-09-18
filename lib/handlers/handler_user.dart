@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:js_interop';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jotihunt/handlers/handler_secure_storage.dart';
 import 'package:jotihunt/handlers/handler_webrequests.dart';
 import 'package:jotihunt/widgets/alertdialog_edit_user.dart';
 
@@ -79,5 +83,21 @@ class HandlerUser {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<String> getUserIdFromAccessToken() async {
+    String? token = await SecureStorage().getAccessToken() ?? "";
+
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      throw Exception('invalid token');
+    }
+
+    final payload = parts[1];
+    final normalizedPayload = base64Url.normalize(payload);
+    final resp = utf8.decode(base64Url.decode(normalizedPayload));
+    final payloadMap = json.decode(resp);
+    print(payloadMap['user_id']);
+    return payloadMap['user_id'];
   }
 }

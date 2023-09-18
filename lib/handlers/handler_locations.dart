@@ -113,6 +113,9 @@ class LocationHandler {
         '${dotenv.env['API_ROOT']!}/users/location',
         data: postMap,
         options: Options(contentType: Headers.formUrlEncodedContentType));
+    if (newHunterLocation.statusCode == 403) {
+      return true;
+    }
     if (newHunterLocation.statusCode == 201) {
       return true;
     }

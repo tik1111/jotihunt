@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jotihunt/handlers/handler_secure_storage.dart';
+import 'package:jotihunt/handlers/handler_user.dart';
+import 'package:jotihunt/handlers/handler_webrequests.dart';
 
 enum AppState { initial, authenticated, authenticating, unauthenticated }
 
@@ -115,9 +117,35 @@ class Auth with ChangeNotifier {
     return false;
   }
 
+  Future<String> getUserRoleFromWeb() async {
+    String? currentKnownRoleAvailable = await SecureStorage().getUserRole();
+    String userId = await HandlerUser().getUserIdFromAccessToken();
+    Dio dio = HandlerWebRequests.dio;
+    Response userRoleResponse = await dio
+        .get('${dotenv.env['API_ROOT']!}/auth/role/${userId.toString()}');
+
+    if (userRoleResponse.data is List) {
+      Map<String, dynamic> firstObject = userRoleResponse.data[0];
+      String role = firstObject['role'] ?? 'user';
+
+      print('$role is the users role ');
+
+      if (currentKnownRoleAvailable == role) {
+        return currentKnownRoleAvailable ?? "user";
+      } else {
+        await SecureStorage().writeUserRole(role);
+        return role;
+      }
+    } else {
+      print('Received unexpected data from the API.');
+      return currentKnownRoleAvailable ?? "user";
+    }
+  }
+
   Future<bool> logout() async {
     await SecureStorage().deleteAccessToken();
     await SecureStorage().deleteRefreshToken();
+    await SecureStorage().deleteUserRole();
     await SecureStorage().deleteCurrentGame();
     await SecureStorage().deleteCurrentArea();
     await SecureStorage().deleteUserPrefCircle();

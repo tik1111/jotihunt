@@ -11,6 +11,10 @@ class SecureStorage {
     return storage.read(key: "RefreshToken");
   }
 
+  Future<String?> getUserRole() {
+    return storage.read(key: "userRole");
+  }
+
   Future<String?> getCurrentSelectedGame() {
     return storage.read(key: 'CurrentGame');
   }
@@ -31,6 +35,10 @@ class SecureStorage {
     await storage.write(key: "RefreshToken", value: refeshToken);
   }
 
+  writeUserRole(String userRole) async {
+    await storage.write(key: "userRole", value: userRole);
+  }
+
   writeCurrentGame(String currentGameID) async {
     await storage.write(key: "CurrentGame", value: currentGameID);
   }
@@ -49,6 +57,10 @@ class SecureStorage {
 
   deleteRefreshToken() async {
     await storage.delete(key: "RefreshToken");
+  }
+
+  deleteUserRole() async {
+    await storage.delete(key: "userRole");
   }
 
   deleteCurrentGame() async {

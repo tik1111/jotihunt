@@ -1,4 +1,4 @@
-7: Fox location radius 500m circles
+18: admin area
 
 9: Admin area to receve hunt codes and administrate
 
@@ -10,5 +10,5 @@
 
 17: Registration code
 
-18: admin area
+
 

@@ -20,9 +20,12 @@ class _ProfilePageState extends State<SettingsPage> {
   final Color whiteColor = const Color.fromARGB(255, 217, 217, 219);
 
   List dropdownMenuEntries = [];
+  List menuItems = [];
 
   String gameID = "";
   bool isGameAvailable = false;
+
+  String? userRole;
 
   Future<List<DropdownMenuEntry<String>>> getAllDropDownMenu() async {
     List<DropdownMenuEntry<String>> allGames =
@@ -38,10 +41,23 @@ class _ProfilePageState extends State<SettingsPage> {
     return await SecureStorage().getCurrentSelectedGame();
   }
 
+  Future<String?> getUserRole() async {
+    return await Auth().getUserRoleFromWeb();
+  }
+
   @override
   void initState() {
     super.initState();
 
+    getUserRole().then((value) {
+      menuItems = [];
+
+      if (mounted) {
+        setState(() {
+          userRole = value;
+        });
+      }
+    });
     getAllDropDownMenu().then((value) {
       if (isGameAvailable) {
         dropdownMenuEntries = value;
@@ -58,147 +74,236 @@ class _ProfilePageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<ListTile> menuItems = [
-      ListTile(
+    if (userRole == 'platform-admin' || userRole == "tenant-admin") {
+      menuItems.addAll([
+        ListTile(
+            enabled: true,
+            leading: const Icon(Icons.person),
+            title: const Text('Hunters'),
+            onTap: () {
+              context.push('/hunters');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.people),
+            title: const Text('Teams'),
+            onTap: () {
+              context.push('/teams');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.format_list_numbered),
+            title: const Text('Huntcodes'),
+            onTap: () {
+              context.push('/huntcode');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.question_mark),
+            title: const Text('Hint toevoegen'),
+            onTap: () {
+              context.push('/addhint');
+            }),
+        ListTile(
           enabled: true,
-          leading: const Icon(Icons.person),
-          title: const Text('Hunters'),
+          leading: const Icon(Icons.settings),
+          title: const Text('Mijn instellingen'),
           onTap: () {
-            context.push('/hunters');
-          }),
-      ListTile(
-          enabled: false,
-          leading: const Icon(Icons.people),
-          title: const Text('Teams'),
+            context.push('/userSettings');
+          },
+        ),
+        ListTile(
+          enabled: true,
+          leading: const Icon(Icons.playlist_add),
+          title: const Text('Game editor'),
           onTap: () {
-            context.push('/teams');
-          }),
-      ListTile(
-          enabled: false,
-          leading: const Icon(Icons.format_list_numbered),
-          title: const Text('Huntcodes'),
-          onTap: () {
-            context.push('/huntcode');
-          }),
-      ListTile(
-          enabled: false,
-          leading: const Icon(Icons.question_mark),
-          title: const Text('Hint toevoegen'),
-          onTap: () {
-            context.push('/addhint');
-          }),
-      ListTile(
-        enabled: true,
-        leading: const Icon(Icons.settings),
-        title: const Text('Mijn instellingen'),
-        onTap: () {
-          context.push('/userSettings');
-        },
-      ),
-      ListTile(
-        enabled: true,
-        leading: const Icon(Icons.playlist_add),
-        title: const Text('Game editor'),
-        onTap: () {
-          context.push('/gameEditor');
-        },
-      ),
-      ListTile(
-        enabled: true,
-        leading: const Icon(Icons.logout),
-        title: const Text('Uitloggen'),
-        onTap: () async {
-          if (mounted) {
-            Future<bool> loginState = Auth().logout();
-            if (await loginState) {
-              // ignore: use_build_context_synchronously
-              context.read<LoginCubit>().logout();
+            context.push('/gameEditor');
+          },
+        ),
+        ListTile(
+          enabled: true,
+          leading: const Icon(Icons.logout),
+          title: const Text('Uitloggen'),
+          onTap: () async {
+            if (mounted) {
+              Future<bool> loginState = Auth().logout();
+              if (await loginState) {
+                // ignore: use_build_context_synchronously
+                context.read<LoginCubit>().logout();
+              }
             }
-          }
-        },
-      ),
-    ];
+          },
+        ),
+      ]);
+    } else {
+      menuItems.addAll([
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.person),
+            title: const Text('Hunters'),
+            onTap: () {
+              context.push('/hunters');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.people),
+            title: const Text('Teams'),
+            onTap: () {
+              context.push('/teams');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.format_list_numbered),
+            title: const Text('Huntcodes'),
+            onTap: () {
+              context.push('/huntcode');
+            }),
+        ListTile(
+            enabled: false,
+            leading: const Icon(Icons.question_mark),
+            title: const Text('Hint toevoegen'),
+            onTap: () {
+              context.push('/addhint');
+            }),
+        ListTile(
+          enabled: true,
+          leading: const Icon(Icons.settings),
+          title: const Text('Mijn instellingen'),
+          onTap: () {
+            context.push('/userSettings');
+          },
+        ),
+        ListTile(
+          enabled: true,
+          leading: const Icon(Icons.playlist_add),
+          title: const Text('Spellen'),
+          onTap: () {
+            context.push('/gameEditor');
+          },
+        ),
+        ListTile(
+          enabled: true,
+          leading: const Icon(Icons.logout),
+          title: const Text('Uitloggen'),
+          onTap: () async {
+            if (mounted) {
+              Future<bool> loginState = Auth().logout();
+              if (await loginState) {
+                // ignore: use_build_context_synchronously
+                context.read<LoginCubit>().logout();
+              }
+            }
+          },
+        ),
+      ]);
+    }
 
     return Scaffold(
       //bottomNavigationBar: const Navigator(),
       backgroundColor: backgroundColor,
       bottomNavigationBar: const DefaultBottomAppBar(),
-      body: ListView(children: [
-        Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(20, 40, 20, 0),
-                  decoration: BoxDecoration(
-                      color: orangeColor,
-                      border: Border.all(color: orangeColor),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  height: 100,
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: Row(
+      body: FutureBuilder<String?>(
+        future: Auth().getUserRoleFromWeb(), // your Future function here
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.orange,
+              ),
+            ); // return a loader widget
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}'); // return an error widget
+            } else {
+              // return your main widget
+              return ListView(
+                children: [
+                  Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 35,
-                              child: ClipOval(
-                                  child: Image.network(
-                                      'https://i.imgur.com/8qcWcvM.png')),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text('Naam:'),
-                            Text('Hunter code:'),
-                            Text('Team:'),
-                          ],
-                        ),
-                      ),
-                      const Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          Text('{name}'),
-                          Text('{hunt_code}'),
-                          Text("{team_name}"),
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                            decoration: BoxDecoration(
+                                color: orangeColor,
+                                border: Border.all(color: orangeColor),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                            height: 100,
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 35,
+                                        child: ClipOval(
+                                            child: Image.network(
+                                                'https://i.imgur.com/8qcWcvM.png')),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text('Naam:'),
+                                      Text('Hunter code:'),
+                                      Text('Team:'),
+                                    ],
+                                  ),
+                                ),
+                                const Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('{name}'),
+                                    Text('{hunt_code}'),
+                                    Text("{team_name}"),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
                         ],
-                      )
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                        decoration: BoxDecoration(
+                            color: orangeColor,
+                            border: Border.all(color: orangeColor),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20))),
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: ListView.builder(
+                            itemCount: menuItems.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return menuItems[index];
+                            }),
+                      ),
                     ],
                   ),
-                )
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-              decoration: BoxDecoration(
-                  color: orangeColor,
-                  border: Border.all(color: orangeColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width - 40,
-              child: ListView.builder(
-                  itemCount: menuItems.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return menuItems[index];
-                  }),
-            ),
-          ],
-        ),
-      ]),
+                ],
+              );
+            }
+          } else {
+            return Text(
+                'State: ${snapshot.connectionState}'); // return some text for any other state, useful for debugging
+          }
+        },
+      ),
     );
   }
 }

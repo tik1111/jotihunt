@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jotihunt/handlers/auth/handler_auth.dart';
 import 'package:jotihunt/handlers/handler_game.dart';
 
 class SettingsGameScreen extends StatefulWidget {
@@ -14,7 +15,24 @@ class SettingsGameScreen extends StatefulWidget {
 class _SettingsGameScreenState extends State<SettingsGameScreen> {
   final Color backgroundColor = const Color.fromARGB(255, 33, 34, 45);
   String? selectedGame;
+  String? userRole;
   final TextEditingController gameNameController = TextEditingController();
+
+  Future<String?> getUserRole() async {
+    return await Auth().getUserRoleFromWeb();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole().then((value) {
+      if (mounted) {
+        setState(() {
+          userRole = value;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,27 +48,25 @@ class _SettingsGameScreenState extends State<SettingsGameScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            const Text(
-              "Nieuw spel:",
-              style: TextStyle(color: Colors.white),
-            ),
-            TextField(
-              controller: gameNameController,
-              decoration: const InputDecoration(
-                hintText: 'Spel naam ',
-                hintStyle: TextStyle(color: Colors.grey),
+            if (userRole == 'tenant-admin' || userRole == 'platform-admin') ...[
+              TextField(
+                controller: gameNameController,
+                decoration: const InputDecoration(
+                  hintText: 'Spel naam ',
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+                style: const TextStyle(color: Colors.white),
               ),
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 18),
-            ElevatedButton(
-              onPressed: () async {
-                await GameHandler()
-                    .createNewGame(gameNameController.value.text);
-                context.pushReplacement('/gameEditor');
-              },
-              child: const Text("Aanmaken"),
-            ),
+              const SizedBox(height: 18),
+              ElevatedButton(
+                onPressed: () async {
+                  await GameHandler()
+                      .createNewGame(gameNameController.value.text);
+                  context.pushReplacement('/gameEditor');
+                },
+                child: const Text("Aanmaken"),
+              ),
+            ],
             const SizedBox(height: 32),
             const Text(
               "Beschikbare spellen:",
