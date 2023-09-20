@@ -26,3 +26,9 @@ API_ROOT=
 ### Web app (production)
 - Run `flutter build web` in the root of the project
 - The output will be in `build/web`
+
+## Setup for CloudFlare Pages
+Using `peanut` to setup the project for static usage
+- Setup: `flutter pub global activate peanut`
+- Create/update branch: `flutter pub global run peanut -b static-site`
+  - Ensure that the `.env` file is in the root of the project (or a proper env variable is set during build)!
