@@ -10,9 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file@v1
+        with:
+          INPUT_ENV_API_ROOT: https://2023.jotihunters.nl/
       - run: flutter build web --release
-        env:
-          API_ROOT: https://2023.jotihunters.nl/
       - run: git config user.name github-actions
       - run: git config user.email github-actions@github.com
       - run: git --work-tree build/web add --all
